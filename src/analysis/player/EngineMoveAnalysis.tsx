@@ -417,6 +417,11 @@ export function EngineMoveAnalysis({
                     </span>
                     <small>
                       {candidate.visits} visits
+                      {candidate.prior !== null
+                        ? ` · policy ${percent(
+                            candidate.prior,
+                          )}`
+                        : ''}
                       {candidate.humanPrior !==
                       null
                         ? ` · human ${percent(
