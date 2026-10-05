@@ -86,6 +86,16 @@ export type MoveResult =
       readonly reason: IllegalMoveReason;
     };
 
+function validateRules(rules: GameRules): void {
+  if (rules.koRule !== 'simple' && rules.koRule !== 'positional-superko') {
+    throw new Error(`Unsupported ko rule: ${String(rules.koRule)}.`);
+  }
+
+  if (!Number.isFinite(rules.komi)) {
+    throw new RangeError('Komi must be a finite number.');
+  }
+}
+
 function addSetupStones(
   board: Board,
   color: Stone,
@@ -118,6 +128,8 @@ export function createGame(options: NewGameOptions = {}): GameState {
     ...DEFAULT_RULES,
     ...options.rules,
   };
+
+  validateRules(rules);
 
   let board = createEmptyBoard(size);
   board = addSetupStones(board, 'black', options.setup?.black);
