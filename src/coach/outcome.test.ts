@@ -138,7 +138,7 @@ describe('coach outcome', () => {
     ).toBe(0);
   });
 
-  it('uses a later full game when an earlier follow-up is too short', () => {
+  it('uses the latest full game and skips shorter follow-ups', () => {
     const baseline = record(
       'baseline',
       1_000,
