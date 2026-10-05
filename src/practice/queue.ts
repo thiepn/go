@@ -20,10 +20,11 @@ function priorityScore(
     return 100 - problem.difficulty * 2;
   }
 
+  const evidenceCount = entry.successes + entry.failures;
   const failureRate =
-    entry.attempts === 0
+    evidenceCount === 0
       ? 0
-      : entry.failures / entry.attempts;
+      : entry.failures / evidenceCount;
 
   const lastFailureBoost =
     entry.lastResult === 'failure' ? 35 : 0;
