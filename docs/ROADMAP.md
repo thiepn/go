@@ -359,19 +359,63 @@ Boundary:
 
 ## P11 — KataGo Analysis Adapter
 
-Status: **next**
+Status: **implementation complete — runtime/model deployment required for live engine results**
 
-Add:
+Implemented:
+- typed KataGo parallel-analysis JSON boundary;
+- standard Go / GTP coordinate conversion;
+- P8 saved-game → KataGo query conversion;
+- handicap / player-to-move / effective-komi preservation;
+- multi-turn analyzeTurns support;
+- batched whole-game learner-turn scans;
+- widened root candidate discovery for review;
+- forced exact played-move analysis when normal moveInfos omit the move;
 - candidate moves;
+- visits;
+- score lead;
+- winrate;
+- utility;
 - principal variations;
-- score;
 - ownership;
-- policy;
-- human-policy inputs where useful.
+- raw search policy;
+- optional Human SL policy / humanPrior;
+- optional Human SL rank profiles;
+- local analysis caching;
+- external long-running Node/KataGo bridge;
+- same-origin web/Vercel proxy;
+- bridge health endpoint;
+- public-query workload caps and override allowlist;
+- beginner-first score-loss translation;
+- candidate markers and ownership on the shared SVG board;
+- Engine Check inside deterministic Review;
+- arbitrary learner-move Engine Check when P10 finds no deterministic issue;
+- graceful deterministic-review fallback when KataGo is unavailable.
 
-Do not expose raw analysis directly to beginners.
+Validation:
+- GTP coordinates;
+- handicap and pass query construction;
+- analyze-turn indexing;
+- Human SL override construction;
+- response normalization;
+- PV normalization;
+- ownership/policy alignment;
+- forced played-move recovery;
+- score-loss comparison;
+- whole-game batching;
+- human-turn filtering;
+- provider failure behavior;
+- health probing;
+- beginner translation.
+
+Operational boundary:
+- a live KataGo installation and neural-network model are not stored in the repository and still need to be deployed on an analysis host;
+- Chinese rules are used as the engine-analysis approximation for the app's area-scoring games, so rare rules edge cases are not treated as P1 legality overrides;
+- engine point loss does not automatically become P7 mastery evidence;
+- personalized interpretation of recurring engine patterns belongs to P12.
 
 ## P12 — Personalized Coach
+
+Status: **next**
 
 Close the loop:
 
@@ -449,7 +493,7 @@ Visual development runs in parallel rather than being postponed:
 - **V7** practice / milestone visuals — practice foundation complete
 - **V8** play / scoring visuals — independent play and scoring foundation complete
 - **V9** review / variation visuals — deterministic review and SGF variation foundation complete
-- **V10** engine-analysis visualization — next
+- **V10** engine-analysis visualization — candidate, ownership and beginner-translation foundation complete
 - **V11** responsive / accessibility variants
 - **V12** visual performance and QA
 
