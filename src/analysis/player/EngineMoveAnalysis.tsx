@@ -28,6 +28,7 @@ import {
 import type {
   KataGoMoveReview,
 } from '../types';
+import './analysis.css';
 
 export interface EngineMoveAnalysisProps {
   readonly record: SavedGameRecord;
