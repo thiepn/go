@@ -9,7 +9,8 @@
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
-    "katago:bridge": "node server/katago-bridge.mjs"
+    "katago:bridge": "node server/katago-bridge.mjs",
+    "check:server": "node --check server/katago-bridge.mjs && node --check api/katago/analyze.js && node --check api/katago/health.js"
   },
   "dependencies": {
     "react": "^19.1.0",
