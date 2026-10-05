@@ -227,20 +227,50 @@ Certification note:
 
 ## P8 — Independent Play
 
-Status: **next**
+Status: **complete**
 
-Add:
-- 9×9;
-- 13×13;
-- 19×19;
-- local play;
-- computer opponent;
-- handicap;
-- useful clock/scoring controls.
+Implemented:
+- unrestricted legal 9×9, 13×13, and 19×19 play;
+- computer and local modes;
+- deterministic beginner-oriented 25k / 20k / 15k bot profiles;
+- immediate capture and atari-escape bot priorities;
+- human color selection;
+- fixed 2–9 stone handicap;
+- handicap komi handling;
+- optional assisted / hints-only / off coaching;
+- untimed / 10-minute / 20-minute absolute clocks;
+- pass;
+- resignation;
+- timeout;
+- two-pass scoring transition;
+- dead connected-group confirmation;
+- live score preview;
+- resume play when life/death is disputed;
+- final area scoring;
+- local game records and recent-results view;
+- responsive phone/tablet/desktop game layout.
 
-Online multiplayer remains deferred.
+Validation:
+- standard board-size creation;
+- handicap layout and turn order;
+- game lifecycle;
+- scoring confirmation;
+- dispute/resume flow;
+- resignation and timeout;
+- bot determinism and legality;
+- basic tactical bot behavior;
+- record creation;
+- clocks.
+
+Boundary:
+- bot rank labels are intended difficulty framing, not empirical rank certification;
+- online multiplayer remains deferred;
+- advanced tournament clocks remain deferred;
+- strong AI analysis belongs to P11.
 
 ## P9 — SGF Study Workspace
+
+Status: **next**
 
 Add:
 - SGF import/export;
@@ -351,7 +381,7 @@ Visual development runs in parallel rather than being postponed:
 - **V5** lesson choreography — runtime foundation complete
 - **V6** learning home / map — mastery/progress foundation started
 - **V7** practice / milestone visuals — practice foundation complete
-- **V8** play / scoring visuals — guided-game foundation complete
+- **V8** play / scoring visuals — independent play and scoring foundation complete
 - **V9** review / variation visuals
 - **V10** engine-analysis visualization
 - **V11** responsive / accessibility variants
