@@ -127,42 +127,40 @@ export const developingProblems: readonly ProblemDefinition[] = [
   },
   {
     id: 'snapback-vital-01',
-    title: 'See the snapback point',
+    title: 'Snap back after the bait is taken',
     instruction:
-      'Black to play. Find the central tactical point that creates the recapture threat.',
+      'White to play. Black just captured one white stone in the corner and left the capturing group with one liberty. Recapture now.',
     concept: 'snapback',
     tags: ['snapback', 'tesuji', 'reading'],
     difficulty: 3,
     setup: {
       size: 5,
-      toPlay: 'black',
+      toPlay: 'white',
       black: [
-        { x: 1, y: 1 },
-        { x: 2, y: 0 },
-        { x: 3, y: 1 },
-        { x: 1, y: 3 },
-        { x: 2, y: 4 },
-        { x: 3, y: 3 },
+        { x: 0, y: 2 },
+        { x: 0, y: 3 },
+        { x: 1, y: 4 },
       ],
       white: [
+        { x: 0, y: 1 },
         { x: 1, y: 2 },
-        { x: 3, y: 2 },
+        { x: 1, y: 3 },
       ],
     },
     root: {
       branches: [
         {
-          move: { x: 2, y: 2 },
+          move: { x: 0, y: 4 },
           verdict: 'solved',
           feedback:
-            'Correct. Snapback reading revolves around this compact recapture point: never stop calculating at the first capture.',
+            'Snapback. White retakes the corner and captures the two-stone black group that the bait capture left in atari.',
         },
       ],
     },
     hints: [
       {
-        text: 'Look at the single central intersection both sides are fighting over.',
-        showPoints: [{ x: 2, y: 2 }],
+        text: 'The black group on the left edge has only one liberty: the empty corner.',
+        showPoints: [{ x: 0, y: 4 }],
       },
     ],
   },
