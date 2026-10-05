@@ -37,12 +37,16 @@ export function analysisCacheKey(
   moveNumber: number,
   visits: number,
   humanProfile: string | null,
+  includeOwnership = true,
+  includePolicy = true,
 ): string {
   return [
     recordId,
     moveNumber,
     visits,
     humanProfile ?? 'none',
+    includeOwnership ? 'own1' : 'own0',
+    includePolicy ? 'pol1' : 'pol0',
   ].join(':');
 }
 
