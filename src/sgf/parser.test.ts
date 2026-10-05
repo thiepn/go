@@ -28,6 +28,19 @@ describe('SGF parser', () => {
     expect(whiteMove.children[0].children[0].move?.point).toBeNull();
   });
 
+  it('expands compressed point-list ranges', () => {
+    const study = parseSgf(
+      '(;FF[4]GM[1]SZ[9]AB[aa:bb]TR[cc:dc])',
+    );
+
+    expect(study.root.setup?.black).toHaveLength(4);
+    expect(
+      study.root.marks?.filter(
+        (mark) => mark.kind === 'triangle',
+      ),
+    ).toHaveLength(2);
+  });
+
   it('parses multiple game trees from one collection', () => {
     const collection = parseSgfCollection(
       '(;FF[4]GM[1]SZ[9]GN[One])(;FF[4]GM[1]SZ[13]GN[Two])',
