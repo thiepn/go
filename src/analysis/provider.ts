@@ -54,22 +54,24 @@ export class HttpKataGoProvider
       );
     }
 
-    const body = await response
+    const body: unknown = await response
       .json()
-      .catch(() => null) as
-        | {
+      .catch(() => null);
+
+    const envelope =
+      body !== null &&
+      typeof body === 'object' &&
+      !Array.isArray(body)
+        ? body as {
             responses?: readonly KataGoResponseRaw[];
             error?: string;
           }
-        | readonly KataGoResponseRaw[]
-        | null;
+        : null;
 
     if (!response.ok) {
       const message =
-        body &&
-        !Array.isArray(body) &&
-        typeof body.error === 'string'
-          ? body.error
+        typeof envelope?.error === 'string'
+          ? envelope.error
           : `KataGo analysis failed with HTTP ${response.status}.`;
 
       throw new KataGoUnavailableError(
@@ -79,8 +81,8 @@ export class HttpKataGoProvider
 
     const responses =
       Array.isArray(body)
-        ? body
-        : body?.responses;
+        ? body as readonly KataGoResponseRaw[]
+        : envelope?.responses;
 
     if (!responses) {
       throw new Error(
