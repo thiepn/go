@@ -10,7 +10,7 @@ The product goal is not to recreate an online Go server. It is to teach a comple
 
 ## Core loop
 
-**Learn → Practice → Play → Review → Target weaknesses → Play again**
+**Learn → Practice → Play → Review → Coach one weakness → Practice → Play again → Measure**
 
 The board is the primary teaching surface. Definitions follow intuition; visual demonstrations and interaction come before terminology.
 
@@ -54,6 +54,8 @@ Post-game review has two complementary layers:
 - optional KataGo analysis for candidate moves, score comparison, ownership, policy, and principal variations.
 
 KataGo runs behind a server-side analysis bridge and is not required for the core learning app to function.
+
+The Personalized Coach combines mastery and explainable game evidence into one focused intervention, carries one objective into the next game, and compares the same behavior afterward.
 
 ## Repository direction
 
