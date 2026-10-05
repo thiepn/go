@@ -149,78 +149,84 @@ export const netLesson: LessonDefinition = {
   prerequisiteConcepts: ['reading'],
   initialBoard: {
     size: 7,
+    toPlay: 'black',
     black: [
-      { x: 2, y: 3 },
-      { x: 3, y: 2 },
+      { x: 4, y: 0 },
+      { x: 4, y: 1 },
+      { x: 5, y: 2 },
+      { x: 6, y: 2 },
     ],
-    white: [{ x: 3, y: 3 }],
+    white: [{ x: 5, y: 1 }],
   },
   steps: [
     {
-      id: 'chase-or-net',
-      kind: 'choose-answer',
-      title: 'Not every capture needs another atari.',
-      instruction:
-        'If a direct chase lets the target keep running, what is a net trying to do instead?',
-      choices: [
-        {
-          id: 'routes',
-          label: 'Cover the important escape routes before the stone reaches them',
-        },
-        {
-          id: 'atari',
-          label: 'Give atari every move no matter where the target runs',
-        },
-        {
-          id: 'ignore',
-          label: 'Ignore the target completely',
-        },
-      ],
-      correctChoiceId: 'routes',
-      successText:
-        'Exactly. A net wins by shape and future coverage, not by immediate contact.',
-    },
-    {
-      id: 'net-point',
+      id: 'net-not-atari',
       kind: 'predict-move',
-      title: 'Cast the net.',
+      title: 'Capture without giving atari.',
       instruction:
-        'Tap the diagonal point that begins surrounding White’s open escape routes rather than touching the stone directly.',
-      acceptedPoints: [{ x: 4, y: 4 }],
+        'Black can trap the white stone without touching it. Tap the diagonal point in the upper-right corner of the shape.',
+      acceptedPoints: [{ x: 6, y: 0 }],
       enterEffects: [
         {
-          type: 'highlight',
-          points: [{ x: 4, y: 4 }],
-          kind: 'focus',
-          pulse: true,
+          type: 'marker',
+          marker: {
+            point: { x: 6, y: 0 },
+            label: 'net',
+            tone: 'accent',
+          },
         },
       ],
       successText:
-        'That is the net idea: stay far enough away to remove several future escapes at once.',
+        'Correct. The net move does not give atari. Instead, it prepares to block either of White’s two escape routes.',
     },
     {
-      id: 'net-reading',
-      kind: 'choose-answer',
-      title: 'Nets still require reading.',
+      id: 'two-escapes',
+      kind: 'select-points',
+      title: 'White appears to have two ways out.',
       instruction:
-        'What must you verify before declaring the net successful?',
+        'After the net move, tap White’s two remaining liberties.',
+      board: {
+        size: 7,
+        toPlay: 'white',
+        black: [
+          { x: 4, y: 0 },
+          { x: 4, y: 1 },
+          { x: 5, y: 2 },
+          { x: 6, y: 2 },
+          { x: 6, y: 0 },
+        ],
+        white: [{ x: 5, y: 1 }],
+      },
+      expectedPoints: [
+        { x: 5, y: 0 },
+        { x: 6, y: 1 },
+      ],
+      successText:
+        'Exactly. The net works because the surrounding stones make these two routes miai: whichever one White uses, Black blocks the other.',
+    },
+    {
+      id: 'net-proof',
+      kind: 'choose-answer',
+      title: 'Why can White not escape?',
+      instruction:
+        'Suppose White extends to the right at (6,1). What does Black do?',
       choices: [
         {
-          id: 'escape',
-          label: 'That every reasonable escape route still runs into surrounding stones',
+          id: 'block',
+          label: 'Play at the other escape point (5,0), leaving the extended group with no route out',
         },
         {
-          id: 'touch',
-          label: 'That every black stone touches the target immediately',
+          id: 'chase',
+          label: 'Ignore the net and start an unrelated ladder elsewhere',
         },
         {
-          id: 'corner',
-          label: 'That the fight is in a corner',
+          id: 'pass',
+          label: 'Pass because White escaped',
         },
       ],
-      correctChoiceId: 'escape',
+      correctChoiceId: 'block',
       successText:
-        'Correct. A net is not magic; you still read whether the target can break through.',
+        'Correct. If White chooses the other escape instead, Black blocks at (6,1). That two-way trap is the essence of a net.',
     },
   ],
 };
