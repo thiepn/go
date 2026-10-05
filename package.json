@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "katago:bridge": "node server/katago-bridge.mjs"
   },
   "dependencies": {
     "react": "^19.1.0",
