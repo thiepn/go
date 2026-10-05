@@ -5,6 +5,8 @@ import {
   beginnerProblems,
   firstGuidedGame,
 } from '../content';
+import { CoachHub } from '../coach/player';
+import { markCoachPracticeComplete } from '../coach/store';
 import { GuidedGamePlayer } from '../guided';
 import { CoursePlayer } from '../learning';
 import { MasteryDashboard } from '../mastery/player';
@@ -23,7 +25,8 @@ type AppMode =
   | 'progress'
   | 'play'
   | 'study'
-  | 'review';
+  | 'review'
+  | 'coach';
 
 const FIRST_GAME_COMPLETE_KEY =
   'thiepn-go:guided:first-9x9:complete';
@@ -62,6 +65,14 @@ export function App() {
     useState<SavedGameRecord | null>(null);
   const [reviewRecord, setReviewRecord] =
     useState<SavedGameRecord | null>(null);
+  const [coachPracticePlanId, setCoachPracticePlanId] =
+    useState<string | null>(null);
+  const [coachPlayPlanId, setCoachPlayPlanId] =
+    useState<string | null>(null);
+  const [coachObjective, setCoachObjective] =
+    useState<string | null>(null);
+  const [reviewReturnToCoach, setReviewReturnToCoach] =
+    useState(false);
 
   if (mode === 'course') {
     return (
@@ -115,9 +126,23 @@ export function App() {
       <PracticeHub
         problems={beginnerProblems}
         focusedTags={practiceFocus}
+        onComplete={(summary) => {
+          if (coachPracticePlanId) {
+            markCoachPracticeComplete(
+              coachPracticePlanId,
+              summary,
+            );
+          }
+        }}
         onExit={() => {
           setPracticeFocus([]);
-          setMode('home');
+
+          if (coachPracticePlanId) {
+            setCoachPracticePlanId(null);
+            setMode('coach');
+          } else {
+            setMode('home');
+          }
         }}
       />
     );
@@ -126,7 +151,16 @@ export function App() {
   if (mode === 'play') {
     return (
       <PlayHub
-        onExit={() => setMode('home')}
+        coachObjective={coachObjective}
+        onExit={() => {
+          if (coachPlayPlanId) {
+            setCoachPlayPlanId(null);
+            setCoachObjective(null);
+            setMode('coach');
+          } else {
+            setMode('home');
+          }
+        }}
         onStudyRecord={(record) => {
           setStudyRecord(record);
           setMode('study');
@@ -139,13 +173,47 @@ export function App() {
     );
   }
 
+  if (mode === 'coach') {
+    return (
+      <CoachHub
+        problems={beginnerProblems}
+        onExit={() => setMode('home')}
+        onPractice={(tags, planId) => {
+          setPracticeFocus(tags);
+          setCoachPracticePlanId(
+            planId || null,
+          );
+          setMode('practice');
+        }}
+        onPlay={(objective, planId) => {
+          setCoachObjective(objective);
+          setCoachPlayPlanId(
+            planId || null,
+          );
+          setMode('play');
+        }}
+        onReview={(record) => {
+          setReviewRecord(record);
+          setReviewReturnToCoach(true);
+          setMode('review');
+        }}
+      />
+    );
+  }
+
   if (mode === 'review') {
     return (
       <ReviewHub
         initialRecord={reviewRecord}
         onExit={() => {
           setReviewRecord(null);
-          setMode('home');
+
+          if (reviewReturnToCoach) {
+            setReviewReturnToCoach(false);
+            setMode('coach');
+          } else {
+            setMode('home');
+          }
         }}
         onPractice={(tags) => {
           setPracticeFocus(tags);
@@ -155,6 +223,7 @@ export function App() {
         onStudy={(record) => {
           setStudyRecord(record);
           setReviewRecord(null);
+          setReviewReturnToCoach(false);
           setMode('study');
         }}
       />
@@ -216,8 +285,16 @@ export function App() {
               <button
                 className="home-secondary-action"
                 type="button"
+                onClick={() => setMode('coach')}
+              >
+                Coach
+              </button>
+              <button
+                className="home-secondary-action"
+                type="button"
                 onClick={() => {
                   setPracticeFocus([]);
+                  setCoachPracticePlanId(null);
                   setMode('practice');
                 }}
               >
@@ -263,7 +340,7 @@ export function App() {
 
         <p className="secondary-copy">
           {practiceUnlocked
-            ? 'Lessons · play · review · practice · study · mastery diagnosis'
+            ? 'Lessons · coach · play · review · practice · study · mastery diagnosis'
             : '12 interactive lessons · guided first game · no account required'}
         </p>
       </section>
