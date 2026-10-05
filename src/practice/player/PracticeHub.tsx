@@ -21,7 +21,14 @@ type PracticeMode =
   | 'safety'
   | 'connection'
   | 'territory'
-  | 'reading';
+  | 'reading'
+  | 'tactics'
+  | 'life-death'
+  | 'shape'
+  | 'fighting'
+  | 'strategy'
+  | 'endgame'
+  | 'joseki';
 
 const MODES: readonly {
   readonly id: PracticeMode;
@@ -63,6 +70,48 @@ const MODES: readonly {
     title: 'Reading',
     description: 'Think through more than one move before you play.',
     tags: ['reading'],
+  },
+  {
+    id: 'tactics',
+    title: 'Tactical patterns',
+    description: 'Ladders, nets, snapback, and capturing races.',
+    tags: ['ladder', 'net', 'snapback', 'capturing-race'],
+  },
+  {
+    id: 'life-death',
+    title: 'Life & death',
+    description: 'False eyes, vital points, seki, and survival reading.',
+    tags: ['life-death', 'false-eye', 'vital-point', 'seki'],
+  },
+  {
+    id: 'shape',
+    title: 'Shape & cuts',
+    description: 'Connection, cuts, efficient shape, and weak groups.',
+    tags: ['shape', 'cut', 'weak-groups', 'connection'],
+  },
+  {
+    id: 'fighting',
+    title: 'Attack & defense',
+    description: 'Pressure weak groups while keeping your own stones safe.',
+    tags: ['attack', 'defense', 'reading'],
+  },
+  {
+    id: 'strategy',
+    title: 'Whole-board strategy',
+    description: 'Influence, invasions, reductions, and opening direction.',
+    tags: ['influence', 'invasion', 'reduction', 'opening', 'strategy'],
+  },
+  {
+    id: 'endgame',
+    title: 'Sente & endgame',
+    description: 'Keep initiative and compare the last valuable boundaries.',
+    tags: ['sente', 'endgame'],
+  },
+  {
+    id: 'joseki',
+    title: 'Intro joseki',
+    description: 'Practice local corner shape without memorizing blindly.',
+    tags: ['joseki', 'opening', 'shape'],
   },
 ];
 
