@@ -36,7 +36,7 @@ describe('SGF serializer', () => {
           {
             point: { x: 2, y: 2 },
             kind: 'label',
-            label: 'A',
+            label: 'A:B',
           },
         ],
         children: [],
@@ -106,6 +106,12 @@ describe('SGF serializer', () => {
     ]);
     expect(reparsed.root.comment).toBe('root ] slash \\');
     expect(reparsed.root.marks).toHaveLength(2);
+    expect(
+      reparsed.root.marks?.find(
+        (mark) => mark.kind === 'label',
+      )?.label,
+    ).toBe('A:B');
+    expect(reparsed.title).toBe('Round trip');
     expect(reparsed.root.children[0].comment).toBe('branch here');
     expect(reparsed.root.children[0].children).toHaveLength(2);
     expect(
