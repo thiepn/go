@@ -107,6 +107,8 @@ export function buildKataGoGameQuery(
     maxVisits:
       options.maxVisits ??
       defaultVisits(boardSize),
+    rootPolicyTemperature: 1.35,
+    rootFpuReductionMax: 0,
     analysisPVLen:
       options.pvLength ?? 8,
     includeOwnership:
@@ -118,8 +120,6 @@ export function buildKataGoGameQuery(
       Object.keys(overrideSettings).length > 0
         ? overrideSettings
         : undefined,
-  } as KataGoQuery & {
-    readonly whiteHandicapBonus: number;
   };
 }
 
