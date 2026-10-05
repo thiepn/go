@@ -1,5 +1,6 @@
 export * from './cache';
 export * from './coordinates';
+export * from './game';
 export * from './health';
 export * from './normalize';
 export * from './player';
