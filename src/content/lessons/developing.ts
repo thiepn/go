@@ -232,77 +232,97 @@ export const snapbackLesson: LessonDefinition = {
   prerequisiteConcepts: ['reading'],
   initialBoard: {
     size: 5,
+    toPlay: 'black',
     black: [
-      { x: 1, y: 1 },
-      { x: 2, y: 0 },
-      { x: 3, y: 1 },
-      { x: 1, y: 3 },
-      { x: 2, y: 4 },
-      { x: 3, y: 3 },
+      { x: 0, y: 2 },
+      { x: 1, y: 4 },
     ],
     white: [
-      { x: 2, y: 1 },
-      { x: 2, y: 2 },
-      { x: 2, y: 3 },
+      { x: 0, y: 1 },
+      { x: 1, y: 2 },
+      { x: 1, y: 3 },
+      { x: 0, y: 4 },
     ],
   },
   steps: [
     {
-      id: 'tempting-capture',
+      id: 'bait-stone',
       kind: 'continue',
-      title: 'A capture can be bait.',
+      title: 'Black sees a one-stone capture.',
       instruction:
-        'Snapback positions punish automatic capturing. One side offers a stone so the capturing group is left with only one liberty.',
+        'The white stone in the lower-left corner has one liberty. Capturing it looks free—but read one move farther.',
       enterEffects: [
         {
           type: 'show-atari',
-          groupAt: { x: 2, y: 2 },
+          groupAt: { x: 0, y: 4 },
         },
       ],
     },
     {
-      id: 'snapback-question',
-      kind: 'choose-answer',
-      title: 'Look one move beyond the capture.',
-      instruction:
-        'Before taking a tempting stone in a crowded shape, what should you check?',
-      choices: [
-        {
-          id: 'recapture',
-          label: 'Whether the opponent can immediately recapture a larger group',
-        },
-        {
-          id: 'free',
-          label: 'Whether every capture is automatically good',
-        },
-        {
-          id: 'komi',
-          label: 'Whether komi changes the legality of the capture',
-        },
-      ],
-      correctChoiceId: 'recapture',
-      successText:
-        'Correct. Snapback is a reading tactic: the first capture is only the setup for the larger recapture.',
-    },
-    {
-      id: 'snapback-vital',
+      id: 'tempting-capture',
       kind: 'predict-move',
-      title: 'Find the recapture point.',
+      title: 'Find Black’s tempting move.',
       instruction:
-        'Tap the central point where a snapback recapture would occur after the bait is taken.',
-      acceptedPoints: [{ x: 2, y: 2 }],
+        'Tap the point Black would use to capture the corner white stone.',
+      acceptedPoints: [{ x: 0, y: 3 }],
+      successText:
+        'Yes. Black can capture the stone—but the new black group will have only one liberty.',
+    },
+    {
+      id: 'snapback-recapture',
+      kind: 'play-move',
+      title: 'Snap back immediately.',
+      instruction:
+        'The board now shows the position after Black captured. White to play: retake the empty corner point.',
+      board: {
+        size: 5,
+        toPlay: 'white',
+        black: [
+          { x: 0, y: 2 },
+          { x: 0, y: 3 },
+          { x: 1, y: 4 },
+        ],
+        white: [
+          { x: 0, y: 1 },
+          { x: 1, y: 2 },
+          { x: 1, y: 3 },
+        ],
+      },
+      acceptedPoints: [{ x: 0, y: 4 }],
       enterEffects: [
         {
-          type: 'marker',
-          marker: {
-            point: { x: 2, y: 2 },
-            label: '!',
-            tone: 'warning',
-          },
+          type: 'highlight',
+          points: [{ x: 0, y: 4 }],
+          kind: 'warning',
+          pulse: true,
         },
       ],
       successText:
-        'That point is the tactical heart of the shape. Always read one capture beyond the obvious one.',
+        'Snapback. White’s recapture removes the two black stones that were left with only that corner liberty.',
+    },
+    {
+      id: 'snapback-rule',
+      kind: 'choose-answer',
+      title: 'The first capture was the trap.',
+      instruction:
+        'What habit prevents snapback mistakes?',
+      choices: [
+        {
+          id: 'one-more',
+          label: 'After a tempting capture, read the opponent’s immediate recapture before committing',
+        },
+        {
+          id: 'all-good',
+          label: 'Assume every legal capture is profitable',
+        },
+        {
+          id: 'avoid-capture',
+          label: 'Never capture stones near an edge',
+        },
+      ],
+      correctChoiceId: 'one-more',
+      successText:
+        'Correct. Snapback is a perfect example of why reading must continue beyond the first successful-looking move.',
     },
   ],
 };
