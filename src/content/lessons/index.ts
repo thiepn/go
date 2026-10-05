@@ -11,3 +11,4 @@ export * from './safetyAndSuicide';
 export * from './scoring';
 export * from './territory';
 export * from './turnsAndLiberties';
+export * from './developing';
