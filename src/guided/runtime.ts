@@ -41,11 +41,14 @@ export interface GuidedGameState {
   readonly score: AreaScore | null;
   readonly learnerMoves: number;
   readonly helpUses: number;
+  readonly pendingOpponent: GuidedOpponentAction | null;
+  readonly pendingSuccessText: string | null;
 }
 
 export type GuidedGameAction =
   | { readonly type: 'play'; readonly point: Point }
   | { readonly type: 'pass' }
+  | { readonly type: 'opponent' }
   | { readonly type: 'help'; readonly mode: Exclude<GuidedHelpMode, 'none'> }
   | { readonly type: 'clear-help' };
 
@@ -70,6 +73,8 @@ export function createGuidedGameState(
     score: null,
     learnerMoves: 0,
     helpUses: 0,
+    pendingOpponent: null,
+    pendingSuccessText: null,
   };
 }
 
@@ -109,18 +114,21 @@ function applyOpponent(
   return result.state;
 }
 
-function finishIfNeeded(
+function finishAfterOpponent(
   scenario: GuidedGameScenario,
   state: GuidedGameState,
-  game: GameState,
-  nextTurnIndex: number,
-  successText: string,
 ): GuidedGameState {
+  const action = state.pendingOpponent;
+
+  if (!action) return state;
+
+  const game = applyOpponent(state.game, action);
+  const nextTurnIndex = state.turnIndex + 1;
   const completed =
     nextTurnIndex >= scenario.turns.length ||
     game.status === 'finished';
 
-  if (!completed) {
+  if (completed) {
     return {
       ...state,
       game,
@@ -128,8 +136,12 @@ function finishIfNeeded(
       helpMode: 'none',
       feedback: {
         tone: 'success',
-        text: successText,
+        text: scenario.completionMessage,
       },
+      completed: true,
+      score: scoreArea(game.board, scenario.komi),
+      pendingOpponent: null,
+      pendingSuccessText: null,
     };
   }
 
@@ -138,12 +150,38 @@ function finishIfNeeded(
     game,
     turnIndex: nextTurnIndex,
     helpMode: 'none',
+    feedback: action.explanation
+      ? {
+          tone: 'neutral',
+          text: action.explanation,
+        }
+      : state.pendingSuccessText
+        ? {
+            tone: 'success',
+            text: state.pendingSuccessText,
+          }
+        : null,
+    pendingOpponent: null,
+    pendingSuccessText: null,
+  };
+}
+
+function queueOpponent(
+  state: GuidedGameState,
+  game: GameState,
+  turn: GuidedTurn,
+): GuidedGameState {
+  return {
+    ...state,
+    game,
+    learnerMoves: state.learnerMoves + 1,
+    helpMode: 'none',
     feedback: {
       tone: 'success',
-      text: scenario.completionMessage,
+      text: turn.successText,
     },
-    completed: true,
-    score: scoreArea(game.board, scenario.komi),
+    pendingOpponent: turn.opponent,
+    pendingSuccessText: turn.successText,
   };
 }
 
@@ -204,25 +242,14 @@ function playGuidedTurn(
     };
   }
 
-  const afterOpponent = applyOpponent(
+  return queueOpponent(
+    state,
     learnerResult.state,
-    turn.opponent,
-  );
-
-  return finishIfNeeded(
-    scenario,
-    {
-      ...state,
-      learnerMoves: state.learnerMoves + 1,
-    },
-    afterOpponent,
-    state.turnIndex + 1,
-    turn.successText,
+    turn,
   );
 }
 
 function passGuidedTurn(
-  scenario: GuidedGameScenario,
   state: GuidedGameState,
   turn: GuidedTurn,
 ): GuidedGameState {
@@ -248,20 +275,10 @@ function passGuidedTurn(
     };
   }
 
-  const afterOpponent = applyOpponent(
+  return queueOpponent(
+    state,
     learnerPass.state,
-    turn.opponent,
-  );
-
-  return finishIfNeeded(
-    scenario,
-    {
-      ...state,
-      learnerMoves: state.learnerMoves + 1,
-    },
-    afterOpponent,
-    state.turnIndex + 1,
-    turn.successText,
+    turn,
   );
 }
 
@@ -270,6 +287,10 @@ export function reduceGuidedGame(
   state: GuidedGameState,
   action: GuidedGameAction,
 ): GuidedGameState {
+  if (action.type === 'opponent') {
+    return finishAfterOpponent(scenario, state);
+  }
+
   if (action.type === 'clear-help') {
     return {
       ...state,
@@ -277,7 +298,7 @@ export function reduceGuidedGame(
     };
   }
 
-  if (state.completed) {
+  if (state.completed || state.pendingOpponent) {
     return state;
   }
 
@@ -301,7 +322,7 @@ export function reduceGuidedGame(
   }
 
   if (action.type === 'pass') {
-    return passGuidedTurn(scenario, state, turn);
+    return passGuidedTurn(state, turn);
   }
 
   return playGuidedTurn(
