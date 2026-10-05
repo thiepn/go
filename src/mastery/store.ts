@@ -1,4 +1,5 @@
-import type { ProblemDefinition, ProblemHistory } from '../practice';
+import type { ProblemHistory } from '../practice/types';
+import type { ProblemDefinition } from '../practice/types';
 import {
   createLearningEvidence,
   type LearningEvidenceInput,
