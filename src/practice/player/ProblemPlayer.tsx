@@ -2,6 +2,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
 } from 'react';
 
 import {
@@ -23,6 +24,7 @@ export interface ProblemResult {
   readonly firstTry: boolean;
   readonly mistakes: number;
   readonly hintsUsed: number;
+  readonly responseMs: number;
 }
 
 export interface ProblemPlayerProps {
@@ -41,6 +43,8 @@ export function ProblemPlayer({
   onExit,
   onSolved,
 }: ProblemPlayerProps) {
+  const startedAtRef = useRef(Date.now());
+
   const [state, dispatch] = useReducer(
     (
       current: ReturnType<typeof createProblemState>,
@@ -127,6 +131,7 @@ export function ProblemPlayer({
                 firstTry: state.firstTry,
                 mistakes: state.attempts,
                 hintsUsed: state.hintsUsed,
+                responseMs: Math.max(0, Date.now() - startedAtRef.current),
               })
             }
           >
