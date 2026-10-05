@@ -1,0 +1,298 @@
+.mastery-shell {
+  min-height: 100vh;
+  padding: clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(circle at 65% 18%, rgb(219 176 101 / 0.15), transparent 30rem),
+    var(--paper-50);
+}
+
+.mastery-header {
+  width: min(100%, 68rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.mastery-header h1 {
+  max-width: 13ch;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+}
+
+.mastery-header p:not(.eyebrow) {
+  max-width: 39rem;
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.mastery-overview {
+  width: min(100%, 65rem);
+  margin: clamp(2rem, 5vw, 3.5rem) auto 0;
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-100);
+  box-shadow: var(--shadow-soft);
+}
+
+.mastery-overall {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0.25rem 1rem;
+}
+
+.mastery-overall > span {
+  color: var(--ink-700);
+  font-weight: 760;
+}
+
+.mastery-overall > strong {
+  grid-row: span 2;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1;
+}
+
+.mastery-overall > small {
+  color: var(--ink-500);
+}
+
+.mastery-overall__bar {
+  height: 0.5rem;
+  margin-top: 1rem;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--paper-200);
+}
+
+.mastery-overall__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent-500);
+}
+
+.mastery-recommendation,
+.mastery-empty {
+  width: min(100%, 65rem);
+  margin: 1rem auto 0;
+  padding: clamp(1.2rem, 3vw, 1.8rem);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent-100) 78%, var(--paper-100)),
+      var(--paper-100)
+    );
+  border: 1px solid color-mix(in srgb, var(--accent-500) 22%, transparent);
+}
+
+.mastery-recommendation {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem 1.5rem;
+  align-items: center;
+}
+
+.mastery-recommendation h2,
+.mastery-empty h2,
+.mastery-section-heading h2 {
+  margin: 0;
+  color: var(--ink-950);
+  letter-spacing: -0.035em;
+}
+
+.mastery-recommendation h2 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.mastery-recommendation p:not(.eyebrow),
+.mastery-empty p:not(.eyebrow) {
+  max-width: 40rem;
+  color: var(--ink-700);
+  line-height: 1.6;
+}
+
+.mastery-recommendation__score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.mastery-recommendation__score span {
+  font-size: 2rem;
+  font-weight: 820;
+}
+
+.mastery-recommendation__score small {
+  color: var(--ink-500);
+}
+
+.mastery-practice-action {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 0.6rem;
+}
+
+.mastery-map {
+  width: min(100%, 68rem);
+  margin: clamp(2.8rem, 7vw, 5rem) auto 0;
+}
+
+.mastery-section-heading {
+  display: grid;
+  grid-template-columns: 1fr minmax(16rem, 28rem);
+  gap: 2rem;
+  align-items: end;
+}
+
+.mastery-section-heading h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.mastery-section-heading > p {
+  color: var(--ink-500);
+  line-height: 1.55;
+}
+
+.mastery-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.mastery-card {
+  min-height: 14.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-100);
+}
+
+.mastery-card--due {
+  border-color: color-mix(in srgb, var(--danger-500) 28%, transparent);
+}
+
+.mastery-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mastery-stone {
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 50%;
+  border: 2px solid var(--ink-500);
+  background: transparent;
+}
+
+.mastery-stone--learning {
+  background:
+    linear-gradient(90deg, var(--ink-850) 50%, transparent 50%);
+}
+
+.mastery-stone--established {
+  background: var(--ink-850);
+}
+
+.mastery-stone--mastered {
+  background: var(--ink-950);
+  box-shadow:
+    0 0 0 4px var(--accent-100),
+    0 0 0 6px color-mix(in srgb, var(--accent-500) 55%, transparent);
+}
+
+.mastery-card__value {
+  color: var(--ink-700);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.mastery-card h3 {
+  margin: 1rem 0 0;
+  font-size: 1.06rem;
+}
+
+.mastery-card > p {
+  margin: 0.45rem 0 0;
+  color: var(--ink-500);
+  font-size: 0.86rem;
+  line-height: 1.48;
+}
+
+.mastery-card__state {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.mastery-card__state strong {
+  color: var(--danger-500);
+}
+
+.mastery-card__metrics {
+  margin: 0.65rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+}
+
+.mastery-card__metrics div {
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  background: var(--paper-50);
+}
+
+.mastery-card__metrics dt {
+  color: var(--ink-500);
+  font-size: 0.62rem;
+}
+
+.mastery-card__metrics dd {
+  margin: 0.15rem 0 0;
+  color: var(--ink-850);
+  font-size: 0.78rem;
+  font-weight: 760;
+}
+
+.mastery-card__prerequisites {
+  margin-top: 0.65rem;
+  color: var(--ink-500);
+  font-size: 0.66rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .mastery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .mastery-section-heading,
+  .mastery-recommendation {
+    grid-template-columns: 1fr;
+  }
+
+  .mastery-recommendation__score {
+    align-items: flex-start;
+  }
+
+  .mastery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mastery-card {
+    min-height: 12rem;
+  }
+}
