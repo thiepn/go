@@ -16,6 +16,7 @@ export interface CoursePlayerProps {
   readonly course: CourseDefinition;
   readonly onExit?: () => void;
   readonly onReadyForGame?: () => void;
+  readonly onCompletionAction?: () => void;
 }
 
 interface SavedCourseProgress {
@@ -69,6 +70,7 @@ export function CoursePlayer({
   course,
   onExit,
   onReadyForGame,
+  onCompletionAction,
 }: CoursePlayerProps) {
   const lessons = useMemo(
     () => flattenCourseLessons(course),
@@ -93,6 +95,15 @@ export function CoursePlayer({
   }
 
   if (lessonIndex >= lessons.length) {
+    const completion = course.completion ?? {
+      eyebrow: 'Course complete',
+      title: 'Keep playing and reviewing.',
+      description:
+        'You finished this course. Use Practice, Play, Review, and Coach to make the ideas reliable in real games.',
+    };
+    const completionAction =
+      onCompletionAction ?? onReadyForGame;
+
     return (
       <main className="course-complete-shell">
         <section className="course-complete" aria-labelledby="course-complete-title">
@@ -100,21 +111,17 @@ export function CoursePlayer({
             <span className="course-complete__stone course-complete__stone--black" />
             <span className="course-complete__stone course-complete__stone--white" />
           </div>
-          <p className="eyebrow">Foundation complete</p>
-          <h1 id="course-complete-title">You can start playing Go.</h1>
-          <p>
-            You know the rules needed for a real game: liberties, capture,
-            groups, territory, life, ko, passing, dead stones, and scoring.
-            Your next step is a heavily guided 9×9 game.
-          </p>
+          <p className="eyebrow">{completion.eyebrow ?? 'Course complete'}</p>
+          <h1 id="course-complete-title">{completion.title}</h1>
+          <p>{completion.description}</p>
           <div className="course-complete__actions">
-            {onReadyForGame && (
+            {completionAction && completion.actionLabel && (
               <button
                 className="primary-action lesson-primary-action"
                 type="button"
-                onClick={onReadyForGame}
+                onClick={completionAction}
               >
-                Play your first 9×9 game
+                {completion.actionLabel}
               </button>
             )}
             {onExit && (
