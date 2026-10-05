@@ -1,7 +1,13 @@
 import {
+  useEffect,
   useMemo,
   useState,
 } from 'react';
+
+import {
+  fetchKataGoHealth,
+  type KataGoHealth,
+} from '../../analysis/health';
 
 import {
   loadGameRecords,
@@ -54,6 +60,22 @@ export function ReviewHub({
     useState<SavedGameRecord | null>(
       initialRecord,
     );
+  const [engineHealth, setEngineHealth] =
+    useState<KataGoHealth | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    fetchKataGoHealth().then((health) => {
+      if (mounted) {
+        setEngineHealth(health);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const games = useMemo(
     () => loadGameRecords(),
@@ -91,11 +113,26 @@ export function ReviewHub({
               Find the mistakes you can actually explain.
             </h1>
             <p>
-              P10 checks concrete tactical facts such as captures,
-              atari, self-atari, and direct cuts. It deliberately avoids
-              pretending it can judge subtle strategy without a stronger
-              analysis engine.
+              Deterministic review explains concrete tactical facts first.
+              KataGo can then add candidate moves, score comparison, ownership,
+              policy, and principal variations when the analysis service is connected.
             </p>
+
+            <div className={[
+              'review-engine-status',
+              engineHealth?.ready
+                ? 'is-ready'
+                : 'is-offline',
+            ].join(' ')}>
+              <span aria-hidden="true" />
+              {engineHealth === null
+                ? 'Checking KataGo…'
+                : engineHealth.ready
+                  ? `KataGo ready${engineHealth.humanModel ? ' · Human SL available' : ''}`
+                  : engineHealth.configured
+                    ? 'KataGo configured but unavailable'
+                    : 'KataGo optional · not configured'}
+            </div>
           </div>
         </header>
 
