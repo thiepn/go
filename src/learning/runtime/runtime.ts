@@ -2,6 +2,7 @@ import {
   createGame,
   getGroup,
   getIntersection,
+  pass,
   playMove,
   pointKey,
   type GameState,
@@ -58,6 +59,7 @@ export type LessonAction =
   | { readonly type: 'continue' }
   | { readonly type: 'point'; readonly point: Point }
   | { readonly type: 'choice'; readonly choiceId: string }
+  | { readonly type: 'pass' }
   | { readonly type: 'hint' }
   | { readonly type: 'retry' }
   | { readonly type: 'rewind' }
@@ -265,7 +267,35 @@ function handlePoint(
   switch (step.kind) {
     case 'continue':
     case 'choose-answer':
+    case 'pass':
       return state;
+
+    case 'try-illegal-move': {
+      if (point.x !== step.point.x || point.y !== step.point.y) {
+        return correction(
+          state,
+          pointFeedback(step, point, 'Try the marked move so you can see why it is not allowed.'),
+        );
+      }
+
+      const result = playMove(state.board, point);
+
+      if (result.ok) {
+        return correction(
+          state,
+          'That move was legal in this position. Try the marked move.',
+        );
+      }
+
+      if (result.reason !== step.expectedReason) {
+        return correction(
+          state,
+          `That move failed for a different reason (${result.reason}). Try the marked move again.`,
+        );
+      }
+
+      return advance(lesson, state, step.successText);
+    }
 
     case 'play-move': {
       if (
@@ -419,6 +449,27 @@ export function reduceLesson(
 
     case 'point':
       return handlePoint(lesson, state, step, action.point);
+
+    case 'pass':
+      if (step.kind !== 'pass') return state;
+
+      {
+        const result = pass(state.board);
+
+        if (!result.ok) {
+          return correction(state, 'You cannot pass after the game has already ended.');
+        }
+
+        return advance(
+          lesson,
+          {
+            ...state,
+            board: result.state,
+          },
+          step.successText,
+          state,
+        );
+      }
 
     case 'choice':
       if (step.kind !== 'choose-answer') return state;
