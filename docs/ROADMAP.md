@@ -193,21 +193,41 @@ Validation:
 
 ## P7 — Mastery & Knowledge Graph
 
-Status: **next**
+Status: **implementation complete — empirical diagnosis validation pending**
 
-Track:
+Implemented:
+- explicit beginner concept graph and prerequisite edges;
+- canonical concept aliases across lessons and practice content;
+- normalized lesson/practice/guided-game evidence;
 - concept exposure;
-- accuracy;
+- weighted accuracy;
 - first-attempt accuracy;
-- hint usage;
+- hint dependence;
 - recency;
-- retention;
-- response behavior;
-- game-derived mistakes.
+- retention decay;
+- confidence;
+- response-time tracking without speed scoring;
+- guided-game mistake evidence;
+- prerequisite-adjusted mastery;
+- review-due detection;
+- prerequisite-aware weakness diagnosis;
+- direct focused-practice remediation;
+- learner-facing Progress / knowledge-graph view;
+- migration of existing P6 practice history.
 
-Build prerequisite-aware remediation.
+Validation:
+- retention decays with time;
+- prerequisite evidence raises downstream confidence;
+- careful slow solving is not penalized;
+- synthetic weak-foundation histories select the prerequisite ahead of the downstream symptom;
+- no weakness is invented when evidence is absent.
+
+Certification note:
+- M4 has an implementation path and controlled-model validation, but real learner diagnosis remains an empirical product test, especially once game-review evidence arrives in P10.
 
 ## P8 — Independent Play
+
+Status: **next**
 
 Add:
 - 9×9;
@@ -329,7 +349,7 @@ Visual development runs in parallel rather than being postponed:
 - **V3** stone physics / sound / haptics — placement/capture/haptic hooks started; recorded sound layer next
 - **V4** educational motion primitives — semantic foundation started
 - **V5** lesson choreography — runtime foundation complete
-- **V6** learning home / map
+- **V6** learning home / map — mastery/progress foundation started
 - **V7** practice / milestone visuals — practice foundation complete
 - **V8** play / scoring visuals — guided-game foundation complete
 - **V9** review / variation visuals
