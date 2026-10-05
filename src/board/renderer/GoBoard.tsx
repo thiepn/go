@@ -44,6 +44,7 @@ export interface GoBoardProps {
   readonly groupHighlights?: readonly GroupHighlight[];
   readonly markers?: readonly BoardMarker[];
   readonly ghostStone?: GhostStone | null;
+  readonly showPlacementGhost?: boolean;
   readonly showCoordinates?: boolean;
   readonly onIntersectionIntent?: (point: Point) => void;
   readonly onFocusPointChange?: (point: Point) => void;
@@ -125,6 +126,7 @@ export function GoBoard({
   groupHighlights = [],
   markers = [],
   ghostStone = null,
+  showPlacementGhost = true,
   showCoordinates = false,
   onIntersectionIntent,
   onFocusPointChange,
@@ -270,6 +272,7 @@ export function GoBoard({
 
   const hoveredGhost: GhostStone | null =
     interactive &&
+    showPlacementGhost &&
     hoveredPoint &&
     getIntersection(board, hoveredPoint) === null
       ? { point: hoveredPoint, color: placementColor }
@@ -277,6 +280,7 @@ export function GoBoard({
 
   const keyboardGhost: GhostStone | null =
     interactive &&
+    showPlacementGhost &&
     getIntersection(board, focusPoint) === null &&
     !hoveredGhost
       ? { point: focusPoint, color: placementColor }
