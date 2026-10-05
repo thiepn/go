@@ -19,6 +19,10 @@ import './lesson-player.css';
 
 export interface LessonPlayerProps {
   readonly lesson: LessonDefinition;
+  readonly coursePosition?: {
+    readonly current: number;
+    readonly total: number;
+  };
   readonly onExit?: () => void;
   readonly onComplete?: () => void;
 }
@@ -105,6 +109,7 @@ function actionLabel(step: LessonStep | undefined): string | null {
 
 export function LessonPlayer({
   lesson,
+  coursePosition,
   onExit,
   onComplete,
 }: LessonPlayerProps) {
@@ -224,7 +229,9 @@ export function LessonPlayer({
         </div>
 
         <span className="lesson-player__count">
-          {state.stepIndex + 1}/{lesson.steps.length}
+          {coursePosition
+            ? `${coursePosition.current}/${coursePosition.total} · ${state.stepIndex + 1}/${lesson.steps.length}`
+            : `${state.stepIndex + 1}/${lesson.steps.length}`}
         </span>
       </header>
 
