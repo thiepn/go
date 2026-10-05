@@ -3,6 +3,7 @@ import {
   useState,
 } from 'react';
 
+import { recordMasteryEvidence } from '../../mastery';
 import { LessonPlayer } from '../player';
 import {
   flattenCourseLessons,
@@ -151,7 +152,22 @@ export function CoursePlayer({
           total: lessons.length,
         }}
         onExit={onExit}
-        onComplete={() => {
+        onComplete={(result) => {
+          const now = Date.now();
+          recordMasteryEvidence({
+            source: 'lesson',
+            sourceId: result.lessonId,
+            sourceConcept: result.concept,
+            success: true,
+            firstAttempt:
+              result.mistakes === 0 &&
+              result.hintsUsed === 0,
+            mistakes: result.mistakes,
+            hintsUsed: result.hintsUsed,
+            responseMs: result.responseMs,
+            occurredAt: now,
+          });
+
           const next = lessonIndex + 1;
           saveProgress(course, next);
           setLessonIndex(next);
