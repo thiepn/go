@@ -270,18 +270,51 @@ Boundary:
 
 ## P9 — SGF Study Workspace
 
-Status: **next**
+Status: **complete**
 
-Add:
-- SGF import/export;
-- game tree;
-- variations;
+Implemented:
+- internal recursive study-tree model;
+- SGF FF[4] import;
+- SGF export and .sgf download;
+- pasted-text and local-file import;
+- multi-game SGF collections;
+- board size / komi / player / result metadata;
+- moves and passes;
+- setup stones and player-to-move;
 - comments;
-- board editor;
-- replay;
-- study positions.
+- triangle / square / circle / cross / label annotations;
+- compressed point-list import;
+- escaped SGF values and composed labels;
+- engine-backed arbitrary-node replay;
+- previous / next / start navigation;
+- visual recursive variation tree;
+- legal variation creation from any position;
+- duplicate-variation reuse;
+- pass variations;
+- custom root-position editor;
+- 9×9 / 13×13 / 19×19 blank studies;
+- local study persistence;
+- P8 saved-game conversion;
+- direct Play → Study handoff;
+- recent-game Study action;
+- board-first responsive workspace.
+
+Validation:
+- SGF coordinates, metadata, setup, marks, comments, passes and branches;
+- SGF collection parsing;
+- compressed point ranges;
+- serialize / parse round-trips;
+- engine-backed captures and variation replay;
+- setup editing and annotation toggles;
+- P8 handicap, move, pass and result conversion.
+
+Boundary:
+- P9 explains and explores positions but does not grade move quality;
+- deterministic mistake detection begins in P10.
 
 ## P10 — Deterministic Game Review
+
+Status: **next**
 
 Detect explainable beginner/intermediate issues:
 - missed captures;
@@ -382,7 +415,7 @@ Visual development runs in parallel rather than being postponed:
 - **V6** learning home / map — mastery/progress foundation started
 - **V7** practice / milestone visuals — practice foundation complete
 - **V8** play / scoring visuals — independent play and scoring foundation complete
-- **V9** review / variation visuals
+- **V9** review / variation visuals — SGF replay and variation foundation complete
 - **V10** engine-analysis visualization
 - **V11** responsive / accessibility variants
 - **V12** visual performance and QA
