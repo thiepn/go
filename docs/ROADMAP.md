@@ -2,7 +2,7 @@
 
 ## P0 — Product Constitution, Beginner Contract & Architecture
 
-Status: **active**
+Status: **complete**
 
 Deliverables:
 - product constitution;
@@ -10,7 +10,9 @@ Deliverables:
 - first-game journey;
 - visual/motion constitution;
 - architecture boundaries;
-- phased roadmap.
+- phased roadmap;
+- minimal React/TypeScript/Vite shell;
+- initial design-token layer.
 
 Exit criteria:
 - new features can be judged against explicit learning principles;
@@ -19,6 +21,8 @@ Exit criteria:
 - engine and UI boundaries are explicit.
 
 ## P1 — Trusted Go Rules Engine
+
+Status: **next**
 
 Build and test:
 - board model;
@@ -244,8 +248,8 @@ Only after anonymous learning is excellent:
 
 Visual development runs in parallel rather than being postponed:
 
-- **V0** visual constitution
-- **V1** tokens and material language
+- **V0** visual constitution — complete
+- **V1** tokens and material language — foundation established, continues with P2
 - **V2** board renderer
 - **V3** stone physics / sound / haptics
 - **V4** educational motion primitives
