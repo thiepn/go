@@ -11,23 +11,23 @@ import type {
   Point,
   Stone,
 } from '../../go/engine';
-import {
-  serializeSgf,
-} from '../../sgf';
+import { serializeSgf } from '../../sgf/serializer';
 import {
   addStudyMoveVariation,
   editRootSetupPoint,
+  setRootToPlay,
+  setStudyLabel,
+  toggleStudyMark,
+} from '../editor';
+import { studyMarksToBoardMarkers } from '../marks';
+import {
   flattenStudyTree,
   nextMainNodeId,
   parentNodeId,
-  replayStudyPath,
-  saveStudyDocument,
-  setRootToPlay,
-  setStudyLabel,
-  studyMarksToBoardMarkers,
-  toggleStudyMark,
-  updateStudyComment,
-} from '..';
+} from '../navigation';
+import { replayStudyPath } from '../replay';
+import { saveStudyDocument } from '../store';
+import { updateStudyComment } from '../tree';
 import type {
   StudyDocument,
   StudyMarkKind,
