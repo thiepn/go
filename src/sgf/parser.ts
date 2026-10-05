@@ -205,16 +205,55 @@ function numeric(
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function expandPointValue(
+  value: string,
+  boardSize: number,
+): Point[] {
+  const separator = value.indexOf(':');
+
+  if (separator < 0) {
+    const point = sgfToPoint(value, boardSize);
+    return point ? [point] : [];
+  }
+
+  const start = sgfToPoint(
+    value.slice(0, separator),
+    boardSize,
+  );
+  const end = sgfToPoint(
+    value.slice(separator + 1),
+    boardSize,
+  );
+
+  if (!start || !end) return [];
+
+  const points: Point[] = [];
+
+  for (
+    let y = Math.min(start.y, end.y);
+    y <= Math.max(start.y, end.y);
+    y += 1
+  ) {
+    for (
+      let x = Math.min(start.x, end.x);
+      x <= Math.max(start.x, end.x);
+      x += 1
+    ) {
+      points.push({ x, y });
+    }
+  }
+
+  return points;
+}
+
 function parseSetup(
   properties: Readonly<Record<string, readonly string[]>>,
   boardSize: number,
 ): StudySetup | undefined {
   const points = (key: string) =>
-    (properties[key] ?? [])
-      .map((value) => sgfToPoint(value, boardSize))
-      .filter((point): point is NonNullable<typeof point> =>
-        point !== null,
-      );
+    (properties[key] ?? []).flatMap(
+      (value) => expandPointValue(value, boardSize),
+    );
 
   const black = points('AB');
   const white = points('AW');
@@ -255,8 +294,12 @@ function parseMarks(
     kind: StudyMark['kind'],
   ) => {
     for (const value of properties[property] ?? []) {
-      const point = sgfToPoint(value, boardSize);
-      if (point) marks.push({ point, kind });
+      for (const point of expandPointValue(
+        value,
+        boardSize,
+      )) {
+        marks.push({ point, kind });
+      }
     }
   };
 
