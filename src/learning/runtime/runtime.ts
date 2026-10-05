@@ -37,6 +37,8 @@ export interface LessonRuntimeState {
   readonly sequence: readonly Point[];
   readonly hintIndex: number;
   readonly attempts: number;
+  readonly totalAttempts: number;
+  readonly totalHintsUsed: number;
   readonly feedback: LessonFeedback | null;
   readonly presentation: LessonPresentation;
   readonly completed: boolean;
@@ -139,6 +141,8 @@ export function createLessonRuntime(
     sequence: [],
     hintIndex: 0,
     attempts: 0,
+    totalAttempts: 0,
+    totalHintsUsed: 0,
     feedback: null,
     presentation: presentationForStep(firstStep, initialBoard),
     completed: false,
@@ -198,6 +202,7 @@ function correction(
   return {
     ...state,
     attempts: state.attempts + 1,
+    totalAttempts: state.totalAttempts + 1,
     feedback: {
       tone: 'correction',
       text,
@@ -429,6 +434,8 @@ export function reduceLesson(
     return {
       lessonId: state.lessonId,
       ...previous,
+      totalAttempts: state.totalAttempts,
+      totalHintsUsed: state.totalHintsUsed,
       history: state.history.slice(0, -1),
     };
   }
@@ -493,6 +500,7 @@ export function reduceLesson(
       return {
         ...state,
         hintIndex: Math.min(state.hintIndex + 1, hints.length),
+        totalHintsUsed: state.totalHintsUsed + 1,
         feedback: {
           tone: 'neutral',
           text: hint.text,
