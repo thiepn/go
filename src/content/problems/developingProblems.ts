@@ -48,9 +48,9 @@ export const developingProblems: readonly ProblemDefinition[] = [
   },
   {
     id: 'ladder-read-01',
-    title: 'Continue the ladder',
+    title: 'Read the forced ladder',
     instruction:
-      'Black to play. Start the ladder, then continue the next atari after White escapes.',
+      'Black to play. Follow the forcing ladder sequence through two White escapes.',
     concept: 'ladder',
     tags: ['ladder', 'reading', 'atari'],
     difficulty: 3,
@@ -58,26 +58,39 @@ export const developingProblems: readonly ProblemDefinition[] = [
       size: 7,
       toPlay: 'black',
       black: [
-        { x: 1, y: 2 },
-        { x: 2, y: 1 },
+        { x: 0, y: 3 },
+        { x: 1, y: 3 },
+        { x: 0, y: 5 },
+        { x: 2, y: 5 },
       ],
-      white: [{ x: 2, y: 2 }],
+      white: [{ x: 1, y: 5 }],
     },
     root: {
       branches: [
         {
-          move: { x: 3, y: 2 },
+          move: { x: 1, y: 6 },
           verdict: 'continue',
           feedback:
-            'Good. White escapes downward; continue the forcing zigzag.',
-          opponentMove: { x: 2, y: 3 },
+            'Atari. White has only one escape and runs upward.',
+          opponentMove: { x: 1, y: 4 },
           next: {
             branches: [
               {
-                move: { x: 3, y: 3 },
-                verdict: 'solved',
+                move: { x: 0, y: 4 },
+                verdict: 'continue',
                 feedback:
-                  'Correct. You continued the ladder instead of chasing randomly.',
+                  'Correct. Another atari forces the chain to zigzag.',
+                opponentMove: { x: 2, y: 4 },
+                next: {
+                  branches: [
+                    {
+                      move: { x: 3, y: 4 },
+                      verdict: 'solved',
+                      feedback:
+                        'Correct. You maintained the ladder pattern through multiple forced replies.',
+                    },
+                  ],
+                },
               },
             ],
           },
@@ -86,8 +99,8 @@ export const developingProblems: readonly ProblemDefinition[] = [
     },
     hints: [
       {
-        text: 'The first move is atari on White’s right.',
-        showPoints: [{ x: 3, y: 2 }],
+        text: 'Start at the lower liberty of the white stone.',
+        showPoints: [{ x: 1, y: 6 }],
       },
     ],
   },
