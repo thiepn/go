@@ -14,6 +14,7 @@ import './course-player.css';
 export interface CoursePlayerProps {
   readonly course: CourseDefinition;
   readonly onExit?: () => void;
+  readonly onReadyForGame?: () => void;
 }
 
 interface SavedCourseProgress {
@@ -66,6 +67,7 @@ function saveProgress(
 export function CoursePlayer({
   course,
   onExit,
+  onReadyForGame,
 }: CoursePlayerProps) {
   const lessons = useMemo(
     () => flattenCourseLessons(course),
@@ -105,6 +107,15 @@ export function CoursePlayer({
             Your next step is a heavily guided 9×9 game.
           </p>
           <div className="course-complete__actions">
+            {onReadyForGame && (
+              <button
+                className="primary-action lesson-primary-action"
+                type="button"
+                onClick={onReadyForGame}
+              >
+                Play your first 9×9 game
+              </button>
+            )}
             {onExit && (
               <button className="secondary-action" type="button" onClick={onExit}>
                 Back home
