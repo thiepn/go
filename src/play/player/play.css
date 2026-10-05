@@ -179,6 +179,20 @@
   color: var(--ink-500);
 }
 
+.recent-game-study {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.58rem;
+  border: 1px solid color-mix(in srgb, var(--accent-500) 28%, transparent);
+  border-radius: var(--radius-pill);
+  background: var(--accent-100);
+  color: var(--accent-600);
+  font-size: 0.72rem;
+  font-weight: 760;
+  cursor: pointer;
+}
+
 .independent-game-shell {
   min-height: 100vh;
   padding: clamp(0.75rem, 2vw, 1.5rem);
