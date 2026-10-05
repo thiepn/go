@@ -1,16 +1,49 @@
 import { useState } from 'react';
 
-import { beginnerCourse } from '../content';
+import {
+  beginnerCourse,
+  firstGuidedGame,
+} from '../content';
+import { GuidedGamePlayer } from '../guided';
 import { CoursePlayer } from '../learning';
 
-export function App() {
-  const [started, setStarted] = useState(false);
+type AppMode = 'home' | 'course' | 'guided-game';
 
-  if (started) {
+function markFirstGameComplete(): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    window.localStorage.setItem(
+      'thiepn-go:guided:first-9x9:complete',
+      'true',
+    );
+  } catch {
+    // Completion feedback must not depend on storage availability.
+  }
+}
+
+export function App() {
+  const [mode, setMode] = useState<AppMode>('home');
+
+  if (mode === 'course') {
     return (
       <CoursePlayer
         course={beginnerCourse}
-        onExit={() => setStarted(false)}
+        onExit={() => setMode('home')}
+        onReadyForGame={() => setMode('guided-game')}
+      />
+    );
+  }
+
+  if (mode === 'guided-game') {
+    return (
+      <GuidedGamePlayer
+        scenario={firstGuidedGame}
+        onExit={() => setMode('home')}
+        onComplete={() => {
+          markFirstGameComplete();
+          setMode('home');
+        }}
       />
     );
   }
@@ -27,20 +60,20 @@ export function App() {
         <h1 id="welcome-title">One stone at a time.</h1>
         <p className="welcome-copy">
           Start with no Go knowledge. Learn directly on the board, understand
-          each rule through interaction, and finish ready for your first guided
+          each rule through interaction, then play your first complete guided
           9×9 game.
         </p>
 
         <button
           className="primary-action"
           type="button"
-          onClick={() => setStarted(true)}
+          onClick={() => setMode('course')}
         >
           Start learning
         </button>
 
         <p className="secondary-copy">
-          12 interactive lessons · progress saved on this device · no account required
+          12 interactive lessons · guided first game · no account required
         </p>
       </section>
     </main>
