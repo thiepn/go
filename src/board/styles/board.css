@@ -59,12 +59,7 @@
   filter: blur(2px);
 }
 
-.go-stone--black .go-stone__body {
-  fill: url("#board-black-stone");
-}
-
 .go-stone--white .go-stone__body {
-  fill: url("#board-white-stone");
   stroke: rgb(38 31 23 / 0.22);
   stroke-width: 1.4;
 }
