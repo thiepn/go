@@ -51,6 +51,8 @@ import './play.css';
 export interface IndependentGamePlayerProps {
   readonly settings: IndependentGameSettings;
   readonly onExit?: () => void;
+  readonly coachObjective?: string | null;
+  readonly exitLabel?: string;
 }
 
 function colorLabel(color: Stone): string {
@@ -81,6 +83,8 @@ function resultText(
 export function IndependentGamePlayer({
   settings,
   onExit,
+  coachObjective = null,
+  exitLabel = 'Back to Play',
 }: IndependentGamePlayerProps) {
   const [state, dispatch] = useReducer(
     reduceIndependentGame,
@@ -360,7 +364,7 @@ export function IndependentGamePlayer({
               type="button"
               onClick={onExit}
             >
-              Back to Play
+              {exitLabel}
             </button>
           )}
         </section>
@@ -603,6 +607,13 @@ export function IndependentGamePlayer({
             )}
           </div>
         </footer>
+
+        {coachObjective && (
+          <aside className="game-focus-objective">
+            <span>Game focus</span>
+            <strong>{coachObjective}</strong>
+          </aside>
+        )}
 
         {coachVisible && (
           <aside className="game-coach-card" aria-live="polite">
