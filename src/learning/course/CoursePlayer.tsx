@@ -77,6 +77,10 @@ export function CoursePlayer({
     [course],
   );
 
+  const [lessonIndex, setLessonIndex] = useState(() =>
+    loadProgress(course, lessons.length),
+  );
+
   if (validationIssues.length > 0) {
     throw new Error(
       `Invalid course "${course.id}": ${validationIssues
@@ -84,10 +88,6 @@ export function CoursePlayer({
         .join('; ')}`,
     );
   }
-
-  const [lessonIndex, setLessonIndex] = useState(() =>
-    loadProgress(course, lessons.length),
-  );
 
   if (lessonIndex >= lessons.length) {
     return (
