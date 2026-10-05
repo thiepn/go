@@ -179,10 +179,16 @@
   color: var(--ink-500);
 }
 
-.recent-game-study {
+.recent-game-actions {
   grid-column: 1 / -1;
-  justify-self: start;
   margin-top: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.recent-game-study,
+.recent-game-review {
   padding: 0.35rem 0.58rem;
   border: 1px solid color-mix(in srgb, var(--accent-500) 28%, transparent);
   border-radius: var(--radius-pill);
@@ -191,6 +197,11 @@
   font-size: 0.72rem;
   font-weight: 760;
   cursor: pointer;
+}
+
+.recent-game-review {
+  background: var(--paper-50);
+  color: var(--ink-700);
 }
 
 .independent-game-shell {
