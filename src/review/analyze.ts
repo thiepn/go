@@ -300,8 +300,10 @@ export function reviewSavedGame(
 
     if (
       captures.length > 0 &&
-      frame.move.type === 'play' &&
-      frame.move.captured.length === 0 &&
+      (
+        frame.move.type === 'pass' ||
+        frame.move.captured.length === 0
+      ) &&
       !hasPunishedAtari
     ) {
       findings.push(
