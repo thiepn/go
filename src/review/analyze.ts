@@ -1,5 +1,6 @@
 import {
   getGroup,
+  playMove,
   pointKey,
   type Point,
   type Stone,
@@ -392,7 +393,11 @@ export function reviewSavedGame(
         frame.before.board,
         next.move.point,
         player,
-      ) >= 2
+      ) >= 2 &&
+      playMove(
+        frame.before,
+        next.move.point,
+      ).ok
     ) {
       findings.push(
         finding(record.id, {
