@@ -1,0 +1,106 @@
+.course-context {
+  position: fixed;
+  top: 0.95rem;
+  left: 50%;
+  z-index: 5;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.course-context span {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 15%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--paper-50) 88%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  font-weight: 760;
+  letter-spacing: 0.05em;
+}
+
+.course-complete-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 50% 42%, rgb(211 166 88 / 0.2), transparent 28rem),
+    var(--paper-50);
+}
+
+.course-complete {
+  width: min(100%, 38rem);
+  text-align: center;
+}
+
+.course-complete h1 {
+  font-size: clamp(3rem, 9vw, 5.4rem);
+}
+
+.course-complete p:not(.eyebrow) {
+  max-width: 34rem;
+  margin: 1.35rem auto 0;
+  color: var(--ink-700);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.course-complete__board {
+  position: relative;
+  width: 6rem;
+  height: 5rem;
+  margin: 0 auto 1.7rem;
+  border-radius: 0.9rem;
+  background:
+    linear-gradient(rgb(71 50 28 / 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(71 50 28 / 0.55) 1px, transparent 1px),
+    var(--board-300);
+  background-size: 1rem 1rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.course-complete__stone {
+  position: absolute;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  box-shadow: var(--shadow-stone);
+}
+
+.course-complete__stone--black {
+  left: 1.32rem;
+  top: 1.32rem;
+  background: radial-gradient(circle at 35% 28%, #4b4c46, #151612 68%);
+}
+
+.course-complete__stone--white {
+  right: 1.32rem;
+  bottom: 1.32rem;
+  background: radial-gradient(circle at 35% 28%, #fffef9, #e8e1d5 68%);
+  border: 1px solid rgb(23 24 22 / 0.12);
+}
+
+.course-complete__actions {
+  margin-top: 1.8rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+@media (max-width: 760px) {
+  .course-context {
+    top: 0.75rem;
+  }
+
+  .course-context span {
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
