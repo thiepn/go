@@ -3,17 +3,18 @@ import type {
   ProblemHistoryEntry,
 } from './types';
 
-export interface ProblemAttemptResult {
+export interface ProblemSessionResult {
   readonly problemId: string;
   readonly success: boolean;
   readonly firstTry: boolean;
+  readonly mistakes: number;
   readonly hintsUsed: number;
   readonly attemptedAt: number;
 }
 
-export function recordProblemAttempt(
+export function recordProblemSession(
   history: ProblemHistory,
-  result: ProblemAttemptResult,
+  result: ProblemSessionResult,
 ): ProblemHistory {
   const previous: ProblemHistoryEntry =
     history[result.problemId] ?? {
@@ -33,13 +34,16 @@ export function recordProblemAttempt(
       problemId: result.problemId,
       attempts: previous.attempts + 1,
       successes: previous.successes + (result.success ? 1 : 0),
-      failures: previous.failures + (result.success ? 0 : 1),
+      failures: previous.failures + result.mistakes + (result.success ? 0 : 1),
       firstTrySuccesses:
         previous.firstTrySuccesses +
         (result.success && result.firstTry ? 1 : 0),
       totalHintsUsed:
         previous.totalHintsUsed + result.hintsUsed,
-      lastResult: result.success ? 'success' : 'failure',
+      lastResult:
+        result.success && result.mistakes === 0
+          ? 'success'
+          : 'failure',
       lastAttemptAt: result.attemptedAt,
     },
   };
