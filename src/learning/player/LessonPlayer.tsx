@@ -147,19 +147,8 @@ export function LessonPlayer({
       }
     }
 
-    const beforeIndex = state.stepIndex;
-    const beforeAttempts = state.attempts;
-
     dispatch({ type: 'point', point });
-
-    // The reducer is synchronous but React state arrives on the next render.
-    // Immediate tactile feedback is based on the interaction intent; semantic
-    // success/correction styling comes from runtime state on render.
-    if (step.kind === 'play-move') {
-      triggerBoardFeedback('place', { haptics: true });
-    } else if (beforeIndex === state.stepIndex && beforeAttempts === state.attempts) {
-      triggerBoardFeedback('focus', { haptics: true });
-    }
+    triggerBoardFeedback('focus', { haptics: true });
   };
 
   if (state.completed) {
