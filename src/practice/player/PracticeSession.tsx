@@ -64,6 +64,10 @@ export function PracticeSession({
   const current = queue[index];
 
   const finishProblem = (result: ProblemResult) => {
+    const solvedProblem = current;
+
+    if (!solvedProblem) return;
+
     const nextHistory = recordProblemSession(history, {
       problemId: result.problemId,
       success: true,
@@ -84,7 +88,7 @@ export function PracticeSession({
       (result.mistakes > 0 || result.hintsUsed > 0) &&
       !repeated.has(result.problemId)
     ) {
-      setQueue((items) => [...items, current]);
+      setQueue((items) => [...items, solvedProblem]);
       setRepeated((ids) => {
         const next = new Set(ids);
         next.add(result.problemId);
