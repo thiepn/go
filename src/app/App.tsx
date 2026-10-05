@@ -9,6 +9,7 @@ import { GuidedGamePlayer } from '../guided';
 import { CoursePlayer } from '../learning';
 import { MasteryDashboard } from '../mastery/player';
 import { recordMasteryEvidence } from '../mastery/store';
+import { PlayHub } from '../play/player';
 import { PracticeHub } from '../practice';
 
 type AppMode =
@@ -16,7 +17,8 @@ type AppMode =
   | 'course'
   | 'guided-game'
   | 'practice'
-  | 'progress';
+  | 'progress'
+  | 'play';
 
 const FIRST_GAME_COMPLETE_KEY =
   'thiepn-go:guided:first-9x9:complete';
@@ -112,6 +114,14 @@ export function App() {
     );
   }
 
+  if (mode === 'play') {
+    return (
+      <PlayHub
+        onExit={() => setMode('home')}
+      />
+    );
+  }
+
   if (mode === 'progress') {
     return (
       <MasteryDashboard
@@ -165,6 +175,13 @@ export function App() {
               <button
                 className="home-secondary-action"
                 type="button"
+                onClick={() => setMode('play')}
+              >
+                Play
+              </button>
+              <button
+                className="home-secondary-action"
+                type="button"
                 onClick={() => setMode('progress')}
               >
                 Progress
@@ -175,7 +192,7 @@ export function App() {
 
         <p className="secondary-copy">
           {practiceUnlocked
-            ? 'Lessons · guided game · adaptive practice · mastery diagnosis'
+            ? 'Lessons · play · adaptive practice · mastery diagnosis'
             : '12 interactive lessons · guided first game · no account required'}
         </p>
       </section>
