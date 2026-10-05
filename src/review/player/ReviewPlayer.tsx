@@ -4,6 +4,7 @@ import {
   useState,
 } from 'react';
 
+import { EngineMoveAnalysis } from '../../analysis/player';
 import {
   GoBoard,
   type BoardHighlight,
@@ -107,6 +108,24 @@ export function ReviewPlayer({
   const [tryFeedback, setTryFeedback] =
     useState<string | null>(null);
 
+  const reviewableMoveNumbers = useMemo(
+    () =>
+      record.moves.flatMap((move, index) =>
+        record.settings.mode === 'computer' &&
+        move.player !== record.settings.humanColor
+          ? []
+          : [index + 1],
+      ),
+    [record],
+  );
+
+  const [cleanEngineMove, setCleanEngineMove] =
+    useState(
+      () =>
+        reviewableMoveNumbers.at(-1) ??
+        1,
+    );
+
   useEffect(() => {
     syncReviewMasteryEvidence(review);
   }, [review]);
@@ -138,10 +157,9 @@ export function ReviewPlayer({
           <p className="eyebrow">Game review</p>
           <h1>No deterministic tactical issue found.</h1>
           <p>
-            That does not mean every move was strong. P10 only reports
-            explainable rule-based patterns it can support with high or
-            medium confidence. Strategic evaluation comes later with
-            KataGo analysis.
+            That does not mean every move was strong. Deterministic review
+            only reports rule-based patterns it can explain safely. You can
+            still inspect any of your moves with KataGo below.
           </p>
 
           <div className="review-clean__meta">
@@ -152,6 +170,53 @@ export function ReviewPlayer({
             <span>{record.moves.length} moves</span>
             <span>{resultLabel(record)}</span>
           </div>
+
+          {reviewableMoveNumbers.length > 0 && (
+            <div className="review-clean__engine-picker">
+              <label htmlFor="review-clean-engine-move">
+                Engine-check move
+              </label>
+              <select
+                id="review-clean-engine-move"
+                value={cleanEngineMove}
+                onChange={(event) =>
+                  setCleanEngineMove(
+                    Number(event.target.value),
+                  )
+                }
+              >
+                {reviewableMoveNumbers.map(
+                  (moveNumber) => {
+                    const move =
+                      record.moves[
+                        moveNumber - 1
+                      ];
+
+                    return (
+                      <option
+                        key={moveNumber}
+                        value={moveNumber}
+                      >
+                        Move {moveNumber} ·{' '}
+                        {move.player ===
+                        'black'
+                          ? 'Black'
+                          : 'White'}
+                      </option>
+                    );
+                  },
+                )}
+              </select>
+            </div>
+          )}
+
+          {reviewableMoveNumbers.length > 0 && (
+            <EngineMoveAnalysis
+              key={`${record.id}-clean-${cleanEngineMove}`}
+              record={record}
+              moveNumber={cleanEngineMove}
+            />
+          )}
 
           <div className="review-clean__actions">
             {onStudy && (
@@ -570,6 +635,15 @@ export function ReviewPlayer({
           )}
         </aside>
       </section>
+
+      <div className="review-engine-wide">
+        <EngineMoveAnalysis
+          key={`${record.id}-finding-${finding.moveNumber}`}
+          record={record}
+          moveNumber={finding.moveNumber}
+          deterministicFinding={finding}
+        />
+      </div>
     </main>
   );
 }
