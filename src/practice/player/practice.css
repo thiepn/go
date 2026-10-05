@@ -1,0 +1,376 @@
+.problem-shell {
+  min-height: 100vh;
+  width: 100%;
+  padding: clamp(0.9rem, 2.3vw, 2rem);
+  background:
+    radial-gradient(circle at 67% 49%, rgb(222 177 98 / 0.15), transparent 30rem),
+    var(--paper-50);
+}
+
+.problem-header {
+  width: min(100%, 74rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.problem-header__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.problem-header__meta span {
+  color: var(--ink-850);
+  font-size: 0.84rem;
+  font-weight: 760;
+}
+
+.problem-header__meta small {
+  margin-top: 0.12rem;
+  color: var(--ink-500);
+  font-size: 0.72rem;
+}
+
+.problem-difficulty {
+  display: flex;
+  gap: 0.22rem;
+}
+
+.problem-difficulty span {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--paper-200);
+}
+
+.problem-difficulty span.is-filled {
+  background: var(--accent-500);
+}
+
+.problem-layout {
+  width: min(100%, 74rem);
+  margin: clamp(2rem, 6vh, 4.8rem) auto 0;
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.72fr) minmax(22rem, 1.28fr);
+  grid-template-areas:
+    "copy board"
+    "tools board";
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.problem-copy {
+  grid-area: copy;
+  align-self: end;
+}
+
+.problem-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  margin-bottom: 0.85rem;
+}
+
+.problem-tags span {
+  padding: 0.3rem 0.54rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-size: 0.68rem;
+  font-weight: 720;
+  text-transform: capitalize;
+}
+
+.problem-copy h1 {
+  max-width: 10ch;
+  font-size: clamp(2.7rem, 5.8vw, 5.3rem);
+}
+
+.problem-instruction {
+  max-width: 31rem;
+  margin: 1.3rem 0 0;
+  color: var(--ink-700);
+  font-size: clamp(1rem, 1.8vw, 1.13rem);
+  line-height: 1.7;
+}
+
+.problem-opponent {
+  margin: 0.9rem 0 0;
+  color: var(--ink-500);
+  font-size: 0.84rem;
+  font-weight: 680;
+}
+
+.problem-board-stage {
+  grid-area: board;
+  width: min(100%, 43rem);
+  justify-self: end;
+  position: relative;
+}
+
+.problem-board-stage .go-board-shell {
+  position: relative;
+}
+
+.problem-tools {
+  grid-area: tools;
+  align-self: start;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.problem-tools__left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.problem-shell--solved {
+  display: grid;
+  place-items: center;
+}
+
+.problem-result {
+  width: min(100%, 36rem);
+  text-align: center;
+}
+
+.problem-result__mark {
+  width: 4.2rem;
+  height: 4.2rem;
+  margin: 0 auto 1.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-100);
+  color: var(--accent-600);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.problem-result h1 {
+  font-size: clamp(2.7rem, 8vw, 4.8rem);
+}
+
+.problem-result > p:not(.eyebrow) {
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.problem-result__stats {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.problem-result__stats span {
+  padding: 0.42rem 0.68rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.practice-primary-action {
+  margin-top: 1.45rem;
+}
+
+.practice-hub-shell,
+.practice-summary-shell {
+  min-height: 100vh;
+  padding: clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(circle at 50% 38%, rgb(215 170 92 / 0.16), transparent 32rem),
+    var(--paper-50);
+}
+
+.practice-hub {
+  width: min(100%, 64rem);
+  margin: 0 auto;
+}
+
+.practice-hub__header {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.practice-hub__header h1 {
+  max-width: 12ch;
+  font-size: clamp(2.8rem, 7vw, 5.4rem);
+}
+
+.practice-hub__header p:not(.eyebrow) {
+  max-width: 34rem;
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.practice-mode-grid {
+  margin-top: clamp(2rem, 6vw, 4rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.practice-mode-card {
+  min-height: 13rem;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 16%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-100);
+  color: var(--ink-850);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgb(34 30 23 / 0.045);
+  transition:
+    transform var(--motion-standard) var(--ease-out),
+    border-color var(--motion-micro) linear;
+}
+
+.practice-mode-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent-500) 38%, transparent);
+}
+
+.practice-mode-card strong {
+  margin-top: auto;
+  font-size: 1.05rem;
+}
+
+.practice-mode-card small {
+  margin-top: 0.42rem;
+  color: var(--ink-500);
+  line-height: 1.45;
+}
+
+.practice-mode-card__board {
+  position: relative;
+  width: 3.8rem;
+  height: 3.8rem;
+  border-radius: 0.55rem;
+  background:
+    linear-gradient(rgb(72 51 30 / 0.45) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(72 51 30 / 0.45) 1px, transparent 1px),
+    var(--board-300);
+  background-size: 0.95rem 0.95rem;
+}
+
+.practice-mode-card__board i {
+  position: absolute;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 50%;
+  background: var(--stone-black);
+  box-shadow: var(--shadow-stone);
+}
+
+.practice-mode-card__board i:nth-child(1) {
+  left: 0.58rem;
+  top: 0.58rem;
+}
+
+.practice-mode-card__board i:nth-child(2) {
+  left: 1.53rem;
+  top: 1.53rem;
+  background: var(--stone-white);
+  border: 1px solid rgb(0 0 0 / 0.12);
+}
+
+.practice-mode-card__board i:nth-child(3) {
+  left: 2.48rem;
+  top: 1.53rem;
+}
+
+.practice-summary-shell {
+  display: grid;
+  place-items: center;
+}
+
+.practice-summary {
+  width: min(100%, 36rem);
+  text-align: center;
+}
+
+.practice-summary h1 {
+  font-size: clamp(3rem, 9vw, 5.2rem);
+}
+
+.practice-summary > p:not(.eyebrow) {
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.practice-summary__note {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+@media (max-width: 820px) {
+  .practice-mode-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .problem-shell {
+    padding: 0.8rem 0.85rem 1.5rem;
+  }
+
+  .problem-layout {
+    margin-top: 1.6rem;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "board"
+      "tools";
+    gap: 1.15rem;
+  }
+
+  .problem-copy {
+    text-align: center;
+  }
+
+  .problem-copy h1 {
+    max-width: none;
+    font-size: clamp(2.45rem, 12vw, 4.2rem);
+  }
+
+  .problem-tags {
+    justify-content: center;
+  }
+
+  .problem-instruction,
+  .lesson-feedback-card {
+    margin-inline: auto;
+  }
+
+  .problem-board-stage {
+    width: min(100%, 38rem);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .practice-mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .practice-mode-card {
+    min-height: 10.5rem;
+  }
+}
