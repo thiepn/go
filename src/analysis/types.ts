@@ -9,10 +9,13 @@ export interface KataGoQuery {
   readonly moves: readonly (readonly [KataGoColor, string])[];
   readonly rules: string | Readonly<Record<string, unknown>>;
   readonly komi: number;
+  readonly whiteHandicapBonus?: 0 | 'N' | 'N-1';
   readonly boardXSize: number;
   readonly boardYSize: number;
   readonly analyzeTurns?: readonly number[];
   readonly maxVisits?: number;
+  readonly rootPolicyTemperature?: number;
+  readonly rootFpuReductionMax?: number;
   readonly analysisPVLen?: number;
   readonly includeOwnership?: boolean;
   readonly includeOwnershipStdev?: boolean;
