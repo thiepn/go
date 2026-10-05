@@ -88,14 +88,23 @@ export function normalizeKataGoResponse(
           utility: finite(item.utility),
           prior: finite(item.prior),
           humanPrior: finite(item.humanPrior),
-          pvCoordinates: [
-            coordinate,
-            ...(item.pv ?? []),
-          ],
-          pv: [
-            coordinate,
-            ...(item.pv ?? []),
-          ].map((value) =>
+          pvCoordinates:
+            item.pv?.[0]?.toLowerCase() ===
+            coordinate.toLowerCase()
+              ? [...item.pv]
+              : [
+                  coordinate,
+                  ...(item.pv ?? []),
+                ],
+          pv: (
+            item.pv?.[0]?.toLowerCase() ===
+            coordinate.toLowerCase()
+              ? [...item.pv]
+              : [
+                  coordinate,
+                  ...(item.pv ?? []),
+                ]
+          ).map((value) =>
             kataGoToPoint(
               value,
               boardSize,
