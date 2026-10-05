@@ -2,6 +2,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
 } from 'react';
 
 import {
@@ -19,10 +20,20 @@ import {
 import type { GuidedGameScenario } from '../types';
 import './guided-game.css';
 
+export interface GuidedGameCompletionResult {
+  readonly scenarioId: string;
+  readonly masteryConcepts: readonly string[];
+  readonly learnerMoves: number;
+  readonly helpUses: number;
+  readonly mistakes: number;
+  readonly captures: number;
+  readonly responseMs: number;
+}
+
 export interface GuidedGamePlayerProps {
   readonly scenario: GuidedGameScenario;
   readonly onExit?: () => void;
-  readonly onComplete?: () => void;
+  readonly onComplete?: (result: GuidedGameCompletionResult) => void;
 }
 
 function formatScore(value: number): string {
@@ -34,6 +45,8 @@ export function GuidedGamePlayer({
   onExit,
   onComplete,
 }: GuidedGamePlayerProps) {
+  const startedAtRef = useRef(Date.now());
+
   const [state, dispatch] = useReducer(
     (
       current: ReturnType<typeof createGuidedGameState>,
@@ -121,6 +134,7 @@ export function GuidedGamePlayer({
           <div className="guided-complete__stats">
             <span>{state.learnerMoves} learner turns</span>
             <span>{state.helpUses} help requests</span>
+            <span>{state.mistakes} corrections</span>
             <span>{state.game.captures.black} capture</span>
           </div>
 
@@ -134,7 +148,17 @@ export function GuidedGamePlayer({
               <button
                 className="primary-action guided-primary-action"
                 type="button"
-                onClick={onComplete}
+                onClick={() =>
+                  onComplete({
+                    scenarioId: scenario.id,
+                    masteryConcepts: scenario.masteryConcepts ?? [],
+                    learnerMoves: state.learnerMoves,
+                    helpUses: state.helpUses,
+                    mistakes: state.mistakes,
+                    captures: state.game.captures.black,
+                    responseMs: Math.max(0, Date.now() - startedAtRef.current),
+                  })
+                }
               >
                 Continue
               </button>
