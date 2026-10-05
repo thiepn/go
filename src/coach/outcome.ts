@@ -99,13 +99,16 @@ export function evaluateCoachPlan(
           b.playedAt,
       );
 
-  const followup =
-    followups.find(
+  const fullFollowups =
+    followups.filter(
       (game) =>
         learnerMoveCount(game) >=
         10,
-    ) ??
-    followups[0] ??
+    );
+
+  const followup =
+    fullFollowups.at(-1) ??
+    followups.at(-1) ??
     null;
 
   const currentMastery =
