@@ -47,9 +47,9 @@ Validation:
 
 ## V1/P2 — Board Rendering & Interaction Foundation
 
-Status: **next**
+Status: **complete**
 
-Build:
+Implemented:
 - SVG board;
 - responsive geometry;
 - stones;
@@ -62,9 +62,17 @@ Build:
 - reduced motion.
 
 Exit criterion:
-- 9×9 and 19×19 boards feel excellent on phone, tablet, and desktop.
+- reusable SVG renderer supports responsive standard board sizes, engine-backed interaction, overlays, motion, accessibility, and reduced-motion behavior.
+
+Validation:
+- engine-backed 9×9 integration is live in the app shell;
+- geometry and transition behavior have unit coverage;
+- repository verification workflow runs tests and production build;
+- rendering resources are isolated per board instance for multi-board course/review layouts.
 
 ## P3 — Educational Interaction Runtime
+
+Status: **next**
 
 Implement primitives:
 - place a stone;
@@ -256,9 +264,9 @@ Only after anonymous learning is excellent:
 Visual development runs in parallel rather than being postponed:
 
 - **V0** visual constitution — complete
-- **V1** tokens and material language — foundation established, continues with P2
-- **V2** board renderer
-- **V3** stone physics / sound / haptics
+- **V1** tokens and material language — complete foundation
+- **V2** board renderer — complete foundation
+- **V3** stone physics / sound / haptics — placement/capture/haptic hooks started; recorded sound layer next
 - **V4** educational motion primitives
 - **V5** lesson choreography
 - **V6** learning home / map
