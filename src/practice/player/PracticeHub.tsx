@@ -5,6 +5,7 @@ import { PracticeSession } from './PracticeSession';
 
 export interface PracticeHubProps {
   readonly problems: readonly ProblemDefinition[];
+  readonly focusedTags?: readonly string[];
   readonly onExit?: () => void;
 }
 
@@ -61,9 +62,21 @@ const MODES: readonly {
 
 export function PracticeHub({
   problems,
+  focusedTags,
   onExit,
 }: PracticeHubProps) {
   const [mode, setMode] = useState<PracticeMode | null>(null);
+
+  if (focusedTags && focusedTags.length > 0) {
+    return (
+      <PracticeSession
+        problems={problems}
+        tags={focusedTags}
+        sessionSize={5}
+        onExit={onExit}
+      />
+    );
+  }
 
   if (mode) {
     const config = MODES.find((item) => item.id === mode);
