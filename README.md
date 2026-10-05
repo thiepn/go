@@ -46,8 +46,15 @@ The board is the primary teaching surface. Definitions follow intuition; visual 
 - 13×13
 - 19×19 foundations
 
+## Analysis architecture
+
+Post-game review has two complementary layers:
+
+- deterministic rule-based review for explainable tactical facts;
+- optional KataGo analysis for candidate moves, score comparison, ownership, policy, and principal variations.
+
+KataGo runs behind a server-side analysis bridge and is not required for the core learning app to function.
+
 ## Repository direction
 
-This repository is being built in phases. P0 establishes the product, beginner-learning, visual, and technical contracts before feature volume grows.
-
-See `docs/` for the authoritative foundation.
+This repository is being built in phases. See `docs/` for the authoritative product, learning, study, review, and analysis contracts.
