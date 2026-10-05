@@ -505,3 +505,36 @@
     width: 100%;
   }
 }
+
+.review-engine-status {
+  width: fit-content;
+  margin-top: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.62rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.review-engine-status > span {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--ink-500);
+}
+
+.review-engine-status.is-ready {
+  color: var(--accent-600);
+}
+
+.review-engine-status.is-ready > span {
+  background: var(--accent-500);
+}
+
+.review-engine-status.is-offline > span {
+  opacity: 0.55;
+}
