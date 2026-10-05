@@ -7,6 +7,14 @@ export const firstGuidedGame: GuidedGameScenario = {
   boardSize: 9,
   komi: 6.5,
   assistanceLevel: 'guided',
+  masteryConcepts: [
+    'connection',
+    'territory',
+    'atari',
+    'capture',
+    'passing',
+    'scoring',
+  ],
   openingMessage:
     'You are Black. We will build one secure corner, notice a tactical opportunity, make a capture, then finish and count the board.',
   completionMessage:
