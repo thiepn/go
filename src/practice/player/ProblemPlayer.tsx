@@ -66,8 +66,9 @@ export function ProblemPlayer({
     return move?.type === 'play' ? move.point : null;
   }, [state.game.moves]);
 
+  const hints = problem.hints ?? [];
   const hint = state.hintIndex > 0
-    ? problem.hints?.[Math.min(state.hintIndex, problem.hints.length) - 1]
+    ? hints[Math.min(state.hintIndex, hints.length) - 1]
     : undefined;
 
   const highlights: BoardHighlight[] = (hint?.showPoints ?? []).map(
