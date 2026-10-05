@@ -180,8 +180,15 @@ function serializeSequence(
 export function serializeSgf(
   document: StudyDocument,
 ): string {
+  const metadata = {
+    ...document.metadata,
+    gameName:
+      document.metadata.gameName ??
+      document.title,
+  };
+
   return `(${serializeSequence(
     document.root,
-    document.metadata,
+    metadata,
   )})`;
 }
