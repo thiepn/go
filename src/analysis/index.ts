@@ -2,6 +2,7 @@ export * from './cache';
 export * from './coordinates';
 export * from './health';
 export * from './normalize';
+export * from './player';
 export * from './provider';
 export * from './request';
 export * from './review';
