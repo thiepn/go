@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -50,10 +51,6 @@ export interface GoBoardProps {
 
 const EXIT_DURATION_MS = 210;
 
-function samePoint(a: Point | null, b: Point): boolean {
-  return a?.x === b.x && a.y === b.y;
-}
-
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
@@ -66,6 +63,8 @@ function StoneShape({
   cy,
   entering = false,
   exiting = false,
+  blackFill,
+  whiteFill,
 }: {
   readonly point: Point;
   readonly color: Stone;
@@ -74,6 +73,8 @@ function StoneShape({
   readonly cy: number;
   readonly entering?: boolean;
   readonly exiting?: boolean;
+  readonly blackFill: string;
+  readonly whiteFill: string;
 }) {
   const className = [
     'go-stone',
@@ -101,6 +102,7 @@ function StoneShape({
         cx={cx}
         cy={cy}
         r={radius}
+        fill={color === 'black' ? blackFill : whiteFill}
       />
       <ellipse
         className="go-stone__shine"
@@ -128,6 +130,13 @@ export function GoBoard({
   onFocusPointChange,
 }: GoBoardProps) {
   const geometry = useMemo(() => getBoardGeometry(board.size), [board.size]);
+  const idPrefix = useId().replace(/:/g, '');
+  const shadowId = `${idPrefix}-board-shadow`;
+  const blackStoneId = `${idPrefix}-black-stone`;
+  const whiteStoneId = `${idPrefix}-white-stone`;
+  const surfaceId = `${idPrefix}-surface`;
+  const blackStoneFill = `url(#${blackStoneId})`;
+  const whiteStoneFill = `url(#${whiteStoneId})`;
   const previousBoardRef = useRef<Board | null>(null);
   const [entered, setEntered] = useState<readonly StoneAtPoint[]>([]);
   const [exiting, setExiting] = useState<readonly StoneAtPoint[]>([]);
@@ -138,28 +147,6 @@ export function GoBoard({
   });
 
   const starPoints = useMemo(() => getStarPoints(board.size), [board.size]);
-
-  const highlightMap = useMemo(
-    () => new Map(highlights.map((highlight) => [pointKey(highlight.point), highlight])),
-    [highlights],
-  );
-
-  const markerMap = useMemo(
-    () => new Map(markers.map((marker) => [pointKey(marker.point), marker])),
-    [markers],
-  );
-
-  const groupPointMap = useMemo(() => {
-    const result = new Map<string, GroupHighlight>();
-
-    for (const group of groupHighlights) {
-      for (const point of group.stones) {
-        result.set(pointKey(point), group);
-      }
-    }
-
-    return result;
-  }, [groupHighlights]);
 
   useEffect(() => {
     const diff = diffBoards(previousBoardRef.current, board);
@@ -312,7 +299,7 @@ export function GoBoard({
         aria-label={label}
       >
         <defs>
-          <filter id="board-soft-shadow" x="-10%" y="-10%" width="120%" height="125%">
+          <filter id={shadowId} x="-10%" y="-10%" width="120%" height="125%">
             <feDropShadow
               dx="0"
               dy="12"
@@ -321,17 +308,17 @@ export function GoBoard({
               floodOpacity="0.18"
             />
           </filter>
-          <radialGradient id="board-black-stone" cx="32%" cy="26%" r="75%">
+          <radialGradient id={blackStoneId} cx="32%" cy="26%" r="75%">
             <stop offset="0%" stopColor="#50514b" />
             <stop offset="48%" stopColor="#242521" />
             <stop offset="100%" stopColor="#11120f" />
           </radialGradient>
-          <radialGradient id="board-white-stone" cx="32%" cy="24%" r="80%">
+          <radialGradient id={whiteStoneId} cx="32%" cy="24%" r="80%">
             <stop offset="0%" stopColor="#fffef9" />
             <stop offset="58%" stopColor="#f4efe5" />
             <stop offset="100%" stopColor="#d8d1c5" />
           </radialGradient>
-          <linearGradient id="board-surface" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id={surfaceId} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#e6bf7d" />
             <stop offset="52%" stopColor="#d9ad66" />
             <stop offset="100%" stopColor="#c99854" />
@@ -345,8 +332,8 @@ export function GoBoard({
           width="964"
           height="964"
           rx="34"
-          fill="url(#board-surface)"
-          filter="url(#board-soft-shadow)"
+          fill={`url(#${surfaceId})`}
+          filter={`url(#${shadowId})`}
         />
 
         <g className="go-board__grain" aria-hidden="true">
@@ -459,6 +446,8 @@ export function GoBoard({
                 cx={position.x}
                 cy={position.y}
                 entering={enteredKeys.has(pointKey(point))}
+                blackFill={blackStoneFill}
+                whiteFill={whiteStoneFill}
               />
             );
           })}
@@ -475,6 +464,8 @@ export function GoBoard({
                 cx={position.x}
                 cy={position.y}
                 exiting
+                blackFill={blackStoneFill}
+                whiteFill={whiteStoneFill}
               />
             );
           })}
