@@ -340,69 +340,59 @@ export const capturingRaceLesson: LessonDefinition = {
   prerequisiteConcepts: ['reading'],
   initialBoard: {
     size: 5,
+    toPlay: 'black',
     black: [
-      { x: 1, y: 1 },
-      { x: 1, y: 2 },
+      { x: 0, y: 2 },
+      { x: 4, y: 3 },
     ],
     white: [
-      { x: 3, y: 1 },
-      { x: 3, y: 2 },
+      { x: 3, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+      { x: 4, y: 2 },
+      { x: 1, y: 3 },
     ],
   },
   steps: [
     {
       id: 'count-black',
       kind: 'select-points',
-      title: 'Count Black’s outside liberties.',
+      title: 'Count the target Black group.',
       instruction:
-        'Tap the empty intersections directly beside the black group that are not occupied by White.',
+        'The black stone at the lower-right is racing the white stone directly above it. Tap Black’s two liberties.',
       expectedPoints: [
-        { x: 0, y: 1 },
-        { x: 0, y: 2 },
-        { x: 1, y: 0 },
-        { x: 1, y: 3 },
-        { x: 2, y: 1 },
-        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+        { x: 4, y: 4 },
       ],
       successText:
-        'Good. In a capturing race, accurate liberty counting comes before tactical confidence.',
+        'Black has two liberties.',
     },
     {
-      id: 'race-principle',
-      kind: 'choose-answer',
-      title: 'Do not count only your target.',
-      instruction:
-        'What decides a basic capturing race most directly?',
-      choices: [
-        {
-          id: 'both',
-          label: 'The liberties and forcing moves available to both groups',
-        },
-        {
-          id: 'stones',
-          label: 'Whichever group contains more stones',
-        },
-        {
-          id: 'first',
-          label: 'Whoever started the fight',
-        },
-      ],
-      correctChoiceId: 'both',
-      successText:
-        'Exactly. Compare both groups, then account for shared liberties, captures, and forcing moves.',
-    },
-    {
-      id: 'shared-liberties',
+      id: 'count-white',
       kind: 'select-points',
-      title: 'Shared liberties matter.',
+      title: 'Now count White.',
       instruction:
-        'Tap the two points between the groups. These shared liberties behave differently from outside liberties.',
+        'Tap the two liberties of the white stone directly above Black.',
       expectedPoints: [
-        { x: 2, y: 1 },
-        { x: 2, y: 2 },
+        { x: 3, y: 2 },
+        { x: 4, y: 1 },
       ],
       successText:
-        'Correct. Shared liberties are often the reason a capturing race cannot be solved by a simple outside-liberty count.',
+        'White also has two liberties. With no hidden tactical resource, move order now matters.',
+    },
+    {
+      id: 'race-sequence',
+      kind: 'predict-sequence',
+      title: 'Read the race to the end.',
+      instruction:
+        'Black moves first. Tap the three-move race: Black removes a White liberty, White removes a Black liberty, then Black takes White’s last liberty.',
+      expectedSequence: [
+        { x: 3, y: 2 },
+        { x: 4, y: 4 },
+        { x: 4, y: 1 },
+      ],
+      successText:
+        'Correct. Equal outside-liberty counts can make the player to move decisive. Real semeai may also involve shared liberties, eyes, captures, or ko.',
     },
   ],
 };
