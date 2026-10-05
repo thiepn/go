@@ -100,9 +100,9 @@ Exit criterion:
 
 ## P4 — Zero-to-First-Game Course
 
-Status: **next**
+Status: **complete**
 
-Build the minimum complete beginner curriculum:
+Implemented beginner curriculum:
 - board;
 - turns;
 - liberties;
@@ -114,10 +114,24 @@ Build the minimum complete beginner curriculum:
 - passing;
 - scoring.
 
+Added:
+- 12 interactive lessons across four beginner modules;
+- course prerequisite validation;
+- sequential CoursePlayer;
+- lesson-level local progress;
+- real pass teaching;
+- engine-verified suicide and ko demonstrations;
+- 9×9 readiness checkpoint.
+
 Exit criterion:
-- a zero-knowledge learner is ready to start a guided 9×9 game.
+- implementation now covers every rule concept needed before a guided 9×9 game.
+
+Certification note:
+- actual novice comprehension remains a user-testing requirement; M2/M3 are not marked certified by code alone.
 
 ## P5 — Guided 9×9 Game Engine
+
+Status: **next**
 
 Build:
 - teaching interruptions;
