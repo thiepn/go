@@ -537,62 +537,66 @@ export const sekiLesson: LessonDefinition = {
   concept: 'seki',
   prerequisiteConcepts: ['false-eye'],
   initialBoard: {
-    size: 5,
+    size: 4,
     black: [
-      { x: 1, y: 1 },
-      { x: 1, y: 2 },
       { x: 2, y: 0 },
+      { x: 3, y: 0 },
+      { x: 2, y: 1 },
+      { x: 2, y: 2 },
+      { x: 2, y: 3 },
     ],
     white: [
-      { x: 3, y: 1 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 1, y: 2 },
+      { x: 1, y: 3 },
       { x: 3, y: 2 },
-      { x: 2, y: 3 },
     ],
   },
   steps: [
     {
       id: 'shared-space',
       kind: 'select-points',
-      title: 'Find the contested liberties.',
+      title: 'Both chains have the same two liberties.',
       instruction:
-        'Tap the two central points both groups depend on.',
+        'Tap the two empty points on the right edge. They are liberties of both the large black chain and the single white stone.',
       expectedPoints: [
-        { x: 2, y: 1 },
-        { x: 2, y: 2 },
+        { x: 3, y: 1 },
+        { x: 3, y: 3 },
       ],
       successText:
-        'Both groups depend on the same small set of liberties.',
+        'Exactly. Both opposing chains depend on these same two liberties.',
     },
     {
       id: 'why-no-first',
       kind: 'choose-answer',
-      title: 'Sometimes the first capture attempt loses.',
+      title: 'Playing first loses the race.',
       instruction:
-        'What is the key idea in a basic seki?',
+        'If either player fills one shared liberty, what can the opponent do?',
       choices: [
         {
-          id: 'mutual',
-          label: 'Neither side can safely fill the shared liberties first without making itself capturable',
+          id: 'capture',
+          label: 'Fill the other shared liberty and capture the chain that played first',
         },
         {
-          id: 'two-eyes',
-          label: 'Both groups always have two normal eyes',
+          id: 'nothing',
+          label: 'Nothing changes because shared liberties cannot be played',
         },
         {
           id: 'ko',
-          label: 'Every seki is a ko fight',
+          label: 'The position automatically becomes ko',
         },
       ],
-      correctChoiceId: 'mutual',
+      correctChoiceId: 'capture',
       successText:
-        'Correct. Seki is mutual life created by liberty relationships, not by ordinary two-eye life.',
+        'Correct. That is why neither side wants to play first: both groups stay alive together in seki.',
     },
     {
       id: 'seki-discipline',
       kind: 'continue',
-      title: 'Do not “fix” a stable seki automatically.',
+      title: 'Mutual life means leaving the shared liberties alone.',
       instruction:
-        'A move inside shared seki liberties can destroy your own living status. Recognizing that no move is needed is part of good reading.',
+        'At the end of the game the groups remain on the board. The shared points stay empty rather than becoming ordinary territory.',
     },
   ],
 };
