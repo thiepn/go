@@ -415,19 +415,58 @@ Operational boundary:
 
 ## P12 — Personalized Coach
 
-Status: **next**
+Status: **implementation complete — empirical transfer certification pending**
 
-Close the loop:
+Implemented:
+- persistent coaching-cycle model;
+- evidence-strength confidence labels;
+- recent-game deterministic signal aggregation;
+- recurrence-aware concept ranking;
+- P7 mastery integration;
+- prerequisite-aware root-cause diagnosis;
+- refusal to invent a focus when evidence is absent;
+- one primary focus per cycle;
+- concept-specific next-game objectives;
+- five-problem focused Practice handoff;
+- practice-completion tracking;
+- coached-game objective in Play setup and live game;
+- Coach → Practice → Coach routing;
+- Coach → Play → Coach routing;
+- Coach → Review → Coach routing;
+- deterministic turning-point ranking;
+- maximum four turning points;
+- maximum two turning points per source game;
+- optional batched P11 KataGo enrichment;
+- deterministic + engine turning-point merging;
+- engine-only moments kept concept-neutral;
+- frozen pre-intervention baseline;
+- normalized weighted finding signal per 20 learner moves;
+- short/abandoned follow-up filtering;
+- latest full follow-up evaluation;
+- improved / stable / worse outcome states;
+- mastery change shown separately from game transfer;
+- local active-plan and plan-history persistence;
+- archive-and-build-next-plan workflow;
+- first-class Coach destination on Home.
 
-```
-game mistake
-→ concept diagnosis
-→ targeted micro-practice
-→ next game
-→ compare behavior
-```
+Validation:
+- repeated game symptoms;
+- supported prerequisite root causes;
+- no unsupported/engine-only diagnosis;
+- deterministic + KataGo moment merging;
+- normalized behavior comparison;
+- improvement detection;
+- short-game skipping;
+- practice completion persistence;
+- plan persistence.
+
+Certification note:
+- the complete M5 measurement path now exists;
+- real learner transfer remains an empirical requirement and is not certified by implementation alone.
 
 ## P13 — Developing-Player Curriculum
+
+Status: **next**
 
 Expand into:
 - reading;
@@ -493,7 +532,7 @@ Visual development runs in parallel rather than being postponed:
 - **V7** practice / milestone visuals — practice foundation complete
 - **V8** play / scoring visuals — independent play and scoring foundation complete
 - **V9** review / variation visuals — deterministic review and SGF variation foundation complete
-- **V10** engine-analysis visualization — candidate, ownership and beginner-translation foundation complete
+- **V10** engine-analysis visualization — candidate, ownership, beginner translation and coach turning-point surfacing complete
 - **V11** responsive / accessibility variants
 - **V12** visual performance and QA
 
