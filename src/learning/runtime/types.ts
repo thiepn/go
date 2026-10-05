@@ -4,11 +4,13 @@ import type {
   GhostStone,
   GroupHighlight,
 } from '../../board';
-import type { Point, Stone } from '../../go/engine';
+import type { IllegalMoveReason, Point, Stone } from '../../go/engine';
 
 export type LessonInteractionKind =
   | 'continue'
   | 'play-move'
+  | 'try-illegal-move'
+  | 'pass'
   | 'select-points'
   | 'select-stones'
   | 'select-group'
@@ -99,6 +101,17 @@ export interface PlayMoveStep extends LessonStepBase {
   readonly wrongPointFeedback?: Readonly<Record<string, string>>;
 }
 
+export interface TryIllegalMoveStep extends LessonStepBase {
+  readonly kind: 'try-illegal-move';
+  readonly point: Point;
+  readonly expectedReason: IllegalMoveReason;
+  readonly wrongPointFeedback?: Readonly<Record<string, string>>;
+}
+
+export interface PassStep extends LessonStepBase {
+  readonly kind: 'pass';
+}
+
 interface PointCollectionStepBase extends LessonStepBase {
   readonly expectedPoints: readonly Point[];
   readonly wrongPointFeedback?: Readonly<Record<string, string>>;
@@ -148,6 +161,8 @@ export interface PredictSequenceStep extends LessonStepBase {
 export type LessonStep =
   | ContinueStep
   | PlayMoveStep
+  | TryIllegalMoveStep
+  | PassStep
   | SelectPointsStep
   | SelectStonesStep
   | SelectGroupStep
