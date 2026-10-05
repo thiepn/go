@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
-import { firstStoneLesson } from '../content/lessons';
-import { LessonPlayer } from '../learning';
+import { beginnerCourse } from '../content';
+import { CoursePlayer } from '../learning';
 
 export function App() {
   const [started, setStarted] = useState(false);
 
   if (started) {
     return (
-      <LessonPlayer
-        lesson={firstStoneLesson}
+      <CoursePlayer
+        course={beginnerCourse}
         onExit={() => setStarted(false)}
       />
     );
@@ -26,8 +26,9 @@ export function App() {
         <p className="eyebrow">Learn Go from zero</p>
         <h1 id="welcome-title">One stone at a time.</h1>
         <p className="welcome-copy">
-          No rulebook first. Learn directly on the board, see what every move
-          changes, and grow into real games as each idea becomes clear.
+          Start with no Go knowledge. Learn directly on the board, understand
+          each rule through interaction, and finish ready for your first guided
+          9×9 game.
         </p>
 
         <button
@@ -38,7 +39,9 @@ export function App() {
           Start learning
         </button>
 
-        <p className="secondary-copy">No account required.</p>
+        <p className="secondary-copy">
+          12 interactive lessons · progress saved on this device · no account required
+        </p>
       </section>
     </main>
   );
