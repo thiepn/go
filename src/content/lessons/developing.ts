@@ -73,71 +73,71 @@ export const ladderLesson: LessonDefinition = {
   prerequisiteConcepts: ['reading'],
   initialBoard: {
     size: 7,
+    toPlay: 'black',
     black: [
-      { x: 1, y: 2 },
-      { x: 2, y: 1 },
+      { x: 0, y: 3 },
+      { x: 1, y: 3 },
+      { x: 0, y: 5 },
+      { x: 2, y: 5 },
     ],
-    white: [{ x: 2, y: 2 }],
+    white: [{ x: 1, y: 5 }],
   },
   steps: [
     {
       id: 'ladder-start',
       kind: 'predict-move',
-      title: 'Start the chase.',
+      title: 'Start the forced chase.',
       instruction:
-        'Black can atari White toward the open board. Tap the forcing move on White’s right.',
-      acceptedPoints: [{ x: 3, y: 2 }],
+        'Black can put the marked white stone in atari at the lower edge. Tap the move that leaves White only one escape.',
+      acceptedPoints: [{ x: 1, y: 6 }],
       enterEffects: [
         {
-          type: 'marker',
-          marker: {
-            point: { x: 3, y: 2 },
-            label: '1',
-            tone: 'accent',
-          },
+          type: 'show-liberties',
+          of: { x: 1, y: 5 },
         },
       ],
       successText:
-        'That begins the repeated atari pattern. Now read the escape-and-atari rhythm before committing.',
+        'Correct. White’s only escape is upward. A ladder works because every escape creates the next forcing atari.',
     },
     {
       id: 'ladder-sequence',
       kind: 'predict-sequence',
-      title: 'Follow the zigzag.',
+      title: 'Read the zigzag.',
       instruction:
-        'Tap this short ladder fragment in alternating move order: Black atari, White escape, Black atari, White escape.',
+        'Assume Black has played the first atari. Tap the next five moves in order: White escape, Black atari, White escape, Black atari, White escape.',
       expectedSequence: [
-        { x: 3, y: 2 },
-        { x: 2, y: 3 },
-        { x: 3, y: 3 },
+        { x: 1, y: 4 },
+        { x: 0, y: 4 },
         { x: 2, y: 4 },
+        { x: 3, y: 4 },
+        { x: 2, y: 3 },
       ],
       successText:
-        'That diagonal repetition is the ladder pattern. A real ladder must be read all the way to the edge or a ladder breaker.',
+        'That is a real ladder fragment. The chased chain zigzags because each escape is answered by another one-liberty atari.',
     },
     {
       id: 'ladder-breaker',
       kind: 'choose-answer',
-      title: 'A distant stone can change everything.',
+      title: 'Read the whole path before starting.',
       instruction:
-        'Why must you inspect the ladder path before starting the chase?',
+        'Why can a ladder that works locally still fail later?',
       choices: [
         {
           id: 'breaker',
-          label: 'A distant opposing stone can interfere with the ladder and let the chased group escape',
+          label: 'A distant opposing stone on the ladder path can give the chased chain extra support or liberties',
         },
         {
           id: 'always',
-          label: 'Ladders always work once the first atari is possible',
+          label: 'Ladders never fail after the first atari',
         },
         {
           id: 'score',
-          label: 'Because ladders only matter during scoring',
+          label: 'A ladder stops working when komi changes',
         },
       ],
       correctChoiceId: 'breaker',
       successText:
-        'Correct. Read the entire path first. Starting a failing ladder can damage your position severely.',
+        'Correct. Read the path all the way through before committing to the chase.',
     },
   ],
 };
