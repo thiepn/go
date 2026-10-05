@@ -62,6 +62,29 @@ describe('KataGo normalization', () => {
     expect(analysis.humanProfile).toBe('rank_20k');
   });
 
+  it('does not duplicate the candidate when KataGo PV already begins with it', () => {
+    const analysis =
+      normalizeKataGoResponse(
+        {
+          id: 'q-pv',
+          turnNumber: 0,
+          moveInfos: [{
+            move: 'D4',
+            order: 0,
+            pv: ['D4', 'C4', 'E5'],
+          }],
+          rootInfo: {
+            currentPlayer: 'B',
+          },
+        },
+        9,
+      );
+
+    expect(
+      analysis.candidates[0].pvCoordinates,
+    ).toEqual(['D4', 'C4', 'E5']);
+  });
+
   it('rejects malformed numeric arrays rather than shifting their indexes', () => {
     const analysis =
       normalizeKataGoResponse(
