@@ -18,6 +18,23 @@ function prop(
     .join('')}`;
 }
 
+function propEscaped(
+  key: string,
+  values: readonly string[] | undefined,
+): string {
+  if (!values || values.length === 0) return '';
+
+  return `${key}${values
+    .map((value) => `[${value}]`)
+    .join('')}`;
+}
+
+function escapeComposedPart(
+  value: string,
+): string {
+  return escapeValue(value).replace(/:/g, '\\:');
+}
+
 function nodeProperties(
   node: StudyNode,
   rootMetadata?: StudyDocument['metadata'],
@@ -120,7 +137,7 @@ function nodeProperties(
     prop('SQ', simple('square')),
     prop('CR', simple('circle')),
     prop('MA', simple('cross')),
-    prop(
+    propEscaped(
       'LB',
       marks
         .filter(
@@ -130,7 +147,7 @@ function nodeProperties(
         )
         .map(
           (mark) =>
-            `${pointToSgf(mark.point)}:${mark.label ?? ''}`,
+            `${escapeComposedPart(pointToSgf(mark.point))}:${escapeComposedPart(mark.label ?? '')}`,
         ),
     ),
   );
