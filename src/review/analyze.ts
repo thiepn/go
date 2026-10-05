@@ -140,6 +140,13 @@ export function reviewSavedGame(
 
   for (const [index, frame] of frames.entries()) {
     const player = frame.move.player;
+
+    if (
+      record.settings.mode === 'computer' &&
+      player !== record.settings.humanColor
+    ) {
+      continue;
+    }
     const next = frames[index + 1];
     const movePoint = actualPoint(
       frame.move,
