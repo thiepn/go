@@ -7,9 +7,18 @@ import {
 } from '../content';
 import { GuidedGamePlayer } from '../guided';
 import { CoursePlayer } from '../learning';
+import {
+  MasteryDashboard,
+  recordMasteryEvidence,
+} from '../mastery';
 import { PracticeHub } from '../practice';
 
-type AppMode = 'home' | 'course' | 'guided-game' | 'practice';
+type AppMode =
+  | 'home'
+  | 'course'
+  | 'guided-game'
+  | 'practice'
+  | 'progress';
 
 const FIRST_GAME_COMPLETE_KEY =
   'thiepn-go:guided:first-9x9:complete';
@@ -42,6 +51,8 @@ export function App() {
   const [practiceUnlocked, setPracticeUnlocked] = useState(
     () => hasFirstGameComplete(),
   );
+  const [practiceFocus, setPracticeFocus] =
+    useState<readonly string[]>([]);
 
   if (mode === 'course') {
     return (
@@ -58,7 +69,30 @@ export function App() {
       <GuidedGamePlayer
         scenario={firstGuidedGame}
         onExit={() => setMode('home')}
-        onComplete={() => {
+        onComplete={(result) => {
+          const now = Date.now();
+          const conceptCount = Math.max(
+            1,
+            result.masteryConcepts.length,
+          );
+
+          for (const concept of result.masteryConcepts) {
+            recordMasteryEvidence({
+              source: 'guided-game',
+              sourceId: result.scenarioId,
+              sourceConcept: concept,
+              success: true,
+              firstAttempt:
+                result.mistakes === 0 &&
+                result.helpUses === 0,
+              mistakes: result.mistakes,
+              hintsUsed: result.helpUses,
+              responseMs:
+                result.responseMs / conceptCount,
+              occurredAt: now,
+            });
+          }
+
           markFirstGameComplete();
           setPracticeUnlocked(true);
           setMode('home');
@@ -71,7 +105,24 @@ export function App() {
     return (
       <PracticeHub
         problems={beginnerProblems}
+        focusedTags={practiceFocus}
+        onExit={() => {
+          setPracticeFocus([]);
+          setMode('home');
+        }}
+      />
+    );
+  }
+
+  if (mode === 'progress') {
+    return (
+      <MasteryDashboard
+        problems={beginnerProblems}
         onExit={() => setMode('home')}
+        onPractice={(tags) => {
+          setPracticeFocus(tags);
+          setMode('practice');
+        }}
       />
     );
   }
@@ -88,8 +139,8 @@ export function App() {
         <h1 id="welcome-title">One stone at a time.</h1>
         <p className="welcome-copy">
           Start with no Go knowledge. Learn directly on the board, understand
-          each rule through interaction, then build skill through real games
-          and short practice problems.
+          each rule through interaction, then build skill through real games,
+          short practice problems, and targeted review.
         </p>
 
         <div className="home-actions">
@@ -102,19 +153,31 @@ export function App() {
           </button>
 
           {practiceUnlocked && (
-            <button
-              className="home-secondary-action"
-              type="button"
-              onClick={() => setMode('practice')}
-            >
-              Practice
-            </button>
+            <>
+              <button
+                className="home-secondary-action"
+                type="button"
+                onClick={() => {
+                  setPracticeFocus([]);
+                  setMode('practice');
+                }}
+              >
+                Practice
+              </button>
+              <button
+                className="home-secondary-action"
+                type="button"
+                onClick={() => setMode('progress')}
+              >
+                Progress
+              </button>
+            </>
           )}
         </div>
 
         <p className="secondary-copy">
           {practiceUnlocked
-            ? 'Lessons · guided game · adaptive practice · no account required'
+            ? 'Lessons · guided game · adaptive practice · mastery diagnosis'
             : '12 interactive lessons · guided first game · no account required'}
         </p>
       </section>
