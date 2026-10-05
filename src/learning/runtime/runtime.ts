@@ -102,10 +102,12 @@ function stepBoard(
 
 function presentationForStep(
   step: LessonStep | undefined,
+  board: GameState,
 ): LessonPresentation {
   return applyLessonEffects(
     EMPTY_PRESENTATION,
     step?.enterEffects,
+    board.board,
   );
 }
 
@@ -123,19 +125,20 @@ export function createLessonRuntime(
   }
 
   const firstStep = lesson.steps[0];
+  const initialBoard = firstStep?.board
+    ? gameFromSetup(firstStep.board)
+    : gameFromSetup(lesson.initialBoard);
 
   return {
     lessonId: lesson.id,
     stepIndex: 0,
-    board: firstStep?.board
-      ? gameFromSetup(firstStep.board)
-      : gameFromSetup(lesson.initialBoard),
+    board: initialBoard,
     selectedPoints: [],
     sequence: [],
     hintIndex: 0,
     attempts: 0,
     feedback: null,
-    presentation: presentationForStep(firstStep),
+    presentation: presentationForStep(firstStep, initialBoard),
     completed: false,
     history: [],
   };
@@ -181,7 +184,7 @@ function advance(
           text: successText,
         }
       : null,
-    presentation: presentationForStep(nextStep),
+    presentation: presentationForStep(nextStep, nextBoard),
     history: [...state.history, snapshot(historyState)],
   };
 }
@@ -446,6 +449,7 @@ export function reduceLesson(
         presentation: applyLessonEffects(
           state.presentation,
           hint.effects,
+          state.board.board,
         ),
       };
     }
@@ -456,7 +460,7 @@ export function reduceLesson(
         selectedPoints: [],
         sequence: [],
         feedback: null,
-        presentation: presentationForStep(step),
+        presentation: presentationForStep(step, state.board),
       };
 
     case 'apply-choreography':
@@ -465,6 +469,7 @@ export function reduceLesson(
         presentation: applyLessonEffects(
           state.presentation,
           action.effects,
+          state.board.board,
         ),
       };
   }
