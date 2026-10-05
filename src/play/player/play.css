@@ -1,0 +1,598 @@
+.play-hub-shell {
+  min-height: 100vh;
+  padding: clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(circle at 68% 18%, rgb(220 176 96 / 0.15), transparent 32rem),
+    var(--paper-50);
+}
+
+.play-hub {
+  width: min(100%, 68rem);
+  margin: 0 auto;
+}
+
+.play-hub__header {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.play-hub__header h1 {
+  max-width: 11ch;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+}
+
+.play-hub__header p:not(.eyebrow) {
+  max-width: 40rem;
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.play-setup {
+  margin-top: clamp(2rem, 5vw, 3.8rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.play-setting-card {
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-100);
+}
+
+.play-setting-card--wide {
+  grid-column: 1 / -1;
+}
+
+.play-setting-label {
+  display: block;
+  margin-bottom: 0.65rem;
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.play-setting-card > small {
+  display: block;
+  margin-top: 0.7rem;
+  color: var(--ink-500);
+  line-height: 1.45;
+}
+
+.play-setting-card select {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 20%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--paper-50);
+  color: var(--ink-850);
+  font: inherit;
+}
+
+.segmented-control {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  padding: 0.22rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-200);
+}
+
+.segmented-control button {
+  min-height: 2.45rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-500);
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.segmented-control button.is-active {
+  background: var(--paper-50);
+  color: var(--ink-900);
+  box-shadow: 0 2px 8px rgb(30 26 20 / 0.08);
+}
+
+.bot-level-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.bot-level-grid button {
+  min-height: 8.5rem;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 16%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--paper-50);
+  color: var(--ink-800);
+  text-align: left;
+  cursor: pointer;
+}
+
+.bot-level-grid button.is-active {
+  border-color: color-mix(in srgb, var(--accent-500) 48%, transparent);
+  background: color-mix(in srgb, var(--accent-100) 42%, var(--paper-50));
+}
+
+.bot-level-grid strong {
+  font-size: 0.9rem;
+}
+
+.bot-level-grid small {
+  margin-top: 0.4rem;
+  color: var(--ink-500);
+  line-height: 1.42;
+}
+
+.play-start-action {
+  margin-top: 1rem;
+}
+
+.recent-games {
+  margin-top: clamp(2.8rem, 7vw, 5rem);
+}
+
+.recent-games h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.recent-games__list {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.recent-games article {
+  padding: 0.9rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 13%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.recent-games article > span {
+  color: var(--ink-700);
+  font-size: 0.86rem;
+}
+
+.recent-games article > strong {
+  grid-row: span 2;
+  align-self: center;
+  color: var(--ink-900);
+}
+
+.recent-games article > small {
+  color: var(--ink-500);
+}
+
+.independent-game-shell {
+  min-height: 100vh;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  background:
+    radial-gradient(circle at 50% 48%, rgb(220 175 94 / 0.15), transparent 34rem),
+    var(--paper-50);
+}
+
+.independent-game-header {
+  width: min(100%, 82rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.independent-game-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.independent-game-header > div > span {
+  color: var(--ink-850);
+  font-size: 0.85rem;
+  font-weight: 760;
+}
+
+.independent-game-header > div > small,
+.game-size-label {
+  color: var(--ink-500);
+  font-size: 0.72rem;
+}
+
+.game-turn-chip {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.42rem;
+  padding: 0.42rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-700);
+  font-size: 0.76rem;
+  font-weight: 720;
+}
+
+.game-turn-stone,
+.game-side-panel__stone {
+  display: inline-block;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.22);
+}
+
+.game-turn-stone {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.game-turn-stone--black,
+.game-side-panel__stone--black {
+  background: var(--stone-black);
+}
+
+.game-turn-stone--white,
+.game-side-panel__stone--white {
+  background: var(--stone-white);
+  border: 1px solid rgb(0 0 0 / 0.13);
+}
+
+.independent-game-layout {
+  width: min(100%, 82rem);
+  margin: clamp(1.4rem, 4vh, 3rem) auto 0;
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.4fr) minmax(22rem, 1.7fr) minmax(8rem, 0.4fr);
+  grid-template-areas:
+    "black board white"
+    ". controls ."
+    ". coach .";
+  align-items: center;
+  gap: 1rem;
+}
+
+.independent-board-stage {
+  grid-area: board;
+  position: relative;
+  width: min(100%, 48rem);
+  justify-self: center;
+}
+
+.game-side-panel {
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 13%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.game-side-panel--black {
+  grid-area: black;
+}
+
+.game-side-panel--white {
+  grid-area: white;
+}
+
+.game-side-panel > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.game-side-panel__stone {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.game-side-panel > span {
+  color: var(--ink-500);
+  font-size: 1.2rem;
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+}
+
+.game-side-panel > span.is-active {
+  color: var(--ink-900);
+}
+
+.game-side-panel small {
+  color: var(--ink-500);
+}
+
+.game-thinking {
+  position: absolute;
+  left: 50%;
+  bottom: 3.5%;
+  transform: translateX(-50%);
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--paper-50) 88%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--ink-700);
+  font-size: 0.74rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-soft);
+}
+
+.game-controls {
+  grid-area: controls;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game-controls__status {
+  min-height: 1.3rem;
+  color: var(--ink-500);
+  font-size: 0.8rem;
+}
+
+.game-controls__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.game-resign-confirm {
+  border-color: color-mix(in srgb, var(--danger-500) 40%, transparent) !important;
+  color: var(--danger-500) !important;
+}
+
+.game-coach-card {
+  grid-area: coach;
+  padding: 0.9rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent-500) 24%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent-100) 48%, var(--paper-100));
+}
+
+.game-coach-card > span {
+  display: block;
+  color: var(--accent-600);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.game-coach-card strong {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.game-coach-card p {
+  margin: 0.35rem 0 0;
+  color: var(--ink-700);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.scoring-layout {
+  width: min(100%, 75rem);
+  margin: clamp(1.8rem, 5vh, 4rem) auto 0;
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.72fr) minmax(22rem, 1.28fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.scoring-copy h1 {
+  max-width: 10ch;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+}
+
+.scoring-copy > p:not(.eyebrow) {
+  max-width: 32rem;
+  color: var(--ink-700);
+  line-height: 1.62;
+}
+
+.scoring-preview {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.scoring-preview > div {
+  padding: 0.8rem;
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.scoring-preview span {
+  display: block;
+  color: var(--ink-500);
+  font-size: 0.74rem;
+}
+
+.scoring-preview strong {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 1.8rem;
+}
+
+.scoring-preview__result {
+  font-weight: 700;
+}
+
+.scoring-actions {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.independent-result-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(circle at 50% 34%, rgb(218 173 94 / 0.16), transparent 30rem),
+    var(--paper-50);
+}
+
+.independent-result {
+  width: min(100%, 58rem);
+  text-align: center;
+}
+
+.independent-result h1 {
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
+}
+
+.independent-result__board {
+  width: min(100%, 32rem);
+  margin: 1.5rem auto 0;
+}
+
+.independent-result__score {
+  width: min(100%, 34rem);
+  margin: 1rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.independent-result__score > div {
+  padding: 0.85rem;
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.independent-result__score span,
+.independent-result__score small {
+  display: block;
+  color: var(--ink-500);
+}
+
+.independent-result__score strong {
+  display: block;
+  margin: 0.2rem 0;
+  font-size: 1.8rem;
+}
+
+.independent-result__meta {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.independent-result__meta span {
+  padding: 0.38rem 0.62rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-size: 0.73rem;
+  font-weight: 680;
+}
+
+.play-result-action {
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .independent-game-layout {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "black white"
+      "board board"
+      "controls controls"
+      "coach coach";
+  }
+
+  .game-side-panel {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .game-side-panel small {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .play-setup,
+  .scoring-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .play-setting-card--wide {
+    grid-column: auto;
+  }
+
+  .bot-level-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bot-level-grid button {
+    min-height: 6.5rem;
+  }
+
+  .independent-game-header {
+    grid-template-columns: 2.7rem 1fr auto;
+  }
+
+  .independent-game-layout {
+    margin-top: 1rem;
+  }
+
+  .game-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .game-controls__actions {
+    justify-content: center;
+  }
+
+  .game-controls__status {
+    text-align: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .independent-game-shell {
+    padding: 0.7rem;
+  }
+
+  .independent-game-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "black"
+      "board"
+      "white"
+      "controls"
+      "coach";
+  }
+
+  .game-side-panel {
+    padding: 0.55rem 0.7rem;
+  }
+
+  .independent-result__score,
+  .scoring-preview {
+    grid-template-columns: 1fr;
+  }
+}
