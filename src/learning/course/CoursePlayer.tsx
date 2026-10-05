@@ -3,7 +3,7 @@ import {
   useState,
 } from 'react';
 
-import { recordMasteryEvidence } from '../../mastery';
+import { recordMasteryEvidence } from '../../mastery/store';
 import { LessonPlayer } from '../player';
 import {
   flattenCourseLessons,
