@@ -21,6 +21,7 @@ export interface PlayHubProps {
   readonly onExit?: () => void;
   readonly onStudyRecord?: (record: SavedGameRecord) => void;
   readonly onReviewRecord?: (record: SavedGameRecord) => void;
+  readonly coachObjective?: string | null;
 }
 
 function resultLabel(
@@ -46,6 +47,7 @@ export function PlayHub({
   onExit,
   onStudyRecord,
   onReviewRecord,
+  coachObjective = null,
 }: PlayHubProps) {
   const [activeSettings, setActiveSettings] =
     useState<IndependentGameSettings | null>(null);
@@ -72,9 +74,15 @@ export function PlayHub({
     return (
       <IndependentGamePlayer
         settings={activeSettings}
+        coachObjective={coachObjective}
+        exitLabel={coachObjective ? 'Back to Coach' : 'Back to Play'}
         onExit={() => {
           setActiveSettings(null);
           setRecordVersion((value) => value + 1);
+
+          if (coachObjective) {
+            onExit?.();
+          }
         }}
       />
     );
@@ -115,6 +123,16 @@ export function PlayHub({
             </p>
           </div>
         </header>
+
+        {coachObjective && (
+          <aside className="play-coach-objective">
+            <span>Coach objective</span>
+            <strong>{coachObjective}</strong>
+            <small>
+              Keep everything else normal. This game is testing one habit only.
+            </small>
+          </aside>
+        )}
 
         <div className="play-setup">
           <section className="play-setting-card">
