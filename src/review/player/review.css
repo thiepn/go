@@ -1,0 +1,507 @@
+.review-hub-shell,
+.review-player-shell,
+.review-clean-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 62% 18%, rgb(218 174 96 / 0.14), transparent 32rem),
+    var(--paper-50);
+}
+
+.review-hub-shell {
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.review-hub {
+  width: min(100%, 70rem);
+  margin: 0 auto;
+}
+
+.review-hub__header {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.review-hub__header h1 {
+  max-width: 14ch;
+  font-size: clamp(2.8rem, 7vw, 5.4rem);
+}
+
+.review-hub__header p:not(.eyebrow) {
+  max-width: 44rem;
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.review-game-library,
+.review-empty {
+  margin-top: clamp(2.4rem, 6vw, 4.5rem);
+}
+
+.review-game-library h2,
+.review-empty h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.review-empty {
+  padding: 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-100);
+}
+
+.review-empty p {
+  max-width: 38rem;
+  color: var(--ink-700);
+  line-height: 1.6;
+}
+
+.review-game-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.review-game-card {
+  min-height: 9rem;
+  padding: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+  color: var(--ink-850);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform var(--motion-standard) var(--ease-out),
+    border-color var(--motion-micro) linear;
+}
+
+.review-game-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent-500) 34%, transparent);
+}
+
+.review-game-card span {
+  margin-top: 0.35rem;
+  color: var(--ink-700);
+}
+
+.review-game-card small {
+  margin-top: 0.2rem;
+  color: var(--ink-500);
+}
+
+.review-game-card em {
+  margin-top: auto;
+  color: var(--ink-700);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 760;
+}
+
+.review-player-shell {
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.review-player-header {
+  width: min(100%, 92rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.review-player-header > div:nth-child(2) {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-player-header span {
+  color: var(--ink-500);
+  font-size: 0.72rem;
+}
+
+.review-player-header strong {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--ink-850);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-counter {
+  padding: 0.42rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-700);
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.review-player-layout {
+  width: min(100%, 92rem);
+  margin: clamp(1.2rem, 3vh, 2.5rem) auto 0;
+  display: grid;
+  grid-template-columns:
+    minmax(17rem, 0.68fr)
+    minmax(24rem, 1.22fr)
+    minmax(14rem, 0.46fr);
+  grid-template-areas: "copy board list";
+  gap: clamp(0.8rem, 2vw, 1.4rem);
+  align-items: start;
+}
+
+.review-copy {
+  grid-area: copy;
+}
+
+.review-summary-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.review-summary-strip span {
+  padding: 0.33rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-size: 0.68rem;
+  font-weight: 720;
+}
+
+.review-finding {
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 15%, transparent);
+  border-left-width: 3px;
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.review-finding--mistake {
+  border-left-color: var(--danger-500);
+}
+
+.review-finding--warning {
+  border-left-color: var(--accent-500);
+}
+
+.review-finding--opportunity {
+  border-left-color: var(--ink-500);
+}
+
+.review-finding__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.review-finding__meta span,
+.review-finding__meta small {
+  color: var(--ink-500);
+  font-size: 0.7rem;
+}
+
+.review-finding__meta strong {
+  padding: 0.25rem 0.45rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-50);
+  color: var(--ink-700);
+  font-size: 0.68rem;
+}
+
+.review-finding h1 {
+  margin: 1rem 0 0;
+  max-width: 11ch;
+  font-size: clamp(2rem, 4.6vw, 3.8rem);
+}
+
+.review-finding__summary {
+  margin: 0.9rem 0 0;
+  color: var(--ink-700);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.review-finding__explanation {
+  margin: 0.75rem 0 0;
+  color: var(--ink-500);
+  line-height: 1.58;
+}
+
+.review-concept-chip {
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.62rem;
+  border-radius: var(--radius-pill);
+  background: var(--accent-100);
+}
+
+.review-concept-chip span {
+  color: var(--accent-600);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.review-concept-chip strong {
+  color: var(--ink-700);
+  font-size: 0.75rem;
+}
+
+.review-try-feedback {
+  margin-top: 0.75rem;
+  padding: 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--paper-100);
+  color: var(--ink-700);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.review-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.review-board-column {
+  grid-area: board;
+  min-width: 0;
+}
+
+.review-board-toolbar {
+  min-height: 2.6rem;
+  margin-bottom: 0.55rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.review-board-toolbar button {
+  min-height: 2.25rem;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 16%, transparent);
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.review-board-toolbar button.is-active {
+  border-color: color-mix(in srgb, var(--accent-500) 42%, transparent);
+  background: var(--accent-100);
+  color: var(--accent-600);
+}
+
+.review-board-toolbar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.review-board-toolbar span {
+  color: var(--accent-600);
+  font-size: 0.75rem;
+  font-weight: 760;
+}
+
+.review-board-stage {
+  width: min(100%, 52rem);
+  margin: 0 auto;
+}
+
+.review-reset-try {
+  display: block;
+  margin: 0.65rem auto 0;
+}
+
+.review-findings-list {
+  grid-area: list;
+  position: sticky;
+  top: 1rem;
+  padding: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.review-findings-list__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-findings-list__heading small {
+  color: var(--ink-500);
+}
+
+.review-findings-list__items {
+  max-height: 52vh;
+  overflow: auto;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.review-findings-list__items button {
+  padding: 0.65rem;
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-700);
+  text-align: left;
+  cursor: pointer;
+}
+
+.review-findings-list__items button:hover,
+.review-findings-list__items button.is-active {
+  background: var(--paper-50);
+}
+
+.review-findings-list__items button.is-active {
+  border-color: color-mix(in srgb, var(--accent-500) 26%, transparent);
+}
+
+.review-findings-list__items button.is-mistake {
+  border-left: 2px solid var(--danger-500);
+}
+
+.review-findings-list__items button.is-warning {
+  border-left: 2px solid var(--accent-500);
+}
+
+.review-findings-list__items button span,
+.review-findings-list__items button small {
+  color: var(--ink-500);
+  font-size: 0.65rem;
+}
+
+.review-findings-list__items button strong {
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.review-list-actions {
+  margin-top: 0.65rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.review-study-action {
+  width: 100%;
+  margin-top: 0.6rem;
+}
+
+.review-clean-shell {
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.review-clean {
+  width: min(100%, 44rem);
+  text-align: center;
+}
+
+.review-clean h1 {
+  font-size: clamp(2.7rem, 7vw, 5rem);
+}
+
+.review-clean > p:not(.eyebrow) {
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.review-clean__meta,
+.review-clean__actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.review-clean__meta span {
+  padding: 0.38rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-size: 0.74rem;
+}
+
+@media (max-width: 1100px) {
+  .review-player-layout {
+    grid-template-columns:
+      minmax(17rem, 0.65fr)
+      minmax(24rem, 1.2fr);
+    grid-template-areas:
+      "copy board"
+      "list board";
+  }
+
+  .review-findings-list {
+    position: static;
+  }
+}
+
+@media (max-width: 800px) {
+  .review-game-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .review-player-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "board"
+      "list";
+  }
+
+  .review-findings-list {
+    position: static;
+  }
+
+  .review-finding h1 {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .review-hub-shell,
+  .review-player-shell {
+    padding: 0.75rem;
+  }
+
+  .review-game-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-player-header {
+    grid-template-columns: 2.7rem 1fr auto;
+  }
+
+  .review-actions {
+    display: grid;
+  }
+
+  .review-actions > * {
+    width: 100%;
+  }
+}
