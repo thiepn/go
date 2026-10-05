@@ -72,9 +72,9 @@ Validation:
 
 ## P3 — Educational Interaction Runtime
 
-Status: **next**
+Status: **complete**
 
-Implement primitives:
+Implemented primitives:
 - place a stone;
 - select intersections;
 - select stones/groups;
@@ -84,13 +84,23 @@ Implement primitives:
 - predict a move;
 - predict a sequence.
 
-Add:
+Added:
+- deterministic lesson reducer;
+- reusable LessonPlayer;
 - timeline/choreography runtime;
 - retry/rewind;
-- hint ladder;
-- semantic board animation commands.
+- progressive hint ladder;
+- misconception-specific feedback;
+- lesson-schema validation;
+- semantic engine-aware board effects;
+- first data-driven beginner lesson.
+
+Exit criterion:
+- curriculum authors can express all core beginner teaching interactions as data without adding bespoke React lesson screens.
 
 ## P4 — Zero-to-First-Game Course
+
+Status: **next**
 
 Build the minimum complete beginner curriculum:
 - board;
@@ -267,8 +277,8 @@ Visual development runs in parallel rather than being postponed:
 - **V1** tokens and material language — complete foundation
 - **V2** board renderer — complete foundation
 - **V3** stone physics / sound / haptics — placement/capture/haptic hooks started; recorded sound layer next
-- **V4** educational motion primitives
-- **V5** lesson choreography
+- **V4** educational motion primitives — semantic foundation started
+- **V5** lesson choreography — runtime foundation complete
 - **V6** learning home / map
 - **V7** practice / milestone visuals
 - **V8** play / scoring visuals
