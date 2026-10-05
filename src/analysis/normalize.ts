@@ -17,6 +17,23 @@ function finite(
     : null;
 }
 
+function numericArray(
+  value: unknown,
+): readonly number[] | null {
+  if (
+    !Array.isArray(value) ||
+    !value.every(
+      (item) =>
+        typeof item === 'number' &&
+        Number.isFinite(item),
+    )
+  ) {
+    return null;
+  }
+
+  return value as number[];
+}
+
 function stone(
   color: unknown,
 ): Stone {
@@ -116,30 +133,15 @@ export function normalizeKataGoResponse(
       raw.rootInfo?.utility,
     ),
     candidates,
-    ownership:
-      Array.isArray(raw.ownership)
-        ? raw.ownership.filter(
-            (value): value is number =>
-              typeof value === 'number' &&
-              Number.isFinite(value),
-          )
-        : null,
-    policy:
-      Array.isArray(raw.policy)
-        ? raw.policy.filter(
-            (value): value is number =>
-              typeof value === 'number' &&
-              Number.isFinite(value),
-          )
-        : null,
-    humanPolicy:
-      Array.isArray(raw.humanPolicy)
-        ? raw.humanPolicy.filter(
-            (value): value is number =>
-              typeof value === 'number' &&
-              Number.isFinite(value),
-          )
-        : null,
+    ownership: numericArray(
+      raw.ownership,
+    ),
+    policy: numericArray(
+      raw.policy,
+    ),
+    humanPolicy: numericArray(
+      raw.humanPolicy,
+    ),
     humanProfile,
   };
 }
