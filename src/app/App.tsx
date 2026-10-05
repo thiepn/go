@@ -162,10 +162,15 @@ export function App() {
           }
         }}
         onStudyRecord={(record) => {
+          setCoachPlayPlanId(null);
+          setCoachObjective(null);
           setStudyRecord(record);
           setMode('study');
         }}
         onReviewRecord={(record) => {
+          setCoachPlayPlanId(null);
+          setCoachObjective(null);
+          setReviewReturnToCoach(false);
           setReviewRecord(record);
           setMode('review');
         }}
@@ -303,7 +308,11 @@ export function App() {
               <button
                 className="home-secondary-action"
                 type="button"
-                onClick={() => setMode('play')}
+                onClick={() => {
+                  setCoachPlayPlanId(null);
+                  setCoachObjective(null);
+                  setMode('play');
+                }}
               >
                 Play
               </button>
@@ -312,6 +321,7 @@ export function App() {
                 type="button"
                 onClick={() => {
                   setReviewRecord(null);
+                  setReviewReturnToCoach(false);
                   setMode('review');
                 }}
               >
