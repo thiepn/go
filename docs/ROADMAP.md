@@ -22,9 +22,9 @@ Exit criteria:
 
 ## P1 — Trusted Go Rules Engine
 
-Status: **next**
+Status: **complete**
 
-Build and test:
+Implemented and tested:
 - board model;
 - coordinates;
 - stone placement;
@@ -40,7 +40,14 @@ Build and test:
 Exit criterion:
 - rules can be tested without rendering a board.
 
+Validation:
+- headless TypeScript engine compiles independently of React;
+- smoke validation covers capture, suicide, capture-before-suicide, ko, passes, and area scoring;
+- repository tests cover immutable board behavior, groups/liberties, setup positions, multi-stone capture, invalid play, ko, game ending, and scoring.
+
 ## V1/P2 — Board Rendering & Interaction Foundation
+
+Status: **next**
 
 Build:
 - SVG board;
