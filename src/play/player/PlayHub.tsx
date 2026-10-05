@@ -12,12 +12,14 @@ import type {
   IndependentBoardSize,
   IndependentGameSettings,
   PlayMode,
+  SavedGameRecord,
 } from '../types';
 import { IndependentGamePlayer } from './IndependentGamePlayer';
 import './play.css';
 
 export interface PlayHubProps {
   readonly onExit?: () => void;
+  readonly onStudyRecord?: (record: SavedGameRecord) => void;
 }
 
 function resultLabel(
@@ -41,6 +43,7 @@ function resultLabel(
 
 export function PlayHub({
   onExit,
+  onStudyRecord,
 }: PlayHubProps) {
   const [activeSettings, setActiveSettings] =
     useState<IndependentGameSettings | null>(null);
@@ -289,6 +292,15 @@ export function PlayHub({
                     {record.moves.length} moves ·{' '}
                     {new Date(record.playedAt).toLocaleDateString()}
                   </small>
+                  {onStudyRecord && (
+                    <button
+                      className="recent-game-study"
+                      type="button"
+                      onClick={() => onStudyRecord(record)}
+                    >
+                      Study
+                    </button>
+                  )}
                 </article>
               ))}
             </div>
