@@ -92,7 +92,9 @@ function validateStep(
             ? [step.expectedSequence]
             : step.kind === 'play-move'
               ? [step.acceptedPoints ?? []]
-              : [];
+              : step.kind === 'try-illegal-move'
+                ? [[step.point]]
+                : [];
 
   for (const [listIndex, points] of pointLists.entries()) {
     points.forEach((point, pointIndex) =>
