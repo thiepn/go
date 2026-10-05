@@ -7,11 +7,19 @@ export interface CourseModule {
   readonly lessons: readonly LessonDefinition[];
 }
 
+export interface CourseCompletion {
+  readonly eyebrow?: string;
+  readonly title: string;
+  readonly description: string;
+  readonly actionLabel?: string;
+}
+
 export interface CourseDefinition {
   readonly id: string;
   readonly title: string;
   readonly description: string;
   readonly modules: readonly CourseModule[];
+  readonly completion?: CourseCompletion;
 }
 
 export interface CourseLessonEntry {
