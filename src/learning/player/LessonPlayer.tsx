@@ -28,6 +28,7 @@ function isPointInteractive(step: LessonStep | undefined): boolean {
 
   return (
     step.kind === 'play-move' ||
+    step.kind === 'try-illegal-move' ||
     step.kind === 'select-points' ||
     step.kind === 'select-stones' ||
     step.kind === 'select-group' ||
@@ -79,6 +80,10 @@ function actionLabel(step: LessonStep | undefined): string | null {
       return 'Continue';
     case 'play-move':
       return 'Play on the board';
+    case 'try-illegal-move':
+      return 'Try the move';
+    case 'pass':
+      return 'Pass';
     case 'select-points':
       return 'Select the points';
     case 'select-stones':
@@ -266,6 +271,16 @@ export function LessonPlayer({
               onClick={() => dispatch({ type: 'continue' })}
             >
               Continue
+            </button>
+          )}
+
+          {step.kind === 'pass' && (
+            <button
+              className="primary-action lesson-primary-action"
+              type="button"
+              onClick={() => dispatch({ type: 'pass' })}
+            >
+              Pass
             </button>
           )}
         </div>
