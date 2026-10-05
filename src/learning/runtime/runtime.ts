@@ -145,6 +145,7 @@ function advance(
   lesson: LessonDefinition,
   state: LessonRuntimeState,
   successText?: string,
+  historyState: LessonRuntimeState = state,
 ): LessonRuntimeState {
   const nextIndex = state.stepIndex + 1;
 
@@ -159,7 +160,7 @@ function advance(
         { type: 'clear-presentation' },
       ]),
       completed: true,
-      history: [...state.history, snapshot(state)],
+      history: [...state.history, snapshot(historyState)],
     };
   }
 
@@ -181,7 +182,7 @@ function advance(
         }
       : null,
     presentation: presentationForStep(nextStep),
-    history: [...state.history, snapshot(state)],
+    history: [...state.history, snapshot(historyState)],
   };
 }
 
@@ -244,7 +245,12 @@ function handlePointCollection(
     };
   }
 
-  return advance(lesson, { ...state, selectedPoints }, step.successText);
+  return advance(
+    lesson,
+    { ...state, selectedPoints },
+    step.successText,
+    state,
+  );
 }
 
 function handlePoint(
@@ -291,6 +297,7 @@ function handlePoint(
           board: result.state,
         },
         step.successText,
+        state,
       );
     }
 
@@ -366,7 +373,12 @@ function handlePoint(
         };
       }
 
-      return advance(lesson, { ...state, sequence }, step.successText);
+      return advance(
+        lesson,
+        { ...state, sequence },
+        step.successText,
+        state,
+      );
     }
   }
 }
