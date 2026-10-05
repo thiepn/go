@@ -12,6 +12,7 @@ import { recordMasteryEvidence } from '../mastery/store';
 import { PlayHub } from '../play/player';
 import type { SavedGameRecord } from '../play/types';
 import { StudyHub } from '../study/player';
+import { ReviewHub } from '../review/player';
 import { PracticeHub } from '../practice';
 
 type AppMode =
@@ -21,7 +22,8 @@ type AppMode =
   | 'practice'
   | 'progress'
   | 'play'
-  | 'study';
+  | 'study'
+  | 'review';
 
 const FIRST_GAME_COMPLETE_KEY =
   'thiepn-go:guided:first-9x9:complete';
@@ -57,6 +59,8 @@ export function App() {
   const [practiceFocus, setPracticeFocus] =
     useState<readonly string[]>([]);
   const [studyRecord, setStudyRecord] =
+    useState<SavedGameRecord | null>(null);
+  const [reviewRecord, setReviewRecord] =
     useState<SavedGameRecord | null>(null);
 
   if (mode === 'course') {
@@ -125,6 +129,32 @@ export function App() {
         onExit={() => setMode('home')}
         onStudyRecord={(record) => {
           setStudyRecord(record);
+          setMode('study');
+        }}
+        onReviewRecord={(record) => {
+          setReviewRecord(record);
+          setMode('review');
+        }}
+      />
+    );
+  }
+
+  if (mode === 'review') {
+    return (
+      <ReviewHub
+        initialRecord={reviewRecord}
+        onExit={() => {
+          setReviewRecord(null);
+          setMode('home');
+        }}
+        onPractice={(tags) => {
+          setPracticeFocus(tags);
+          setReviewRecord(null);
+          setMode('practice');
+        }}
+        onStudy={(record) => {
+          setStudyRecord(record);
+          setReviewRecord(null);
           setMode('study');
         }}
       />
@@ -204,6 +234,16 @@ export function App() {
                 className="home-secondary-action"
                 type="button"
                 onClick={() => {
+                  setReviewRecord(null);
+                  setMode('review');
+                }}
+              >
+                Review
+              </button>
+              <button
+                className="home-secondary-action"
+                type="button"
+                onClick={() => {
                   setStudyRecord(null);
                   setMode('study');
                 }}
@@ -223,7 +263,7 @@ export function App() {
 
         <p className="secondary-copy">
           {practiceUnlocked
-            ? 'Lessons · play · practice · study · mastery diagnosis'
+            ? 'Lessons · play · review · practice · study · mastery diagnosis'
             : '12 interactive lessons · guided first game · no account required'}
         </p>
       </section>
