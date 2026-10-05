@@ -131,21 +131,42 @@ Certification note:
 
 ## P5 — Guided 9×9 Game Engine
 
-Status: **next**
+Status: **implementation complete — novice certification pending**
 
-Build:
+Implemented:
+- complete authored 9×9 teaching game from an empty board;
+- real engine legality for learner and opponent moves;
+- learner/opponent move choreography;
 - teaching interruptions;
-- contextual explanations;
+- contextual atari/capture signals;
 - “What matters?”;
 - “Show me”;
 - “Why?”;
 - “Show the sequence”;
-- assistance-fade model.
+- guided/assisted/optional/independent assistance profiles;
+- constrained teaching moves that distinguish “off-plan” from “illegal”;
+- real pass/pass game ending;
+- engine-backed final area score;
+- course-to-first-game handoff.
+
+Automated validation:
+- authored path legality;
+- opponent reply legality;
+- intended capture;
+- two-pass completion;
+- exact final score;
+- tactical signal detection;
+- assistance-fade behavior.
 
 Exit criterion:
-- zero-knowledge test users complete and understand a full 9×9 game.
+- implementation now provides the full path for a zero-knowledge learner to finish a 9×9 game.
+
+Certification note:
+- M3 remains empirically pending until a genuine first-time Go learner completes the path without outside coaching and demonstrates understanding of capture, ending, and scoring.
 
 ## P6 — Practice / Tsumego System
+
+Status: **next**
 
 Build:
 - problem trees;
@@ -295,7 +316,7 @@ Visual development runs in parallel rather than being postponed:
 - **V5** lesson choreography — runtime foundation complete
 - **V6** learning home / map
 - **V7** practice / milestone visuals
-- **V8** play / scoring visuals
+- **V8** play / scoring visuals — guided-game foundation complete
 - **V9** review / variation visuals
 - **V10** engine-analysis visualization
 - **V11** responsive / accessibility variants
