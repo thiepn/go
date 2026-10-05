@@ -11,7 +11,6 @@ export function App() {
       <LessonPlayer
         lesson={firstStoneLesson}
         onExit={() => setStarted(false)}
-        onComplete={() => setStarted(false)}
       />
     );
   }
