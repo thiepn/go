@@ -96,7 +96,7 @@
 
 .segmented-control button.is-active {
   background: var(--paper-50);
-  color: var(--ink-900);
+  color: var(--ink-850);
   box-shadow: 0 2px 8px rgb(30 26 20 / 0.08);
 }
 
@@ -115,7 +115,7 @@
   border: 1px solid color-mix(in srgb, var(--ink-500) 16%, transparent);
   border-radius: var(--radius-md);
   background: var(--paper-50);
-  color: var(--ink-800);
+  color: var(--ink-700);
   text-align: left;
   cursor: pointer;
 }
@@ -172,7 +172,7 @@
 .recent-games article > strong {
   grid-row: span 2;
   align-self: center;
-  color: var(--ink-900);
+  color: var(--ink-850);
 }
 
 .recent-games article > small {
@@ -307,7 +307,7 @@
 }
 
 .game-side-panel > span.is-active {
-  color: var(--ink-900);
+  color: var(--ink-850);
 }
 
 .game-side-panel small {
