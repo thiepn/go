@@ -7,6 +7,7 @@ import {
   GoBoard,
   type BoardMarker,
 } from '../../board';
+import { coordinateLabel } from '../../board/model/geometry';
 import type {
   Point,
   Stone,
@@ -54,6 +55,7 @@ export interface StudyWorkspaceProps {
 
 function moveLabel(
   node: ReturnType<typeof flattenStudyTree>[number],
+  boardSize: number,
 ): string {
   if (!node.node.move) {
     return node.depth === 0 ? 'Start' : 'Setup';
@@ -66,13 +68,10 @@ function moveLabel(
     return `${node.moveNumber}. ${color} pass`;
   }
 
-  const x = String.fromCharCode(
-    65 + node.node.move.point.x +
-      (node.node.move.point.x >= 8 ? 1 : 0),
-  );
-  const y = node.node.move.point.y + 1;
-
-  return `${node.moveNumber}. ${color} ${x}${y}`;
+  return `${node.moveNumber}. ${color} ${coordinateLabel(
+    node.node.move.point,
+    boardSize,
+  )}`;
 }
 
 function modeMark(
@@ -555,7 +554,7 @@ export function StudyWorkspace({
                     setSelectedNodeId(entry.node.id)
                   }
                 >
-                  <span>{moveLabel(entry)}</span>
+                  <span>{moveLabel(entry, document.metadata.boardSize)}</span>
                   {entry.node.comment && (
                     <small aria-label="Has comment">●</small>
                   )}
