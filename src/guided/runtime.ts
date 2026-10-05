@@ -41,6 +41,7 @@ export interface GuidedGameState {
   readonly score: AreaScore | null;
   readonly learnerMoves: number;
   readonly helpUses: number;
+  readonly mistakes: number;
   readonly pendingOpponent: GuidedOpponentAction | null;
   readonly pendingSuccessText: string | null;
 }
@@ -73,6 +74,7 @@ export function createGuidedGameState(
     score: null,
     learnerMoves: 0,
     helpUses: 0,
+    mistakes: 0,
     pendingOpponent: null,
     pendingSuccessText: null,
   };
@@ -194,6 +196,7 @@ function playGuidedTurn(
   if (turn.type !== 'play') {
     return {
       ...state,
+      mistakes: state.mistakes + 1,
       feedback: {
         tone: 'correction',
         text: 'This is a passing moment. Use the Pass button instead of placing a stone.',
@@ -211,6 +214,7 @@ function playGuidedTurn(
 
     return {
       ...state,
+      mistakes: state.mistakes + 1,
       feedback: {
         tone: 'correction',
         text: legality.ok
@@ -228,6 +232,7 @@ function playGuidedTurn(
   if (!learnerResult.ok) {
     return {
       ...state,
+      mistakes: state.mistakes + 1,
       feedback: {
         tone: 'correction',
         text:
@@ -256,6 +261,7 @@ function passGuidedTurn(
   if (turn.type !== 'pass') {
     return {
       ...state,
+      mistakes: state.mistakes + 1,
       feedback: {
         tone: 'correction',
         text: 'There is still a move to play in this teaching position.',
@@ -268,6 +274,7 @@ function passGuidedTurn(
   if (!learnerPass.ok) {
     return {
       ...state,
+      mistakes: state.mistakes + 1,
       feedback: {
         tone: 'correction',
         text: 'The game has already ended.',
