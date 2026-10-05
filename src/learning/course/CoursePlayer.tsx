@@ -37,7 +37,7 @@ function loadProgress(
     const parsed = JSON.parse(raw) as Partial<SavedCourseProgress>;
     const value = parsed.nextLessonIndex;
 
-    if (!Number.isInteger(value) || typeof value !== 'number') {
+    if (typeof value !== 'number' || !Number.isInteger(value)) {
       return 0;
     }
 
@@ -127,16 +127,11 @@ export function CoursePlayer({
   }
 
   const current = lessons[lessonIndex];
-  const previousModule = lessons[lessonIndex - 1]?.module;
-  const beginsModule = previousModule?.id !== current.module.id;
-
   return (
     <>
-      {beginsModule && (
-        <div className="course-context" aria-hidden="true">
-          <span>{current.module.title}</span>
-        </div>
-      )}
+      <div className="course-context" aria-hidden="true">
+        <span>{current.module.title}</span>
+      </div>
       <LessonPlayer
         key={current.lesson.id}
         lesson={current.lesson}
