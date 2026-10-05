@@ -114,6 +114,8 @@ export async function analyzeSavedGameMove(
     moveNumber,
     visits,
     humanProfile,
+    options.includeOwnership ?? true,
+    options.includePolicy ?? true,
   );
 
   let position =
