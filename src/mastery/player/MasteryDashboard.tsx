@@ -1,9 +1,7 @@
 import { useMemo } from 'react';
 
-import {
-  loadProblemHistory,
-  type ProblemDefinition,
-} from '../../practice';
+import { loadProblemHistory } from '../../practice/history';
+import type { ProblemDefinition } from '../../practice/types';
 import {
   CONCEPTS,
 } from '../graph';
