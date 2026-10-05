@@ -48,6 +48,20 @@ export type LessonEffect =
       readonly kind?: 'focus' | 'warning' | 'success';
     }
   | {
+      readonly type: 'show-group';
+      readonly at: Point;
+      readonly kind?: 'focus' | 'warning' | 'success';
+    }
+  | {
+      readonly type: 'show-liberties';
+      readonly of: Point;
+      readonly pulse?: boolean;
+    }
+  | {
+      readonly type: 'show-atari';
+      readonly groupAt: Point;
+    }
+  | {
       readonly type: 'marker';
       readonly marker: BoardMarker;
     }
