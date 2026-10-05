@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import {
   GoBoard,
@@ -17,6 +17,14 @@ import {
 } from '../runtime';
 import './lesson-player.css';
 
+export interface LessonCompletionResult {
+  readonly lessonId: string;
+  readonly concept: string;
+  readonly mistakes: number;
+  readonly hintsUsed: number;
+  readonly responseMs: number;
+}
+
 export interface LessonPlayerProps {
   readonly lesson: LessonDefinition;
   readonly coursePosition?: {
@@ -24,7 +32,7 @@ export interface LessonPlayerProps {
     readonly total: number;
   };
   readonly onExit?: () => void;
-  readonly onComplete?: () => void;
+  readonly onComplete?: (result: LessonCompletionResult) => void;
 }
 
 function isPointInteractive(step: LessonStep | undefined): boolean {
@@ -113,6 +121,8 @@ export function LessonPlayer({
   onExit,
   onComplete,
 }: LessonPlayerProps) {
+  const startedAtRef = useRef(Date.now());
+
   const {
     state,
     step,
@@ -184,7 +194,15 @@ export function LessonPlayer({
               <button
                 className="primary-action lesson-primary-action"
                 type="button"
-                onClick={onComplete}
+                onClick={() =>
+                  onComplete({
+                    lessonId: lesson.id,
+                    concept: lesson.concept,
+                    mistakes: state.totalAttempts,
+                    hintsUsed: state.totalHintsUsed,
+                    responseMs: Math.max(0, Date.now() - startedAtRef.current),
+                  })
+                }
               >
                 Continue course
               </button>
