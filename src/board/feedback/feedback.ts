@@ -7,6 +7,7 @@ export type BoardFeedbackEvent =
 
 export interface FeedbackOptions {
   readonly haptics?: boolean;
+  readonly sound?: (event: BoardFeedbackEvent) => void;
 }
 
 const patterns: Partial<Record<BoardFeedbackEvent, number | number[]>> = {
@@ -20,6 +21,8 @@ export function triggerBoardFeedback(
   event: BoardFeedbackEvent,
   options: FeedbackOptions = {},
 ): void {
+  options.sound?.(event);
+
   if (!options.haptics) return;
   if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') {
     return;
