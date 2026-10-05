@@ -7,3 +7,8 @@ coverage
 !.env.example
 .DS_Store
 *.local
+
+# Local KataGo binaries/models
+models/
+*.bin.gz
+*.txt.gz
