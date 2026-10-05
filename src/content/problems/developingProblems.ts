@@ -106,9 +106,9 @@ export const developingProblems: readonly ProblemDefinition[] = [
   },
   {
     id: 'net-shape-01',
-    title: 'Use a net, not another chase',
+    title: 'Cast the net',
     instruction:
-      'Black to play. Surround the escape routes from a distance.',
+      'Black to play. Trap the white stone without giving atari, then block its forced escape.',
     concept: 'net',
     tags: ['net', 'capture', 'reading'],
     difficulty: 3,
@@ -116,25 +116,38 @@ export const developingProblems: readonly ProblemDefinition[] = [
       size: 7,
       toPlay: 'black',
       black: [
-        { x: 2, y: 3 },
-        { x: 3, y: 2 },
+        { x: 4, y: 0 },
+        { x: 4, y: 1 },
+        { x: 5, y: 2 },
+        { x: 6, y: 2 },
       ],
-      white: [{ x: 3, y: 3 }],
+      white: [{ x: 5, y: 1 }],
     },
     root: {
       branches: [
         {
-          move: { x: 4, y: 4 },
-          verdict: 'solved',
+          move: { x: 6, y: 0 },
+          verdict: 'continue',
           feedback:
-            'Correct. The diagonal net point covers future escape routes without needing immediate contact.',
+            'Correct. The net covers both escapes without touching White. White tries the right-side escape.',
+          opponentMove: { x: 6, y: 1 },
+          next: {
+            branches: [
+              {
+                move: { x: 5, y: 0 },
+                verdict: 'solved',
+                feedback:
+                  'Correct. Blocking the other escape completes the net. White’s extension created no route out.',
+              },
+            ],
+          },
         },
       ],
     },
     hints: [
       {
-        text: 'A net often sits one step away from the stone it is trapping.',
-        showPoints: [{ x: 4, y: 4 }],
+        text: 'The net point is diagonal from White at the upper-right edge of the shape.',
+        showPoints: [{ x: 6, y: 0 }],
       },
     ],
   },
