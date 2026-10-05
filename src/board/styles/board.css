@@ -289,3 +289,29 @@
     opacity: 1;
   }
 }
+
+.go-board__ownership {
+  pointer-events: none;
+}
+
+.go-ownership {
+  transition:
+    opacity var(--motion-standard) var(--ease-standard),
+    r var(--motion-standard) var(--ease-standard);
+}
+
+.go-ownership--black {
+  fill: rgb(24 26 23 / 0.9);
+}
+
+.go-ownership--white {
+  fill: rgb(255 252 242 / 0.96);
+  stroke: rgb(46 39 30 / 0.14);
+  stroke-width: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .go-ownership {
+    transition: none;
+  }
+}
