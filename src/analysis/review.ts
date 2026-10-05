@@ -25,7 +25,7 @@ import type {
   KataGoProvider,
 } from './types';
 
-function assessment(
+export function classifyScoreLoss(
   scoreLoss: number | null,
 ): EngineMoveAssessment {
   if (scoreLoss === null) {
@@ -267,7 +267,7 @@ export async function analyzeSavedGameMove(
     scoreLoss,
     winrateLoss,
     assessment:
-      assessment(scoreLoss),
+      classifyScoreLoss(scoreLoss),
     position,
   };
 }
