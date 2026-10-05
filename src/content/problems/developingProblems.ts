@@ -289,44 +289,48 @@ export const developingProblems: readonly ProblemDefinition[] = [
     id: 'seki-leave-alone-01',
     title: 'Do not fill mutual life',
     instruction:
-      'Black to play. The central liberties are shared. Play the useful outside point instead of collapsing the mutual-life shape.',
+      'Black to play. Both chains share the two right-edge liberties. Play elsewhere instead of losing the capturing race by filling one first.',
     concept: 'seki',
     tags: ['life-death', 'seki', 'judgment'],
     difficulty: 3,
     setup: {
-      size: 5,
+      size: 4,
       toPlay: 'black',
       black: [
-        { x: 1, y: 1 },
-        { x: 1, y: 2 },
         { x: 2, y: 0 },
+        { x: 3, y: 0 },
+        { x: 2, y: 1 },
+        { x: 2, y: 2 },
+        { x: 2, y: 3 },
       ],
       white: [
-        { x: 3, y: 1 },
+        { x: 1, y: 0 },
+        { x: 1, y: 1 },
+        { x: 1, y: 2 },
+        { x: 1, y: 3 },
         { x: 3, y: 2 },
-        { x: 2, y: 3 },
       ],
     },
     root: {
       branches: [
         {
-          move: { x: 0, y: 4 },
+          move: { x: 0, y: 0 },
           verdict: 'solved',
           feedback:
-            'Correct. Sometimes the right tactical decision is to leave a stable mutual-life shape alone.',
+            'Correct. Leave the two shared liberties untouched. Playing first inside the seki lets White take the other liberty and capture.',
         },
       ],
     },
     wrongMoveFeedback: {
-      '2,1':
-        'Filling a shared liberty first can destroy your own side of the seki. Look elsewhere.',
-      '2,2':
-        'This shared liberty is part of the mutual-life balance. Do not rush to fill it.',
+      '3,1':
+        'That fills one of the two shared liberties. White can take the other and capture Black.',
+      '3,3':
+        'That fills one of the two shared liberties. White can take the other and capture Black.',
     },
     hints: [
       {
-        text: 'Do not play in either central shared liberty.',
-        showPoints: [{ x: 0, y: 4 }],
+        text: 'The right-edge points are the seki liberties. Choose a legal move elsewhere.',
+        showPoints: [{ x: 0, y: 0 }],
       },
     ],
   },
