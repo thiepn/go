@@ -1,14 +1,18 @@
 import { useState } from 'react';
 
 import {
+  allProblems,
   beginnerCourse,
-  beginnerProblems,
+  developingCourse,
   firstGuidedGame,
 } from '../content';
 import { CoachHub } from '../coach/player';
 import { markCoachPracticeComplete } from '../coach/store';
 import { GuidedGamePlayer } from '../guided';
-import { CoursePlayer } from '../learning';
+import {
+  CoursePlayer,
+  type CourseDefinition,
+} from '../learning';
 import { MasteryDashboard } from '../mastery/player';
 import { recordMasteryEvidence } from '../mastery/store';
 import { PlayHub } from '../play/player';
@@ -56,6 +60,8 @@ function markFirstGameComplete(): void {
 
 export function App() {
   const [mode, setMode] = useState<AppMode>('home');
+  const [activeCourse, setActiveCourse] =
+    useState<CourseDefinition>(beginnerCourse);
   const [practiceUnlocked, setPracticeUnlocked] = useState(
     () => hasFirstGameComplete(),
   );
@@ -77,9 +83,18 @@ export function App() {
   if (mode === 'course') {
     return (
       <CoursePlayer
-        course={beginnerCourse}
+        course={activeCourse}
         onExit={() => setMode('home')}
-        onReadyForGame={() => setMode('guided-game')}
+        onReadyForGame={
+          activeCourse.id === beginnerCourse.id
+            ? () => setMode('guided-game')
+            : undefined
+        }
+        onCompletionAction={
+          activeCourse.id === developingCourse.id
+            ? () => setMode('coach')
+            : undefined
+        }
       />
     );
   }
@@ -124,7 +139,7 @@ export function App() {
   if (mode === 'practice') {
     return (
       <PracticeHub
-        problems={beginnerProblems}
+        problems={allProblems}
         focusedTags={practiceFocus}
         onComplete={(summary) => {
           if (coachPracticePlanId) {
@@ -181,7 +196,7 @@ export function App() {
   if (mode === 'coach') {
     return (
       <CoachHub
-        problems={beginnerProblems}
+        problems={allProblems}
         onExit={() => setMode('home')}
         onPractice={(tags, planId) => {
           setPracticeFocus(tags);
@@ -250,7 +265,7 @@ export function App() {
   if (mode === 'progress') {
     return (
       <MasteryDashboard
-        problems={beginnerProblems}
+        problems={allProblems}
         onExit={() => setMode('home')}
         onPractice={(tags) => {
           setPracticeFocus(tags);
@@ -280,9 +295,16 @@ export function App() {
           <button
             className="primary-action"
             type="button"
-            onClick={() => setMode('course')}
+            onClick={() => {
+              setActiveCourse(
+                practiceUnlocked
+                  ? developingCourse
+                  : beginnerCourse,
+              );
+              setMode('course');
+            }}
           >
-            {practiceUnlocked ? 'Continue learning' : 'Start learning'}
+            {practiceUnlocked ? 'Continue developing' : 'Start learning'}
           </button>
 
           {practiceUnlocked && (
@@ -350,7 +372,7 @@ export function App() {
 
         <p className="secondary-copy">
           {practiceUnlocked
-            ? 'Lessons · coach · play · review · practice · study · mastery diagnosis'
+            ? 'Developing course · coach · play · review · practice · study · mastery diagnosis'
             : '12 interactive lessons · guided first game · no account required'}
         </p>
       </section>
