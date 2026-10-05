@@ -93,8 +93,8 @@ export const firstStoneLesson: LessonDefinition = {
         'The empty intersections directly beside a stone matter. Diagonal points do not count. We will find the four that touch your stone.',
       enterEffects: [
         {
-          type: 'group-highlight',
-          stones: [center],
+          type: 'show-group',
+          at: center,
           kind: 'focus',
         },
       ],
@@ -122,14 +122,8 @@ export const firstStoneLesson: LessonDefinition = {
           text: 'Follow the four grid lines coming directly out of the stone.',
           effects: [
             {
-              type: 'highlight',
-              points: [
-                { x: 2, y: 1 },
-                { x: 1, y: 2 },
-                { x: 3, y: 2 },
-                { x: 2, y: 3 },
-              ],
-              kind: 'liberty',
+              type: 'show-liberties',
+              of: center,
             },
           ],
         },
@@ -156,14 +150,8 @@ export const firstStoneLesson: LessonDefinition = {
       },
       enterEffects: [
         {
-          type: 'highlight',
-          points: [
-            { x: 2, y: 1 },
-            { x: 1, y: 2 },
-            { x: 3, y: 2 },
-            { x: 2, y: 3 },
-          ],
-          kind: 'liberty',
+          type: 'show-liberties',
+          of: center,
         },
       ],
       successText:
