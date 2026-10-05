@@ -20,6 +20,7 @@ import './play.css';
 export interface PlayHubProps {
   readonly onExit?: () => void;
   readonly onStudyRecord?: (record: SavedGameRecord) => void;
+  readonly onReviewRecord?: (record: SavedGameRecord) => void;
 }
 
 function resultLabel(
@@ -44,6 +45,7 @@ function resultLabel(
 export function PlayHub({
   onExit,
   onStudyRecord,
+  onReviewRecord,
 }: PlayHubProps) {
   const [activeSettings, setActiveSettings] =
     useState<IndependentGameSettings | null>(null);
@@ -292,14 +294,27 @@ export function PlayHub({
                     {record.moves.length} moves ·{' '}
                     {new Date(record.playedAt).toLocaleDateString()}
                   </small>
-                  {onStudyRecord && (
-                    <button
-                      className="recent-game-study"
-                      type="button"
-                      onClick={() => onStudyRecord(record)}
-                    >
-                      Study
-                    </button>
+                  {(onReviewRecord || onStudyRecord) && (
+                    <div className="recent-game-actions">
+                      {onReviewRecord && (
+                        <button
+                          className="recent-game-review"
+                          type="button"
+                          onClick={() => onReviewRecord(record)}
+                        >
+                          Review
+                        </button>
+                      )}
+                      {onStudyRecord && (
+                        <button
+                          className="recent-game-study"
+                          type="button"
+                          onClick={() => onStudyRecord(record)}
+                        >
+                          Study
+                        </button>
+                      )}
+                    </div>
                   )}
                 </article>
               ))}
