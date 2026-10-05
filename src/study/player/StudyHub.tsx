@@ -8,16 +8,14 @@ import {
   loadGameRecords,
   type SavedGameRecord,
 } from '../../play';
+import { parseSgfCollection } from '../../sgf/parser';
+import { savedGameToStudy } from '../../sgf/records';
 import {
-  parseSgfCollection,
-  savedGameToStudy,
-} from '../../sgf';
-import {
-  createStudyDocument,
   deleteStudyDocument,
   loadStudyDocuments,
   saveStudyDocument,
-} from '..';
+} from '../store';
+import { createStudyDocument } from '../tree';
 import type {
   StudyDocument,
 } from '../types';
