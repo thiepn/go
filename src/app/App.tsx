@@ -7,10 +7,8 @@ import {
 } from '../content';
 import { GuidedGamePlayer } from '../guided';
 import { CoursePlayer } from '../learning';
-import {
-  MasteryDashboard,
-  recordMasteryEvidence,
-} from '../mastery';
+import { MasteryDashboard } from '../mastery/player';
+import { recordMasteryEvidence } from '../mastery/store';
 import { PracticeHub } from '../practice';
 
 type AppMode =
