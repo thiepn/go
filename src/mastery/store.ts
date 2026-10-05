@@ -72,6 +72,28 @@ export function recordMasteryEvidence(
   return next;
 }
 
+export function recordMasteryEvidenceOnce(
+  input: LearningEvidenceInput,
+): MasteryEvidence[] {
+  const current = loadMasteryEvidence();
+  const alreadyRecorded = current.some(
+    (event) =>
+      event.source === input.source &&
+      event.sourceId === input.sourceId,
+  );
+
+  if (alreadyRecorded) {
+    return current;
+  }
+
+  const next = appendMasteryEvidence(
+    current,
+    input,
+  );
+  saveMasteryEvidence(next);
+  return next;
+}
+
 export function migratePracticeHistory(
   current: readonly MasteryEvidence[],
   history: ProblemHistory,
