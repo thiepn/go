@@ -1,0 +1,413 @@
+.coach-shell {
+  min-height: 100vh;
+  padding: clamp(0.9rem, 3vw, 2.5rem);
+  background:
+    radial-gradient(circle at 72% 12%, rgb(220 177 98 / 0.14), transparent 32rem),
+    radial-gradient(circle at 16% 52%, rgb(70 118 95 / 0.08), transparent 28rem),
+    var(--paper-50);
+}
+
+.coach-header,
+.coach-focus,
+.coach-cycle,
+.coach-outcome,
+.coach-turning-points,
+.coach-empty {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+}
+
+.coach-header {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.coach-header h1,
+.coach-empty h1 {
+  max-width: 15ch;
+  font-size: clamp(2.6rem, 6.5vw, 5.2rem);
+}
+
+.coach-header p:not(.eyebrow),
+.coach-empty > p:not(.eyebrow) {
+  max-width: 46rem;
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.coach-focus {
+  margin-top: clamp(2rem, 5vw, 4rem);
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--accent-500) 24%, transparent);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--accent-100) 42%, var(--paper-100)),
+      var(--paper-100)
+    );
+  box-shadow: var(--shadow-soft);
+}
+
+.coach-focus__meta,
+.coach-focus__evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.coach-focus__meta > span,
+.coach-focus__meta > strong,
+.coach-focus__evidence > span {
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-50);
+  color: var(--ink-500);
+  font-size: 0.68rem;
+  font-weight: 760;
+}
+
+.coach-focus__meta > strong {
+  color: var(--accent-600);
+}
+
+.coach-focus h2 {
+  margin: 0.2rem 0 0;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+}
+
+.coach-focus__copy > p:not(.eyebrow) {
+  max-width: 50rem;
+  color: var(--ink-700);
+  line-height: 1.6;
+}
+
+.coach-focus__mastery {
+  min-width: 10rem;
+  align-self: center;
+  text-align: right;
+}
+
+.coach-focus__mastery > span {
+  color: var(--ink-500);
+  font-size: 0.7rem;
+}
+
+.coach-focus__mastery > strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: clamp(2.3rem, 5vw, 3.7rem);
+}
+
+.coach-focus__mastery > div {
+  width: 9rem;
+  height: 0.45rem;
+  margin-top: 0.45rem;
+  margin-left: auto;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--paper-200);
+}
+
+.coach-focus__mastery > div > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent-500);
+}
+
+.coach-cycle,
+.coach-turning-points,
+.coach-outcome {
+  margin-top: clamp(1.8rem, 5vw, 3.4rem);
+}
+
+.coach-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+}
+
+.coach-section-heading h2 {
+  margin: 0;
+  max-width: 21ch;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.coach-cycle__steps {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.coach-cycle__steps article {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.coach-cycle__steps article > span:first-child {
+  width: 2.15rem;
+  height: 2.15rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--paper-200);
+  color: var(--ink-700);
+  font-size: 0.8rem;
+  font-weight: 820;
+}
+
+.coach-cycle__steps article.is-complete {
+  border-color: color-mix(in srgb, var(--accent-500) 30%, transparent);
+}
+
+.coach-cycle__steps article.is-complete > span:first-child {
+  background: var(--accent-100);
+  color: var(--accent-600);
+}
+
+.coach-cycle__steps strong,
+.coach-cycle__steps p,
+.coach-cycle__steps small {
+  display: block;
+}
+
+.coach-cycle__steps p {
+  margin: 0.25rem 0 0;
+  color: var(--ink-700);
+  line-height: 1.5;
+}
+
+.coach-cycle__steps small {
+  margin-top: 0.3rem;
+  color: var(--ink-500);
+}
+
+.coach-outcome {
+  padding: clamp(1rem, 3vw, 1.35rem);
+  border: 1px solid color-mix(in srgb, var(--ink-500) 15%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-100);
+}
+
+.coach-outcome--improved {
+  border-color: color-mix(in srgb, var(--accent-500) 42%, transparent);
+}
+
+.coach-outcome--worse {
+  border-color: color-mix(in srgb, var(--danger-500) 36%, transparent);
+}
+
+.coach-outcome h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.coach-outcome > div:first-child > p:not(.eyebrow) {
+  max-width: 52rem;
+  color: var(--ink-700);
+  line-height: 1.6;
+}
+
+.coach-outcome__metrics {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.coach-outcome__metrics > div {
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--paper-50);
+}
+
+.coach-outcome__metrics span,
+.coach-outcome__metrics small {
+  display: block;
+  color: var(--ink-500);
+  font-size: 0.68rem;
+}
+
+.coach-outcome__metrics strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--ink-850);
+  font-size: 1.5rem;
+}
+
+.coach-outcome > button + button {
+  margin-left: 0.45rem;
+}
+
+.coach-engine-action {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.coach-engine-action > span {
+  padding: 0.32rem 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-size: 0.68rem;
+  font-weight: 720;
+}
+
+.coach-engine-action > span.is-ready {
+  background: var(--accent-100);
+  color: var(--accent-600);
+}
+
+.coach-engine-error {
+  padding: 0.7rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--danger-500) 9%, var(--paper-100));
+  color: var(--danger-500);
+  line-height: 1.5;
+}
+
+.coach-turning-point-list {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.coach-turning-point-list article {
+  padding: 0.9rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 13%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+}
+
+.coach-turning-point__rank {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-100);
+  color: var(--accent-600);
+  font-weight: 820;
+}
+
+.coach-turning-point__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.coach-turning-point__meta span,
+.coach-turning-point__meta strong {
+  padding: 0.24rem 0.4rem;
+  border-radius: var(--radius-pill);
+  background: var(--paper-50);
+  color: var(--ink-500);
+  font-size: 0.65rem;
+}
+
+.coach-turning-point__meta strong {
+  color: var(--accent-600);
+}
+
+.coach-turning-point-list h3 {
+  margin: 0.4rem 0 0;
+  font-size: 1.05rem;
+}
+
+.coach-turning-point-list p {
+  margin: 0.3rem 0 0;
+  color: var(--ink-700);
+  line-height: 1.5;
+}
+
+.coach-turning-points__empty {
+  margin-top: 0.9rem;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background: var(--paper-100);
+  color: var(--ink-700);
+}
+
+.coach-empty {
+  min-height: calc(100vh - 5rem);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+}
+
+.coach-empty__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 760px) {
+  .coach-focus {
+    grid-template-columns: 1fr;
+  }
+
+  .coach-focus__mastery {
+    text-align: left;
+  }
+
+  .coach-focus__mastery > div {
+    margin-left: 0;
+  }
+
+  .coach-cycle__steps article,
+  .coach-turning-point-list article {
+    grid-template-columns: auto 1fr;
+  }
+
+  .coach-cycle__steps article > button,
+  .coach-turning-point-list article > button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .coach-outcome__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .coach-section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .coach-shell {
+    padding: 0.75rem;
+  }
+
+  .coach-outcome > button {
+    width: 100%;
+  }
+
+  .coach-outcome > button + button {
+    margin: 0.45rem 0 0;
+  }
+
+  .coach-engine-action {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
