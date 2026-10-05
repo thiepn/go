@@ -135,6 +135,35 @@ function localScore(
   return 0;
 }
 
+function atariEscapePoints(
+  game: GameState,
+  color: Stone,
+): ReadonlySet<string> {
+  const seen = new Set<string>();
+  const escapes = new Set<string>();
+
+  game.board.intersections.forEach((value, index) => {
+    if (value !== color) return;
+
+    const point = indexToPoint(game.board, index);
+    const key = pointKey(point);
+    if (seen.has(key)) return;
+
+    const group = getGroup(game.board, point);
+    if (!group) return;
+
+    group.stones.forEach((stone) =>
+      seen.add(pointKey(stone)),
+    );
+
+    if (group.liberties.length === 1) {
+      escapes.add(pointKey(group.liberties[0]));
+    }
+  });
+
+  return escapes;
+}
+
 function legalMoves(
   game: GameState,
 ): readonly {
@@ -172,6 +201,7 @@ function evaluateMove(
   next: GameState,
   captures: number,
   profile: BotProfile,
+  escapePoints: ReadonlySet<string>,
 ): number {
   const player = game.toPlay;
   const enemy: Stone = player === 'black' ? 'white' : 'black';
@@ -182,6 +212,11 @@ function evaluateMove(
 
   let score = 0;
   score += captures * profile.tacticalAwareness;
+
+  if (escapePoints.has(pointKey(point))) {
+    score += profile.tacticalAwareness * 0.82;
+  }
+
   score += ownAdjacent * profile.connectionWeight;
   score += enemyAdjacent * 0.42;
   score += edgeShapeScore(game.board.size, point);
@@ -208,6 +243,10 @@ export function chooseBotMove(
 ): BotDecision {
   const profile = BOT_PROFILES[level];
   const moves = legalMoves(game);
+  const escapes = atariEscapePoints(
+    game,
+    game.toPlay,
+  );
 
   if (moves.length === 0) {
     return { type: 'pass' };
@@ -222,6 +261,7 @@ export function chooseBotMove(
         candidate.state,
         candidate.captures,
         profile,
+        escapes,
       ),
     }))
     .sort(
