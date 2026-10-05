@@ -444,6 +444,7 @@ export function IndependentGamePlayer({
               label="Select dead groups for scoring"
               interactive
               placementColor={state.game.toPlay}
+              showPlacementGhost={false}
               lastMove={lastMove}
               markers={deadMarkers}
               showCoordinates={state.game.board.size >= 13}
