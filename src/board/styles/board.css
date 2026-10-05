@@ -1,0 +1,296 @@
+.go-board-shell {
+  position: relative;
+  width: min(100%, 46rem);
+  aspect-ratio: 1;
+  border-radius: clamp(1rem, 3vw, 2rem);
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.go-board-shell:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 5px;
+}
+
+.go-board {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.go-board__surface {
+  vector-effect: non-scaling-stroke;
+}
+
+.go-board__grain {
+  fill: none;
+  stroke: rgb(103 71 32 / 0.13);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.go-board__grid {
+  stroke: rgb(65 48 30 / 0.84);
+  stroke-width: 2.35;
+  shape-rendering: geometricPrecision;
+}
+
+.go-board__stars {
+  fill: rgb(62 46 28 / 0.88);
+}
+
+.go-board__coordinates {
+  fill: rgb(64 48 30 / 0.62);
+  font-family: var(--font-ui);
+  font-size: 23px;
+  font-weight: 650;
+}
+
+.go-stone {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.go-stone__shadow {
+  fill: rgb(29 22 14 / 0.24);
+  filter: blur(2px);
+}
+
+.go-stone--black .go-stone__body {
+  fill: url("#board-black-stone");
+}
+
+.go-stone--white .go-stone__body {
+  fill: url("#board-white-stone");
+  stroke: rgb(38 31 23 / 0.22);
+  stroke-width: 1.4;
+}
+
+.go-stone__shine {
+  fill: rgb(255 255 255 / 0.17);
+  pointer-events: none;
+}
+
+.go-stone--white .go-stone__shine {
+  fill: rgb(255 255 255 / 0.48);
+}
+
+.go-stone--entering {
+  animation: go-stone-enter var(--motion-standard) var(--ease-out) both;
+}
+
+.go-stone--exiting {
+  animation: go-stone-exit 210ms var(--ease-standard) both;
+  pointer-events: none;
+}
+
+@keyframes go-stone-enter {
+  0% {
+    opacity: 0.28;
+    transform: translateY(-7px) scale(0.82);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translateY(1px) scale(1.025);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes go-stone-exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  35% {
+    opacity: 0.92;
+    transform: translateY(-5px) scale(1.015);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+  }
+}
+
+.go-board__ghost {
+  pointer-events: none;
+}
+
+.go-ghost-stone {
+  opacity: 0.42;
+  transition:
+    cx var(--motion-micro) var(--ease-out),
+    cy var(--motion-micro) var(--ease-out),
+    opacity var(--motion-micro) linear;
+}
+
+.go-ghost-stone--black {
+  fill: #1d1e1a;
+}
+
+.go-ghost-stone--white {
+  fill: #f8f3e8;
+  stroke: rgb(38 31 23 / 0.25);
+  stroke-width: 1.5;
+}
+
+.go-board__targets {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.go-board__target {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.go-board__keyboard-cursor {
+  fill: none;
+  stroke: rgb(47 111 221 / 0.82);
+  stroke-width: 4;
+  stroke-dasharray: 9 9;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-micro) linear;
+}
+
+.go-board-shell:focus-visible .go-board__keyboard-cursor {
+  opacity: 1;
+}
+
+.go-highlight {
+  fill: none;
+  stroke-width: 5;
+  pointer-events: none;
+}
+
+.go-highlight--focus {
+  stroke: rgb(52 99 79 / 0.95);
+}
+
+.go-highlight--liberty {
+  fill: rgb(255 248 217 / 0.7);
+  stroke: rgb(91 111 69 / 0.95);
+}
+
+.go-highlight--warning {
+  fill: rgb(174 77 62 / 0.18);
+  stroke: rgb(151 66 54 / 0.95);
+}
+
+.go-highlight--success {
+  fill: rgb(58 129 89 / 0.18);
+  stroke: rgb(52 118 81 / 0.95);
+}
+
+.go-highlight--selected {
+  fill: rgb(47 111 221 / 0.14);
+  stroke: rgb(47 111 221 / 0.9);
+}
+
+.go-highlight--pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: go-highlight-pulse 1.45s ease-in-out infinite;
+}
+
+@keyframes go-highlight-pulse {
+  0%,
+  100% {
+    opacity: 0.64;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.16);
+  }
+}
+
+.go-group-halo {
+  fill: none;
+  stroke-width: 8;
+  opacity: 0.46;
+  pointer-events: none;
+}
+
+.go-group-halo--focus {
+  stroke: #4b8067;
+}
+
+.go-group-halo--warning {
+  stroke: #b56151;
+}
+
+.go-group-halo--success {
+  stroke: #5b966a;
+}
+
+.go-last-move--on-black {
+  fill: rgb(249 244 233 / 0.9);
+}
+
+.go-last-move--on-white {
+  fill: rgb(25 26 22 / 0.82);
+}
+
+.go-marker {
+  font-family: var(--font-ui);
+  font-size: 34px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: rgb(247 241 226 / 0.9);
+  stroke-width: 6px;
+  pointer-events: none;
+}
+
+.go-marker--neutral {
+  fill: #272821;
+}
+
+.go-marker--accent {
+  fill: #315f49;
+}
+
+.go-marker--warning {
+  fill: #9f4f43;
+}
+
+.go-marker-dot--neutral {
+  fill: #2a2a24;
+}
+
+.go-marker-dot--accent {
+  fill: #315f49;
+}
+
+.go-marker-dot--warning {
+  fill: #9f4f43;
+}
+
+@media (hover: hover) {
+  .go-board__target:hover {
+    fill: rgb(255 255 255 / 0.035);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .go-stone--entering,
+  .go-stone--exiting,
+  .go-highlight--pulse {
+    animation: none;
+  }
+
+  .go-highlight--pulse {
+    opacity: 1;
+  }
+}
