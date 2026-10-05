@@ -97,5 +97,8 @@ export function savedGameToStudy(
     parentId = added.childId;
   }
 
-  return document;
+  return {
+    ...document,
+    id: `study-record-${record.id}`,
+  };
 }
