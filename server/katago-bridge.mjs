@@ -116,8 +116,10 @@ function startEngine() {
     const item = pending.get(id);
 
     if (message.warning) {
-      item.warnings.push(message);
-      return;
+      item.warnings.push({
+        id: message.id,
+        warning: message.warning,
+      });
     }
 
     if (message.error) {
