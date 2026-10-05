@@ -166,19 +166,34 @@ Certification note:
 
 ## P6 — Practice / Tsumego System
 
-Status: **next**
+Status: **complete**
 
-Build:
-- problem trees;
-- alternate correct lines;
-- misconception feedback;
-- hints;
-- retries;
+Implemented:
+- declarative problem definitions;
+- engine-backed problem trees;
+- alternate correct variations;
+- authored opponent replies;
+- multi-step reading positions;
+- misconception-specific feedback;
+- progressive hints;
+- retries with evidence preservation;
 - tags;
-- difficulty;
-- practice queues.
+- difficulty levels;
+- local attempt history;
+- mixed and focused practice modes;
+- deterministic adaptive queues;
+- immediate one-time remediation repeats;
+- eight-problem beginner pack;
+- practice unlock after the first guided game.
+
+Validation:
+- every starter solution variation and opponent reply is replayed through the Go engine;
+- queue/history behavior has automated coverage;
+- legal-but-wrong moves are distinguished from illegal moves.
 
 ## P7 — Mastery & Knowledge Graph
+
+Status: **next**
 
 Track:
 - concept exposure;
@@ -315,7 +330,7 @@ Visual development runs in parallel rather than being postponed:
 - **V4** educational motion primitives — semantic foundation started
 - **V5** lesson choreography — runtime foundation complete
 - **V6** learning home / map
-- **V7** practice / milestone visuals
+- **V7** practice / milestone visuals — practice foundation complete
 - **V8** play / scoring visuals — guided-game foundation complete
 - **V9** review / variation visuals
 - **V10** engine-analysis visualization
