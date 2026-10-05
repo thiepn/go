@@ -27,6 +27,7 @@ import type {
   BoardMarker,
   GhostStone,
   GroupHighlight,
+  OwnershipOverlay,
 } from '../model/presentation';
 import {
   diffBoards,
@@ -44,6 +45,7 @@ export interface GoBoardProps {
   readonly groupHighlights?: readonly GroupHighlight[];
   readonly markers?: readonly BoardMarker[];
   readonly ghostStone?: GhostStone | null;
+  readonly ownership?: OwnershipOverlay | null;
   readonly showPlacementGhost?: boolean;
   readonly showCoordinates?: boolean;
   readonly onIntersectionIntent?: (point: Point) => void;
@@ -126,6 +128,7 @@ export function GoBoard({
   groupHighlights = [],
   markers = [],
   ghostStone = null,
+  ownership = null,
   showPlacementGhost = true,
   showCoordinates = false,
   onIntersectionIntent,
@@ -383,6 +386,40 @@ export function GoBoard({
             );
           })}
         </g>
+
+        {ownership &&
+          ownership.values.length === board.intersections.length && (
+            <g className="go-board__ownership" aria-hidden="true">
+              {ownership.values.map((value, index) => {
+                const strength = Math.abs(value);
+                const threshold = ownership.threshold ?? 0.18;
+
+                if (!Number.isFinite(value) || strength < threshold) {
+                  return null;
+                }
+
+                const point = indexToPoint(board, index);
+                const position = pointToSvg(geometry, point);
+                const owner =
+                  value >= 0
+                    ? ownership.perspective
+                    : ownership.perspective === 'black'
+                      ? 'white'
+                      : 'black';
+
+                return (
+                  <circle
+                    key={`ownership-${pointKey(point)}`}
+                    className={`go-ownership go-ownership--${owner}`}
+                    cx={position.x}
+                    cy={position.y}
+                    r={geometry.spacing * 0.4}
+                    opacity={0.08 + strength * 0.3}
+                  />
+                );
+              })}
+            </g>
+          )}
 
         {showCoordinates && (
           <g className="go-board__coordinates" aria-hidden="true">
