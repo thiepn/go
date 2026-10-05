@@ -1,5 +1,7 @@
 import {
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -22,12 +24,21 @@ import {
   type ProblemResult,
 } from './ProblemPlayer';
 
+export interface PracticeSessionSummary {
+  readonly totalProblems: number;
+  readonly cleanSolves: number;
+  readonly repeatedProblems: number;
+}
+
 export interface PracticeSessionProps {
   readonly problems: readonly ProblemDefinition[];
   readonly tags?: readonly string[];
   readonly difficulties?: readonly ProblemDifficulty[];
   readonly sessionSize?: number;
   readonly onExit?: () => void;
+  readonly onComplete?: (
+    summary: PracticeSessionSummary,
+  ) => void;
 }
 
 export function PracticeSession({
@@ -36,6 +47,7 @@ export function PracticeSession({
   difficulties,
   sessionSize = 6,
   onExit,
+  onComplete,
 }: PracticeSessionProps) {
   const [history, setHistory] = useState<ProblemHistory>(
     () => loadProblemHistory(),
@@ -61,8 +73,32 @@ export function PracticeSession({
     () => new Set(),
   );
   const [cleanSolves, setCleanSolves] = useState(0);
+  const completedRef = useRef(false);
 
   const current = queue[index];
+
+  useEffect(() => {
+    if (
+      current ||
+      completedRef.current
+    ) {
+      return;
+    }
+
+    completedRef.current = true;
+    onComplete?.({
+      totalProblems: queue.length,
+      cleanSolves,
+      repeatedProblems:
+        repeated.size,
+    });
+  }, [
+    current,
+    queue.length,
+    cleanSolves,
+    repeated,
+    onComplete,
+  ]);
 
   const finishProblem = (result: ProblemResult) => {
     const solvedProblem = current;
