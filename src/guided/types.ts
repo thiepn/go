@@ -71,6 +71,7 @@ export interface GuidedGameScenario {
   readonly boardSize: number;
   readonly komi: number;
   readonly assistanceLevel: AssistanceLevel;
+  readonly masteryConcepts?: readonly string[];
   readonly openingMessage: string;
   readonly turns: readonly GuidedTurn[];
   readonly completionMessage: string;
