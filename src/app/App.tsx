@@ -3,7 +3,9 @@ import { useState } from 'react';
 import {
   allProblems,
   beginnerCourse,
+  beginnerProblems,
   developingCourse,
+  developingProblems,
   firstGuidedGame,
 } from '../content';
 import { CoachHub } from '../coach/player';
@@ -14,7 +16,11 @@ import {
   type CourseDefinition,
 } from '../learning';
 import { MasteryDashboard } from '../mastery/player';
-import { recordMasteryEvidence } from '../mastery/store';
+import { resolveConceptIds } from '../mastery/graph';
+import {
+  loadMasteryEvidence,
+  recordMasteryEvidence,
+} from '../mastery/store';
 import { PlayHub } from '../play/player';
 import type { SavedGameRecord } from '../play/types';
 import { StudyHub } from '../study/player';
@@ -80,6 +86,28 @@ export function App() {
   const [reviewReturnToCoach, setReviewReturnToCoach] =
     useState(false);
 
+  const evidencedConcepts = new Set(
+    loadMasteryEvidence().map(
+      (event) => event.conceptId,
+    ),
+  );
+  const unlockedDevelopingProblems =
+    developingProblems.filter(
+      (problem) =>
+        resolveConceptIds(
+          problem.concept,
+        ).some(
+          (conceptId) =>
+            evidencedConcepts.has(
+              conceptId,
+            ),
+        ),
+    );
+  const practiceProblems = [
+    ...beginnerProblems,
+    ...unlockedDevelopingProblems,
+  ];
+
   if (mode === 'course') {
     return (
       <CoursePlayer
@@ -139,7 +167,7 @@ export function App() {
   if (mode === 'practice') {
     return (
       <PracticeHub
-        problems={allProblems}
+        problems={practiceProblems}
         focusedTags={practiceFocus}
         onComplete={(summary) => {
           if (coachPracticePlanId) {
@@ -196,7 +224,7 @@ export function App() {
   if (mode === 'coach') {
     return (
       <CoachHub
-        problems={allProblems}
+        problems={practiceProblems}
         onExit={() => setMode('home')}
         onPractice={(tags, planId) => {
           setPracticeFocus(tags);
