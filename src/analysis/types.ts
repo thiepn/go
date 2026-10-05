@@ -140,3 +140,10 @@ export interface KataGoProvider {
     query: KataGoQuery,
   ): Promise<readonly KataGoResponseRaw[]>;
 }
+
+export interface KataGoGameScan {
+  readonly recordId: string;
+  readonly moves: readonly KataGoMoveReview[];
+  readonly missingPlayedMoves: readonly number[];
+  readonly analyzedAt: number;
+}
