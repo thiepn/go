@@ -314,19 +314,52 @@ Boundary:
 
 ## P10 — Deterministic Game Review
 
-Status: **next**
+Status: **complete**
 
-Detect explainable beginner/intermediate issues:
-- missed captures;
-- self-atari;
-- unanswered atari;
-- obvious cuts;
-- failed connections;
-- simple dead-group mistakes.
+Implemented:
+- exact P8 move-by-move game reconstruction;
+- human-only analysis for computer games;
+- both-side analysis for local games;
+- missed immediate capture opportunities;
+- unanswered / left-in-atari warnings;
+- high-confidence ignored-atari detection when the group is captured immediately;
+- self-atari detection;
+- high-confidence punished self-atari detection;
+- direct-cut / missed-connection-point warnings;
+- pass-while-in-atari end-state warnings;
+- legal rescue-move generation;
+- severity and confidence model;
+- P7 concept mapping;
+- strict mastery eligibility for high-confidence punished mistakes only;
+- idempotent review-derived mastery evidence;
+- Before / After board comparison;
+- deterministic alternative highlights;
+- engine-backed “Try another move” interaction;
+- direct Review → Practice remediation;
+- direct Review → Study exploration;
+- recent-game Review action in Play;
+- first-class Review destination on Home;
+- responsive review timeline / finding UI.
 
-Map errors back to concepts.
+Validation:
+- review frame reconstruction;
+- capture opportunity detection;
+- atari and legal rescue signals;
+- punished ignored-atari classification;
+- punished self-atari classification;
+- direct connection-point detection;
+- pass-in-atari warnings;
+- learner-color filtering in computer games;
+- idempotent mastery integration;
+- medium-confidence findings excluded from negative mastery evidence.
+
+Boundary:
+- general dead-group classification is deliberately not claimed;
+- strategic move grading, point loss, ownership and best-move analysis begin with P11.
 
 ## P11 — KataGo Analysis Adapter
+
+Status: **next**
 
 Add:
 - candidate moves;
@@ -415,8 +448,8 @@ Visual development runs in parallel rather than being postponed:
 - **V6** learning home / map — mastery/progress foundation started
 - **V7** practice / milestone visuals — practice foundation complete
 - **V8** play / scoring visuals — independent play and scoring foundation complete
-- **V9** review / variation visuals — SGF replay and variation foundation complete
-- **V10** engine-analysis visualization
+- **V9** review / variation visuals — deterministic review and SGF variation foundation complete
+- **V10** engine-analysis visualization — next
 - **V11** responsive / accessibility variants
 - **V12** visual performance and QA
 
