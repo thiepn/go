@@ -3,6 +3,7 @@ import {
   useState,
 } from 'react';
 
+import { recordMasteryEvidence } from '../../mastery';
 import {
   buildPracticeQueue,
 } from '../queue';
@@ -68,13 +69,26 @@ export function PracticeSession({
 
     if (!solvedProblem) return;
 
+    const attemptedAt = Date.now();
     const nextHistory = recordProblemSession(history, {
       problemId: result.problemId,
       success: true,
       firstTry: result.firstTry,
       mistakes: result.mistakes,
       hintsUsed: result.hintsUsed,
-      attemptedAt: Date.now(),
+      attemptedAt,
+    });
+
+    recordMasteryEvidence({
+      source: 'practice',
+      sourceId: result.problemId,
+      sourceConcept: solvedProblem.concept,
+      success: true,
+      firstAttempt: result.firstTry,
+      mistakes: result.mistakes,
+      hintsUsed: result.hintsUsed,
+      responseMs: result.responseMs,
+      occurredAt: attemptedAt,
     });
 
     setHistory(nextHistory);
