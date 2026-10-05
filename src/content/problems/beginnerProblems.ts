@@ -27,6 +27,10 @@ export const beginnerProblems: readonly ProblemDefinition[] = [
         },
       ],
     },
+    wrongMoveFeedback: {
+      '1,1': 'That point is diagonal to White. Diagonal points are not liberties.',
+      '3,3': 'That point is diagonal to White. Follow the grid lines directly from the stone.',
+    },
     hints: [
       {
         text: 'Count the white stone’s remaining liberties.',
@@ -91,6 +95,10 @@ export const beginnerProblems: readonly ProblemDefinition[] = [
           feedback: 'Safe for now. Extending created several new liberties.',
         },
       ],
+    },
+    wrongMoveFeedback: {
+      '1,1': 'Playing elsewhere leaves Black in atari. Save the threatened group first.',
+      '3,3': 'That does not extend the endangered black stone. Find its last liberty.',
     },
     hints: [
       {
@@ -299,6 +307,9 @@ export const beginnerProblems: readonly ProblemDefinition[] = [
           feedback: 'Closed. The empty points behind the wall are now surrounded by Black and the board edge.',
         },
       ],
+    },
+    wrongMoveFeedback: {
+      '1,1': 'That point is inside the area you are trying to surround. Close the boundary instead of filling your own space.',
     },
     hints: [
       {
