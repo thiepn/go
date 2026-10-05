@@ -192,41 +192,52 @@ export const developingProblems: readonly ProblemDefinition[] = [
   },
   {
     id: 'semeai-last-liberty-01',
-    title: 'Win the capturing race',
+    title: 'Win the equal-liberty race',
     instruction:
-      'Black to play. White’s connected group has one final liberty. Take it before playing elsewhere.',
+      'Black to play. Both adjacent target stones have two liberties. Remove White’s liberties one move faster.',
     concept: 'semeai',
-    tags: ['capturing-race', 'liberties', 'capture'],
-    difficulty: 2,
+    tags: ['capturing-race', 'liberties', 'reading'],
+    difficulty: 3,
     setup: {
       size: 5,
       toPlay: 'black',
       black: [
-        { x: 1, y: 2 },
-        { x: 2, y: 1 },
-        { x: 3, y: 2 },
-        { x: 1, y: 3 },
-        { x: 2, y: 4 },
+        { x: 0, y: 2 },
+        { x: 4, y: 3 },
       ],
       white: [
+        { x: 3, y: 0 },
+        { x: 1, y: 1 },
         { x: 2, y: 2 },
-        { x: 2, y: 3 },
+        { x: 4, y: 2 },
+        { x: 1, y: 3 },
       ],
     },
     root: {
       branches: [
         {
-          move: { x: 3, y: 3 },
-          verdict: 'solved',
+          move: { x: 3, y: 2 },
+          verdict: 'continue',
           feedback:
-            'Correct. In a capturing race, the liberty count only matters if you act on it at the right time.',
+            'Correct. White is down to one liberty. White answers by reducing Black to one liberty too.',
+          opponentMove: { x: 4, y: 4 },
+          next: {
+            branches: [
+              {
+                move: { x: 4, y: 1 },
+                verdict: 'solved',
+                feedback:
+                  'Correct. Black takes White’s last liberty first and wins this capturing race.',
+              },
+            ],
+          },
         },
       ],
     },
     hints: [
       {
-        text: 'Treat the two white stones as one group and count its remaining liberties.',
-        showPoints: [{ x: 3, y: 3 }],
+        text: 'White’s liberties are to the left and above the target stone. Remove the left one first.',
+        showPoints: [{ x: 3, y: 2 }],
       },
     ],
   },
