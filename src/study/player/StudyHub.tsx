@@ -4,10 +4,8 @@ import {
   useState,
 } from 'react';
 
-import {
-  loadGameRecords,
-  type SavedGameRecord,
-} from '../../play';
+import { loadGameRecords } from '../../play/records';
+import type { SavedGameRecord } from '../../play/types';
 import { parseSgfCollection } from '../../sgf/parser';
 import { savedGameToStudy } from '../../sgf/records';
 import {
