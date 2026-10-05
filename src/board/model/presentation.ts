@@ -28,3 +28,9 @@ export interface GhostStone {
   readonly point: Point;
   readonly color: Stone;
 }
+
+export interface OwnershipOverlay {
+  readonly values: readonly number[];
+  readonly perspective: Stone;
+  readonly threshold?: number;
+}
