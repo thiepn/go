@@ -149,6 +149,19 @@ export function PracticeHub({
     );
   }
 
+  const visibleModes = MODES.filter(
+    (item) =>
+      !item.tags ||
+      item.tags.length === 0 ||
+      problems.some(
+        (problem) =>
+          problem.tags.some(
+            (tag) =>
+              item.tags?.includes(tag),
+          ),
+      ),
+  );
+
   return (
     <main className="practice-hub-shell">
       <section className="practice-hub" aria-labelledby="practice-hub-title">
@@ -172,7 +185,7 @@ export function PracticeHub({
         </header>
 
         <div className="practice-mode-grid">
-          {MODES.map((item) => (
+          {visibleModes.map((item) => (
             <button
               key={item.id}
               className="practice-mode-card"
