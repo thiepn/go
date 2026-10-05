@@ -1,12 +1,18 @@
 import { useState } from 'react';
 
 import type { ProblemDefinition } from '../types';
-import { PracticeSession } from './PracticeSession';
+import {
+  PracticeSession,
+  type PracticeSessionSummary,
+} from './PracticeSession';
 
 export interface PracticeHubProps {
   readonly problems: readonly ProblemDefinition[];
   readonly focusedTags?: readonly string[];
   readonly onExit?: () => void;
+  readonly onComplete?: (
+    summary: PracticeSessionSummary,
+  ) => void;
 }
 
 type PracticeMode =
@@ -64,6 +70,7 @@ export function PracticeHub({
   problems,
   focusedTags,
   onExit,
+  onComplete,
 }: PracticeHubProps) {
   const [mode, setMode] = useState<PracticeMode | null>(null);
 
@@ -74,6 +81,7 @@ export function PracticeHub({
         tags={focusedTags}
         sessionSize={5}
         onExit={onExit}
+        onComplete={onComplete}
       />
     );
   }
@@ -87,6 +95,7 @@ export function PracticeHub({
         tags={config?.tags}
         sessionSize={mode === 'mixed' ? 6 : 5}
         onExit={() => setMode(null)}
+        onComplete={onComplete}
       />
     );
   }
