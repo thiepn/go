@@ -86,7 +86,7 @@ export function evaluateCoachPlan(
   games: readonly SavedGameRecord[],
   mastery: MasterySnapshot,
 ): CoachOutcome {
-  const followup =
+  const followups =
     [...games]
       .filter(
         (game) =>
@@ -97,7 +97,16 @@ export function evaluateCoachPlan(
         (a, b) =>
           a.playedAt -
           b.playedAt,
-      )[0] ?? null;
+      );
+
+  const followup =
+    followups.find(
+      (game) =>
+        learnerMoveCount(game) >=
+        10,
+    ) ??
+    followups[0] ??
+    null;
 
   const currentMastery =
     mastery.concepts[
