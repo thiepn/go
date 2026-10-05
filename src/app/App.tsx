@@ -10,6 +10,8 @@ import { CoursePlayer } from '../learning';
 import { MasteryDashboard } from '../mastery/player';
 import { recordMasteryEvidence } from '../mastery/store';
 import { PlayHub } from '../play/player';
+import type { SavedGameRecord } from '../play/types';
+import { StudyHub } from '../study/player';
 import { PracticeHub } from '../practice';
 
 type AppMode =
@@ -18,7 +20,8 @@ type AppMode =
   | 'guided-game'
   | 'practice'
   | 'progress'
-  | 'play';
+  | 'play'
+  | 'study';
 
 const FIRST_GAME_COMPLETE_KEY =
   'thiepn-go:guided:first-9x9:complete';
@@ -53,6 +56,8 @@ export function App() {
   );
   const [practiceFocus, setPracticeFocus] =
     useState<readonly string[]>([]);
+  const [studyRecord, setStudyRecord] =
+    useState<SavedGameRecord | null>(null);
 
   if (mode === 'course') {
     return (
@@ -118,6 +123,22 @@ export function App() {
     return (
       <PlayHub
         onExit={() => setMode('home')}
+        onStudyRecord={(record) => {
+          setStudyRecord(record);
+          setMode('study');
+        }}
+      />
+    );
+  }
+
+  if (mode === 'study') {
+    return (
+      <StudyHub
+        initialRecord={studyRecord}
+        onExit={() => {
+          setStudyRecord(null);
+          setMode('home');
+        }}
       />
     );
   }
@@ -182,6 +203,16 @@ export function App() {
               <button
                 className="home-secondary-action"
                 type="button"
+                onClick={() => {
+                  setStudyRecord(null);
+                  setMode('study');
+                }}
+              >
+                Study
+              </button>
+              <button
+                className="home-secondary-action"
+                type="button"
                 onClick={() => setMode('progress')}
               >
                 Progress
@@ -192,7 +223,7 @@ export function App() {
 
         <p className="secondary-copy">
           {practiceUnlocked
-            ? 'Lessons · play · adaptive practice · mastery diagnosis'
+            ? 'Lessons · play · practice · study · mastery diagnosis'
             : '12 interactive lessons · guided first game · no account required'}
         </p>
       </section>
