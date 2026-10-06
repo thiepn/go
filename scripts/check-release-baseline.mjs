@@ -75,7 +75,7 @@ if (
 
 if (lock.lockfileVersion !== 3) {
   throw new Error(
-    'C0 requires npm lockfileVersion 3.',
+    'The release candidate requires npm lockfileVersion 3.',
   );
 }
 
@@ -83,7 +83,7 @@ if (
   packageJson.engines?.node !== '22.x'
 ) {
   throw new Error(
-    'C0 release builds must stay on Node 22.x.',
+    'Release-candidate builds must stay on Node 22.x.',
   );
 }
 
@@ -101,14 +101,16 @@ if (
 }
 
 if (
-  candidate.phase !== 'C0' ||
+  !/^C(?:[0-9]|1[0-5])$/.test(
+    candidate.phase,
+  ) ||
   candidate.status !== 'frozen' ||
   candidate.canonicalUrl !==
     'https://thiepn.dev/go/' ||
   candidate.canonicalPath !== '/go/'
 ) {
   throw new Error(
-    'Release-candidate identity or canonical target drifted from the C0 freeze.',
+    'Release-candidate identity or canonical target drifted from the frozen release contract.',
   );
 }
 
@@ -231,7 +233,7 @@ if (
   )
 ) {
   throw new Error(
-    'Verify and production deployment workflows must enforce the C0 release baseline.',
+    'Verify and production deployment workflows must enforce the release baseline.',
   );
 }
 
@@ -283,6 +285,31 @@ if (existsSync('dist')) {
   }
 }
 
+const viteConfig = readFileSync(
+  'vite.config.ts',
+  'utf8',
+);
+const manifest = readJson(
+  'public/manifest.webmanifest',
+);
+const pwaRuntime = readFileSync(
+  'src/platform/pwa.ts',
+  'utf8',
+);
+
+if (
+  !viteConfig.includes("base: '/go/'") ||
+  manifest.start_url !== '/go/' ||
+  manifest.scope !== '/go/' ||
+  !pwaRuntime.includes(
+    'import.meta.env.BASE_URL',
+  )
+) {
+  throw new Error(
+    'Canonical /go/ build, manifest, and service-worker registration contract is incomplete.',
+  );
+}
+
 console.log(
-  `C0 release baseline verified: ${candidate.candidate}.`,
+  `Release baseline verified: ${candidate.candidate} (${candidate.phase}).`,
 );
