@@ -1,0 +1,59 @@
+name: account-c3-certification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  account-c3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: c3-account-certification
+
+    steps:
+      - name: Checkout current main candidate
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Require dedicated destructive test account
+        shell: bash
+        env:
+          C3_TEST_EMAIL: ${{ secrets.C3_TEST_EMAIL }}
+          C3_TEST_PASSWORD: ${{ secrets.C3_TEST_PASSWORD }}
+        run: |
+          test -n "$C3_TEST_EMAIL"
+          test -n "$C3_TEST_PASSWORD"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Certify email/password and sync lifecycle
+        run: npm run qa:account:credentialed
+        env:
+          PLAYWRIGHT_BASE_URL: https://thiepn.dev/go/
+          C3_LIVE_BASE_URL: https://thiepn.dev/go/
+          C3_TEST_EMAIL: ${{ secrets.C3_TEST_EMAIL }}
+          C3_TEST_PASSWORD: ${{ secrets.C3_TEST_PASSWORD }}
+
+      - name: Upload account certification failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: account-c3-certification-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 30
