@@ -24,6 +24,12 @@ const requiredFiles = [
   'tests/e2e/mobile-pwa.e2e.ts',
   '.github/workflows/c4-mobile-pwa-qa.yml',
   '.github/workflows/c4-production-mobile-qa.yml',
+  'certification/c5-accessibility-checklist.json',
+  'certification/evidence/C5.md',
+  'playwright.c5.config.ts',
+  'tests/e2e/accessibility-certification.e2e.ts',
+  '.github/workflows/c5-accessibility-qa.yml',
+  '.github/workflows/c5-production-accessibility-qa.yml',
   'docs/RELEASE_BASELINE.md',
   'docs/RELEASE_CHECKLIST.md',
   'docs/KNOWN_LIMITATIONS.md',
@@ -230,6 +236,14 @@ const c4ProductionWorkflow = readFileSync(
   '.github/workflows/c4-production-mobile-qa.yml',
   'utf8',
 );
+const c5Workflow = readFileSync(
+  '.github/workflows/c5-accessibility-qa.yml',
+  'utf8',
+);
+const c5ProductionWorkflow = readFileSync(
+  '.github/workflows/c5-production-accessibility-qa.yml',
+  'utf8',
+);
 const playwright = readFileSync(
   'playwright.config.ts',
   'utf8',
@@ -248,6 +262,8 @@ for (const [
   ['account-c3-certification', accountCredentialedWorkflow],
   ['c4-mobile-pwa-qa', c4Workflow],
   ['c4-production-mobile-qa', c4ProductionWorkflow],
+  ['c5-accessibility-qa', c5Workflow],
+  ['c5-production-accessibility-qa', c5ProductionWorkflow],
 ]) {
   if (
     !workflow.includes(
@@ -354,6 +370,35 @@ if (
 ) {
   throw new Error(
     'C4 local and canonical mobile PWA qualification workflows are incomplete.',
+  );
+}
+
+if (
+  !c5Workflow.includes(
+    'npm run check:c5',
+  ) ||
+  !c5Workflow.includes(
+    'npm run qa:c5:accessibility',
+  ) ||
+  !c5ProductionWorkflow.includes(
+    'https://thiepn.dev/go/',
+  ) ||
+  !c5ProductionWorkflow.includes(
+    'npm run qa:c5:accessibility',
+  )
+) {
+  throw new Error(
+    'C5 local and canonical accessibility qualification workflows are incomplete.',
+  );
+}
+
+if (
+  !verifyWorkflow.includes(
+    'npm run check:c5',
+  )
+) {
+  throw new Error(
+    'Ordinary verification must enforce the C5 accessibility contract.',
   );
 }
 
