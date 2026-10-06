@@ -46,5 +46,8 @@ jobs:
       - name: Check C5 accessibility contract
         run: npm run check:c5
 
+      - name: Check C6 rules integrity contract
+        run: npm run check:c6
+
       - name: Check release baseline
         run: npm run check:release
