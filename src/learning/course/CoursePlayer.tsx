@@ -4,6 +4,11 @@ import {
 } from 'react';
 
 import { recordMasteryEvidence } from '../../mastery/store';
+import {
+  isRecord,
+  readJson,
+  writeJson,
+} from '../../platform/storage';
 import { LessonPlayer } from '../player';
 import {
   flattenCourseLessons,
@@ -27,43 +32,40 @@ function storageKey(course: CourseDefinition): string {
   return `thiepn-go:course:${course.id}:v1`;
 }
 
+function isSavedCourseProgress(
+  value: unknown,
+): value is SavedCourseProgress {
+  return (
+    isRecord(value) &&
+    typeof value.nextLessonIndex === 'number' &&
+    Number.isInteger(value.nextLessonIndex)
+  );
+}
+
 function loadProgress(
   course: CourseDefinition,
   lessonCount: number,
 ): number {
-  if (typeof window === 'undefined') return 0;
+  const saved = readJson(
+    storageKey(course),
+    () => ({ nextLessonIndex: 0 }),
+    isSavedCourseProgress,
+  );
 
-  try {
-    const raw = window.localStorage.getItem(storageKey(course));
-    if (!raw) return 0;
-
-    const parsed = JSON.parse(raw) as Partial<SavedCourseProgress>;
-    const value = parsed.nextLessonIndex;
-
-    if (typeof value !== 'number' || !Number.isInteger(value)) {
-      return 0;
-    }
-
-    return Math.min(Math.max(value, 0), lessonCount);
-  } catch {
-    return 0;
-  }
+  return Math.min(
+    Math.max(saved.nextLessonIndex, 0),
+    lessonCount,
+  );
 }
 
 function saveProgress(
   course: CourseDefinition,
   nextLessonIndex: number,
 ): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    window.localStorage.setItem(
-      storageKey(course),
-      JSON.stringify({ nextLessonIndex } satisfies SavedCourseProgress),
-    );
-  } catch {
-    // Learning must remain usable even if storage is unavailable.
-  }
+  writeJson(
+    storageKey(course),
+    { nextLessonIndex } satisfies SavedCourseProgress,
+  );
 }
 
 export function CoursePlayer({

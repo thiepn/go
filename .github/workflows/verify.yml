@@ -30,3 +30,6 @@ jobs:
 
       - name: Check server analysis runtime
         run: npm run check:server
+
+      - name: Check production platform
+        run: npm run check:platform

@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "katago:bridge": "node server/katago-bridge.mjs",
-    "check:server": "node --check server/katago-bridge.mjs && node --check api/katago/analyze.js && node --check api/katago/health.js"
+    "check:server": "node --check server/katago-bridge.mjs && node --check api/katago/analyze.js && node --check api/katago/health.js",
+    "check:platform": "node --check public/sw.js && node scripts/check-platform.mjs"
   },
   "dependencies": {
     "react": "^19.1.0",

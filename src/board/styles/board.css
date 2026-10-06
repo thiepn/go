@@ -7,6 +7,7 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
 
 .go-board-shell:focus-visible {
@@ -145,6 +146,8 @@
 
 .go-board__target {
   fill: transparent;
+  stroke: transparent;
+  stroke-width: 2;
   pointer-events: all;
 }
 
@@ -313,5 +316,16 @@
 @media (prefers-reduced-motion: reduce) {
   .go-ownership {
     transition: none;
+  }
+}
+
+
+@media (pointer: coarse) {
+  .go-board__target {
+    stroke-width: 7;
+  }
+
+  .go-board-shell {
+    -webkit-tap-highlight-color: transparent;
   }
 }

@@ -1,0 +1,124 @@
+.platform-settings-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(circle at 75% 10%, rgb(220 176 96 / 0.12), transparent 30rem),
+    var(--paper-50);
+}
+
+.platform-settings {
+  width: min(100%, 62rem);
+  margin: 0 auto;
+}
+
+.platform-settings__header {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.platform-settings__header h1 {
+  max-width: 13ch;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+}
+
+.platform-settings__header p:not(.eyebrow) {
+  max-width: 42rem;
+  color: var(--ink-700);
+  line-height: 1.65;
+}
+
+.platform-settings__grid {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.platform-settings-card {
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+  border: 1px solid color-mix(in srgb, var(--ink-500) 14%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-100);
+}
+
+.platform-settings-card h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.platform-settings-card > div > p {
+  margin: 0.35rem 0 0;
+  color: var(--ink-500);
+  line-height: 1.5;
+}
+
+.platform-toggle {
+  min-height: 4.7rem;
+  margin-top: 0.75rem;
+  padding: 0.8rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink-500) 12%, transparent);
+  cursor: pointer;
+}
+
+.platform-toggle span,
+.platform-toggle strong,
+.platform-toggle small {
+  display: block;
+}
+
+.platform-toggle small {
+  max-width: 42rem;
+  margin-top: 0.22rem;
+  color: var(--ink-500);
+  line-height: 1.45;
+}
+
+.platform-toggle input {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: 0 0 auto;
+  accent-color: var(--accent-600);
+}
+
+.platform-status-list {
+  margin: 0.8rem 0 0;
+}
+
+.platform-status-list > div {
+  padding: 0.75rem 0;
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.3fr) minmax(0, 1fr);
+  gap: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink-500) 12%, transparent);
+}
+
+.platform-status-list dt {
+  color: var(--ink-500);
+  font-size: 0.78rem;
+  font-weight: 760;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.platform-status-list dd {
+  margin: 0;
+  color: var(--ink-700);
+  line-height: 1.45;
+}
+
+@media (max-width: 600px) {
+  .platform-settings-shell {
+    padding: 0.8rem 0.85rem 1.5rem;
+  }
+
+  .platform-status-list > div {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}

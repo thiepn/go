@@ -1,3 +1,8 @@
+import {
+  isRecord,
+  readJson,
+  writeJson,
+} from '../platform/storage';
 import type {
   ProblemHistory,
   ProblemHistoryEntry,
@@ -52,30 +57,36 @@ export function recordProblemSession(
 export const PRACTICE_HISTORY_STORAGE_KEY =
   'thiepn-go:practice-history:v1';
 
-export function loadProblemHistory(): ProblemHistory {
-  if (typeof window === 'undefined') return {};
+function isProblemHistory(
+  value: unknown,
+): value is ProblemHistory {
+  if (!isRecord(value)) return false;
 
-  try {
-    const raw = window.localStorage.getItem(
-      PRACTICE_HISTORY_STORAGE_KEY,
-    );
-    return raw ? (JSON.parse(raw) as ProblemHistory) : {};
-  } catch {
-    return {};
-  }
+  return Object.values(value).every(
+    (entry) =>
+      isRecord(entry) &&
+      typeof entry.problemId === 'string' &&
+      typeof entry.attempts === 'number' &&
+      typeof entry.successes === 'number' &&
+      typeof entry.failures === 'number' &&
+      typeof entry.firstTrySuccesses === 'number' &&
+      typeof entry.totalHintsUsed === 'number',
+  );
+}
+
+export function loadProblemHistory(): ProblemHistory {
+  return readJson(
+    PRACTICE_HISTORY_STORAGE_KEY,
+    () => ({}),
+    isProblemHistory,
+  );
 }
 
 export function saveProblemHistory(
   history: ProblemHistory,
 ): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    window.localStorage.setItem(
-      PRACTICE_HISTORY_STORAGE_KEY,
-      JSON.stringify(history),
-    );
-  } catch {
-    // Practice remains usable without persistence.
-  }
+  writeJson(
+    PRACTICE_HISTORY_STORAGE_KEY,
+    history,
+  );
 }

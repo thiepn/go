@@ -1,3 +1,9 @@
+import {
+  isArrayOf,
+  isRecord,
+  readJson,
+  writeJson,
+} from '../platform/storage';
 import type {
   IndependentGameState,
   SavedGameRecord,
@@ -6,22 +12,27 @@ import type {
 export const GAME_RECORDS_STORAGE_KEY =
   'thiepn-go:game-records:v1';
 
+function isSavedGameRecord(
+  value: unknown,
+): value is SavedGameRecord {
+  return (
+    isRecord(value) &&
+    typeof value.id === 'string' &&
+    typeof value.playedAt === 'number' &&
+    isRecord(value.settings) &&
+    Array.isArray(value.moves) &&
+    isRecord(value.result) &&
+    isRecord(value.captures)
+  );
+}
+
 export function loadGameRecords(): SavedGameRecord[] {
-  if (typeof window === 'undefined') return [];
-
-  try {
-    const raw = window.localStorage.getItem(
-      GAME_RECORDS_STORAGE_KEY,
-    );
-    if (!raw) return [];
-
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed)
-      ? (parsed as SavedGameRecord[])
-      : [];
-  } catch {
-    return [];
-  }
+  return readJson(
+    GAME_RECORDS_STORAGE_KEY,
+    () => [],
+    (value): value is SavedGameRecord[] =>
+      isArrayOf(value, isSavedGameRecord),
+  );
 }
 
 export function createGameRecord(
@@ -48,16 +59,14 @@ export function createGameRecord(
 export function saveGameRecord(
   record: SavedGameRecord,
 ): void {
-  if (typeof window === 'undefined') return;
-
   try {
     const existing = loadGameRecords().filter(
       (item) => item.id !== record.id,
     );
 
-    window.localStorage.setItem(
+    writeJson(
       GAME_RECORDS_STORAGE_KEY,
-      JSON.stringify([record, ...existing].slice(0, 50)),
+      [record, ...existing].slice(0, 50),
     );
   } catch {
     // Independent play remains usable without persistence.

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171713" />
+    <title>Go — Offline</title>
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+      body { min-height: 100vh; margin: 0; display: grid; place-items: center; background: #faf8f2; color: #171713; }
+      main { width: min(90vw, 34rem); text-align: center; }
+      h1 { font-size: clamp(2.5rem, 9vw, 4.5rem); line-height: 1; }
+      p { line-height: 1.65; color: #45443a; }
+      button { min-height: 3rem; padding: .7rem 1.1rem; border: 0; border-radius: 999px; background: #171713; color: #faf8f2; font: inherit; font-weight: 700; }
+      @media (prefers-color-scheme: dark) {
+        body { background: #151612; color: #f5f1e7; }
+        p { color: #bbb5a8; }
+        button { background: #f5f1e7; color: #151612; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p>Go learning app</p>
+      <h1>You are offline.</h1>
+      <p>
+        Previously opened lessons and app assets can work offline. This page
+        appears when the requested screen has not been cached yet.
+      </p>
+      <button type="button" onclick="location.reload()">Try again</button>
+    </main>
+  </body>
+</html>

@@ -1,8 +1,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
+import {
+  initializePreferences,
+  registerServiceWorker,
+} from './platform';
 import './styles/tokens.css';
 import './styles/global.css';
+
+initializePreferences();
+void registerServiceWorker();
 
 const root = document.getElementById('root');
 
