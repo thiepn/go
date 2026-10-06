@@ -14,8 +14,9 @@ Changes:
 - surfaces browser-versus-installed launch mode in Device & accessibility;
 - adds production-mode Android-phone, iPhone-WebKit, and iPad-WebKit
   qualification;
-- verifies portrait/landscape reflow, offline cold launch, local progress
-  persistence, 9×9/13×13/19×19 touch placement, and Precision Zoom;
+- verifies portrait/landscape reflow, offline controlled reload, local progress
+  persistence, 9×9/13×13/19×19 touch placement, and responsive Precision Zoom;
+- keeps true offline cold launch as a physical-device evidence gate;
 - adds a real-hardware evidence checklist. Emulation is never accepted as a
   substitute for physical-device certification.
 
