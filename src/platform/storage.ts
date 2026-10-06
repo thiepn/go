@@ -149,6 +149,20 @@ export function writeJson(
 
   try {
     storage.setItem(key, JSON.stringify(value));
+
+    if (
+      typeof window !== 'undefined' &&
+      key.startsWith(APP_STORAGE_PREFIX) &&
+      !key.startsWith(RECOVERY_STORAGE_PREFIX)
+    ) {
+      window.dispatchEvent(
+        new CustomEvent(
+          'thiepn-go:storage-write',
+          { detail: { key } },
+        ),
+      );
+    }
+
     return true;
   } catch {
     return false;
