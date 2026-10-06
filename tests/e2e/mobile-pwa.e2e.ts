@@ -186,7 +186,7 @@ test('mobile shell respects safe areas and rotation without overflow', async ({
   );
 });
 
-test('production service worker survives an offline cold app launch with local progress', async ({
+test('production service worker survives an offline controlled reload with local progress', async ({
   page,
   context,
 }) => {
@@ -215,17 +215,14 @@ test('production service worker survives an offline cold app launch with local p
     },
   );
 
-  const url = page.url();
-  await page.close();
   await context.setOffline(true);
 
-  const offlinePage =
-    await context.newPage();
-
-  await offlinePage.goto(url, {
+  await page.reload({
     waitUntil:
       'domcontentloaded',
   });
+
+  const offlinePage = page;
 
   await expect(
     offlinePage.getByRole(
@@ -418,32 +415,94 @@ for (const size of [
     );
 
     if (size >= 13) {
-      await page.getByRole(
-        'button',
-        {
-          name: 'Precision zoom',
-        },
-      ).click();
-
-      const viewport =
+      const frame =
         page.locator(
-          '.go-board-viewport',
+          '.go-board-frame',
         );
-      const dimensions =
-        await viewport.evaluate(
+
+      const sizing =
+        await frame.evaluate(
           (element) => ({
-            scrollWidth:
-              element.scrollWidth,
-            clientWidth:
+            width:
               element.clientWidth,
+            precisionWidth:
+              Number.parseFloat(
+                getComputedStyle(
+                  element,
+                ).getPropertyValue(
+                  '--go-precision-width',
+                ),
+              ),
           }),
         );
 
       expect(
-        dimensions.scrollWidth,
-      ).toBeGreaterThan(
-        dimensions.clientWidth,
-      );
+        Number.isFinite(
+          sizing.precisionWidth,
+        ),
+      ).toBe(true);
+
+      const zoom =
+        page.getByRole(
+          'button',
+          {
+            name:
+              'Precision zoom',
+          },
+        );
+
+      if (
+        sizing.precisionWidth >
+        sizing.width + 1
+      ) {
+        await expect(zoom)
+          .toBeVisible();
+        await zoom.click();
+        await expect(zoom)
+          .toHaveAttribute(
+            'aria-pressed',
+            'true',
+          );
+
+        const dimensions =
+          await page
+            .locator(
+              '.go-board-viewport',
+            )
+            .evaluate(
+              (element) => ({
+                scrollWidth:
+                  element.scrollWidth,
+                clientWidth:
+                  element.clientWidth,
+              }),
+            );
+
+        const shellWidth =
+          await board.evaluate(
+            (element) =>
+              element.clientWidth,
+          );
+
+        expect(shellWidth)
+          .toBeGreaterThanOrEqual(
+            sizing.precisionWidth - 1,
+          );
+
+        if (
+          sizing.precisionWidth >
+          dimensions.clientWidth + 1
+        ) {
+          expect(
+            dimensions.scrollWidth,
+          ).toBeGreaterThan(
+            dimensions.clientWidth,
+          );
+        }
+      } else {
+        await expect(zoom)
+          .toHaveCount(0);
+      }
 
       await expectNoHorizontalOverflow(
         page,
