@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.0.0-rc.7 — C6 rules and game-integrity candidate
+
+Supersedes rc.6 after C6 found integrity gaps in SGF/study replay:
+
+- conflicting AB/AW/AE setup edits could silently overwrite one another;
+- malformed, out-of-range, fractional, or rectangular SGF board geometry could
+  be coerced into a supported square board;
+- explicit non-Go SGF game types could be imported as if they were Go.
+
+Changes:
+- rejects conflicting setup edits before replay mutates the board;
+- validates SGF board sizes strictly as square integer boards from 2×2 to 25×25;
+- rejects explicit `GM` values other than Go (`GM[1]`);
+- adds deterministic randomized legal-game campaigns from 5×5 through 19×19;
+- verifies capture/stone/history/liberty/turn and positional-superko invariants;
+- adds focused simple-ko and simultaneous-capture adversarial tests;
+- verifies randomized area-scoring partition and color symmetry;
+- certifies saved-game → SGF → parser → engine replay equivalence on
+  9×9/13×13/19×19;
+- adds an explicit end-game dead-group scoring boundary test.
+
 ## 1.0.0-rc.6 — C5 accessibility candidate
 
 Supersedes rc.5 after C5 identified WCAG AA contrast regressions on some card
