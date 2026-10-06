@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import {
+  lazy,
+  Suspense,
+  useState,
+} from 'react';
 
 import {
   allProblems,
@@ -26,7 +30,14 @@ import type { SavedGameRecord } from '../play/types';
 import { StudyHub } from '../study/player';
 import { ReviewHub } from '../review/player';
 import { PracticeHub } from '../practice';
-import { ContentAuthoringStudio } from '../studio';
+import { PlatformSettings } from '../platform';
+
+const ContentAuthoringStudio = lazy(
+  () =>
+    import('../studio').then((module) => ({
+      default: module.ContentAuthoringStudio,
+    })),
+);
 
 type AppMode =
   | 'home'
@@ -37,7 +48,8 @@ type AppMode =
   | 'play'
   | 'study'
   | 'review'
-  | 'coach';
+  | 'coach'
+  | 'settings';
 
 const FIRST_GAME_COMPLETE_KEY =
   'thiepn-go:guided:first-9x9:complete';
@@ -93,20 +105,36 @@ export function App() {
 
   if (studioOpen) {
     return (
-      <ContentAuthoringStudio
-        onExit={() => {
-          if (typeof window !== 'undefined') {
-            const url = new URL(window.location.href);
-            url.searchParams.delete('studio');
-            window.history.replaceState(
-              window.history.state,
-              '',
-              url,
-            );
-          }
+      <Suspense
+        fallback={
+          <main className="app-shell" aria-live="polite">
+            <p>Loading authoring studio…</p>
+          </main>
+        }
+      >
+        <ContentAuthoringStudio
+          onExit={() => {
+            if (typeof window !== 'undefined') {
+              const url = new URL(window.location.href);
+              url.searchParams.delete('studio');
+              window.history.replaceState(
+                window.history.state,
+                '',
+                url,
+              );
+            }
 
-          setStudioOpen(false);
-        }}
+            setStudioOpen(false);
+          }}
+        />
+      </Suspense>
+    );
+  }
+
+  if (mode === 'settings') {
+    return (
+      <PlatformSettings
+        onExit={() => setMode('home')}
       />
     );
   }
@@ -428,6 +456,14 @@ export function App() {
             ? 'Developing course · coach · play · review · practice · study · mastery diagnosis'
             : '12 interactive lessons · guided first game · no account required'}
         </p>
+
+        <button
+          className="home-utility-action"
+          type="button"
+          onClick={() => setMode('settings')}
+        >
+          Device & accessibility settings
+        </button>
       </section>
     </main>
   );
