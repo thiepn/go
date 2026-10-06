@@ -33,3 +33,6 @@ jobs:
 
       - name: Check production platform
         run: npm run check:platform
+
+      - name: Check responsive accessibility invariants
+        run: npm run check:a11y
