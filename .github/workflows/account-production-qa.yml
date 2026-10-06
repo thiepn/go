@@ -1,0 +1,51 @@
+name: account-production-qa
+
+on:
+  workflow_run:
+    workflows: ["Deploy Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  account-public:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout deployed source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke production account surface
+        run: npm run qa:account:public
+        env:
+          PLAYWRIGHT_BASE_URL: https://thiepn.dev/go/
+          C3_LIVE_BASE_URL: https://thiepn.dev/go/
+
+      - name: Upload account failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: account-production-qa-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 30
