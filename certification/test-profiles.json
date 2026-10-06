@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "candidate": "1.0.0-rc.5",
+  "candidate": "1.0.0-rc.6",
   "profiles": [
     {
       "id": "guest-fresh",
