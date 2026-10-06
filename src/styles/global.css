@@ -177,9 +177,16 @@ h1 {
   font-size: 0.82rem;
 }
 
+.home-utility-actions {
+  margin-top: 0.65rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
 .home-utility-action {
   min-height: 2.75rem;
-  margin-top: 0.65rem;
   padding: 0.55rem 0.85rem;
   border: 0;
   background: transparent;

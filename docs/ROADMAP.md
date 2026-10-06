@@ -557,13 +557,40 @@ Certification note:
 
 ## P16 — Account/Ecosystem Integration
 
-Status: **next**
+Status: **implementation complete — deployed auth/sync smoke pending**
 
-Only after anonymous learning is excellent:
-- account sync;
-- cross-device progress;
-- backup/export;
-- shared ecosystem identity where appropriate.
+Implemented:
+- canonical THIEPN Account SDK 1.x consumer integration;
+- app registration as `go` at `/go/`;
+- anonymous/local-first mode remains fully functional;
+- unsupported origins remain local-only instead of creating another auth authority;
+- shared account identity with local-scope sign-out;
+- automatic cross-device synchronization for durable Go learning data;
+- deterministic monotonic merge rules that do not roll progress backward;
+- optimistic-concurrency cloud writes with conflict pull/merge/retry;
+- portable JSON backup export/import;
+- Go-only cloud data deletion without deleting local data or the account;
+- central account consumer manifest and pinned conformance workflow;
+- isolated `public.go_user_state` backend with owner-only RLS;
+- explicit authenticated Data API grants and no anonymous table access;
+- SECURITY INVOKER sync RPC with anonymous execution revoked;
+- Supabase advisor verification with no findings on the new Go objects.
+
+Validation:
+- central THIEPN Account consumer contract passes;
+- full Go test suite passes;
+- production TypeScript/Vite build passes;
+- server/platform checks pass;
+- backend registry, RLS, grants, and RPC privileges verified;
+- Supabase migration `20261006123802_go_p16_account_sync` applied.
+
+Remaining empirical gate:
+- deploy at the canonical `https://thiepn.dev/go/` path and smoke-test real
+  email/password, Google OAuth, password recovery, two-device sync, offline
+  degradation, backup restore, local sign-out, and Go-only cloud deletion.
+
+Core P0–P16 product phases are now implemented. Continue with the remaining
+visual/certification track rather than inventing a parallel account system.
 
 ## Visual track
 
