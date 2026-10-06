@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "phase": "C4",
+  "candidate": "1.0.0-rc.5",
+  "evidencePolicy": "A row may be marked passed only from a physical device/browser session. Emulation is supporting evidence and never substitutes for physical-device qualification.",
+  "devices": [
+    {
+      "id": "android-chrome",
+      "required": true,
+      "target": "current stable Android Chrome on a physical phone",
+      "modes": [
+        "browser",
+        "installed-pwa"
+      ],
+      "checks": [
+        "canonical /go/ opens without horizontal overflow",
+        "install/Add to Home screen succeeds",
+        "installed launch reports Installed app",
+        "portrait safe areas are unobstructed",
+        "landscape rotation remains usable",
+        "9x9 touch placement",
+        "13x13 touch placement and Precision Zoom",
+        "19x19 touch placement and Precision Zoom",
+        "offline cold launch after one online visit",
+        "durable local progress survives offline cold launch",
+        "returning online does not clear local progress",
+        "background/resume retains current app state",
+        "haptics fail safely if unavailable or disabled"
+      ]
+    },
+    {
+      "id": "ios-safari",
+      "required": true,
+      "target": "current stable iOS Safari on a physical iPhone",
+      "modes": [
+        "browser",
+        "add-to-home-screen"
+      ],
+      "checks": [
+        "Safari browser launch is usable",
+        "Add to Home Screen succeeds with Go icon/name",
+        "Home Screen launch opens as a standalone web app",
+        "launch reports Installed app",
+        "top cutout/Dynamic Island safe area is unobstructed",
+        "home-indicator safe area is unobstructed",
+        "portrait and landscape remain usable",
+        "9x9 touch placement",
+        "13x13 touch placement and Precision Zoom",
+        "19x19 touch placement and Precision Zoom",
+        "offline cold launch after one online visit",
+        "durable local progress survives offline cold launch",
+        "browser and Home Screen storage behavior is documented rather than assumed identical",
+        "background/resume retains current app state"
+      ]
+    },
+    {
+      "id": "ipad-safari",
+      "required": true,
+      "target": "current stable iPadOS Safari on a physical iPad",
+      "modes": [
+        "browser",
+        "add-to-home-screen"
+      ],
+      "checks": [
+        "Safari and Home Screen launches are usable",
+        "portrait and landscape remain usable",
+        "safe areas are unobstructed",
+        "9x9/13x13/19x19 boards fit or expose Precision Zoom appropriately",
+        "touch placement remains accurate",
+        "offline cold launch works",
+        "durable local progress survives offline launch",
+        "background/resume retains app state"
+      ]
+    },
+    {
+      "id": "desktop-chromium",
+      "required": true,
+      "target": "current stable Chromium-family desktop browser",
+      "modes": [
+        "browser"
+      ],
+      "checks": [
+        "canonical /go/ loads",
+        "service worker activates",
+        "offline reload works",
+        "keyboard/pointer basics are intact"
+      ]
+    },
+    {
+      "id": "desktop-firefox",
+      "required": true,
+      "target": "current stable Firefox desktop",
+      "modes": [
+        "browser"
+      ],
+      "checks": [
+        "canonical /go/ loads",
+        "local-first use remains functional",
+        "keyboard/pointer basics are intact"
+      ]
+    },
+    {
+      "id": "desktop-safari",
+      "required": true,
+      "target": "current stable Safari desktop",
+      "modes": [
+        "browser"
+      ],
+      "checks": [
+        "canonical /go/ loads",
+        "local-first use remains functional",
+        "keyboard/pointer basics are intact"
+      ]
+    }
+  ],
+  "recordFields": [
+    "device model",
+    "OS version",
+    "browser version",
+    "mode",
+    "orientation",
+    "pass/fail",
+    "defect severity if failed",
+    "screenshot or screen recording reference",
+    "tester",
+    "timestamp"
+  ]
+}
