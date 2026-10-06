@@ -433,7 +433,7 @@ export function GoBoard({
               ? 'ArrowLeft ArrowRight ArrowUp ArrowDown Home End Enter Space'
               : undefined
           }
-          tabIndex={interactive ? 0 : -1}
+          tabIndex={interactive ? 0 : undefined}
           onKeyDown={onKeyDown}
         >
       <svg
