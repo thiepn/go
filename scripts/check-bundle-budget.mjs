@@ -69,10 +69,10 @@ const largestJs = allJs
   .sort((a, b) => b.gzip - a.gzip)[0];
 
 const budgets = {
-  initialJsGzip: 100 * 1024,
-  initialCssGzip: 45 * 1024,
-  largestJsGzip: 130 * 1024,
-  totalJsGzip: 360 * 1024,
+  initialJsGzip: 90 * 1024,
+  initialCssGzip: 20 * 1024,
+  largestJsGzip: 110 * 1024,
+  totalJsGzip: 240 * 1024,
 };
 
 const actual = {
