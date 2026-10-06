@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
+import { AccountProvider } from './account';
 import {
   initializePreferences,
   registerServiceWorker,
@@ -19,6 +20,8 @@ if (!root) {
 
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <AccountProvider>
+      <App />
+    </AccountProvider>
   </StrictMode>,
 );
