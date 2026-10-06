@@ -112,3 +112,44 @@ blindly replacing local state.
 It does not delete local data or the THIEPN Account.
 
 Canonical account deletion remains owned by THIEPN Account.
+
+
+## Applied backend migration
+
+The canonical THIEPN Account project records this schema change as:
+
+`20261006123802_go_p16_account_sync`
+
+Repository migration:
+
+`supabase/migrations/20261006123802_go_p16_account_sync.sql`
+
+Post-apply verification confirmed:
+- Go registry entry is active at `/go/`;
+- the consumer manifest registry declares shared identity / isolated app data;
+- `go_user_state` has RLS enabled;
+- all four owner-only CRUD policies exist;
+- only the `authenticated` role has table CRUD grants;
+- `go_sync_write` is SECURITY INVOKER;
+- anonymous RPC execution is false and authenticated execution is true;
+- Supabase security/performance advisors return no findings tied to the new Go
+  table or RPC.
+
+## Deployment smoke gate
+
+Repository and backend implementation are complete, but the phase does not
+claim live OAuth/sync certification until the app is actually served from the
+canonical `https://thiepn.dev/go/` origin.
+
+The live smoke must cover:
+- signed-out boot with no account dependency;
+- email/password sign-in;
+- Google OAuth return;
+- password reset return;
+- first sign-in merge of existing local progress;
+- two-browser/device conflict merge;
+- offline learning while a prior account session exists;
+- online resync without forced logout;
+- backup export/import;
+- local sign-out;
+- Go-only cloud-data deletion.
