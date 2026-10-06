@@ -14,7 +14,7 @@ the detailed evidence.
 - [x] Known limitations separated from blockers.
 - [x] Release severity policy defined.
 - [x] Build/source identification defined.
-- [ ] Dependency lockfile generated and verified.
+- [x] Dependency lockfile generated and aligned with the candidate.
 - [ ] Final C0 workflows green on one head.
 - [ ] C0 merged; merge SHA recorded as the rc.1 baseline externally/in release evidence.
 
