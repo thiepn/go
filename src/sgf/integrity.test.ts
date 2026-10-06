@@ -138,6 +138,16 @@ describe('C6 SGF integrity', () => {
     },
   );
 
+  it('rejects an explicit non-Go SGF game type', () => {
+    expect(() =>
+      parseSgf(
+        '(;FF[4]GM[2]SZ[9])',
+      ),
+    ).toThrow(
+      /only imports Go/i,
+    );
+  });
+
   it('accepts an explicitly square rectangular-size form', () => {
     expect(
       parseSgf(
