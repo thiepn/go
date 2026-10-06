@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "candidate": "1.0.0-rc.6",
+  "candidate": "1.0.0-rc.7",
   "track": "v1.0",
-  "phase": "C5",
+  "phase": "C6",
   "status": "frozen",
   "canonicalUrl": "https://thiepn.dev/go/",
   "canonicalPath": "/go/",
@@ -11,7 +11,8 @@
   "requiredChecks": [
     "verify",
     "browser-qa",
-    "THIEPN Account Contract"
+    "THIEPN Account Contract",
+    "c6-rules-integrity"
   ],
   "certificationOrder": [
     "C1",
@@ -30,6 +31,6 @@
     "C14",
     "C15"
   ],
-  "supersedes": "1.0.0-rc.5",
-  "invalidationReason": "C5 found WCAG AA text-contrast failures on card/dark surfaces and incomplete explicit rendering for the SVG Go board in forced-colors mode."
+  "supersedes": "1.0.0-rc.6",
+  "invalidationReason": "C6 found silent SGF/study integrity coercions: conflicting setup edits could overwrite each other, unsupported board geometry could be normalized, and explicit non-Go SGF game types were accepted."
 }
