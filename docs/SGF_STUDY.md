@@ -75,6 +75,15 @@ A collection with multiple game trees is imported as multiple local studies.
 
 Malformed input produces an explicit import error rather than silently falling back to a partial game.
 
+C6 tightens that contract:
+
+- explicit non-Go `GM` values are rejected;
+- board sizes must be square integers from 2 through 25;
+- rectangular, fractional, malformed, and out-of-range `SZ` values are
+  rejected rather than rounded or clamped;
+- conflicting `AB` / `AW` / `AE` setup edits at the same intersection
+  fail before replay instead of silently overwriting one another.
+
 ## Export
 
 Each study can:
