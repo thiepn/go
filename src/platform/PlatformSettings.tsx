@@ -5,6 +5,10 @@ import {
 } from 'react';
 
 import {
+  detectDisplayMode,
+  displayModeLabel,
+} from './display-mode';
+import {
   getPreferences,
   setPreferences,
   subscribePreferences,
@@ -35,6 +39,9 @@ export function PlatformSettings({
       typeof navigator === 'undefined'
         ? true
         : navigator.onLine,
+  );
+  const [displayMode] = useState(
+    () => detectDisplayMode(),
   );
   const [offlineState, setOfflineState] =
     useState<OfflineState>('checking');
@@ -290,6 +297,10 @@ export function PlatformSettings({
               <div>
                 <dt>Network</dt>
                 <dd>{online ? 'Online' : 'Offline'}</dd>
+              </div>
+              <div>
+                <dt>Launch mode</dt>
+                <dd>{displayModeLabel(displayMode)}</dd>
               </div>
               <div>
                 <dt>Offline app</dt>
