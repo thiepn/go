@@ -1,3 +1,9 @@
+import {
+  isArrayOf,
+  isRecord,
+  readJson,
+  writeJson,
+} from '../platform/storage';
 import type {
   KataGoPositionAnalysis,
 } from './types';
@@ -11,25 +17,24 @@ interface CacheEntry {
   readonly analysis: KataGoPositionAnalysis;
 }
 
+function isCacheEntry(
+  value: unknown,
+): value is CacheEntry {
+  return (
+    isRecord(value) &&
+    typeof value.key === 'string' &&
+    typeof value.savedAt === 'number' &&
+    isRecord(value.analysis)
+  );
+}
+
 function load(): CacheEntry[] {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-
-  try {
-    const raw = window.localStorage.getItem(
-      KATAGO_CACHE_KEY,
-    );
-
-    if (!raw) return [];
-
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed)
-      ? (parsed as CacheEntry[])
-      : [];
-  } catch {
-    return [];
-  }
+  return readJson(
+    KATAGO_CACHE_KEY,
+    () => [],
+    (value): value is CacheEntry[] =>
+      isArrayOf(value, isCacheEntry),
+  );
 }
 
 export function analysisCacheKey(
@@ -83,16 +88,16 @@ export function writeAnalysisCache(
       (item) => item.key !== key,
     );
 
-    window.localStorage.setItem(
+    writeJson(
       KATAGO_CACHE_KEY,
-      JSON.stringify([
+      [
         {
           key,
           savedAt: Date.now(),
           analysis,
         },
         ...entries,
-      ].slice(0, 160)),
+      ].slice(0, 160),
     );
   } catch {
     // Engine analysis remains usable without local caching.
