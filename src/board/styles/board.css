@@ -1,3 +1,56 @@
+.go-board-frame {
+  width: min(100%, 46rem);
+  min-width: 0;
+}
+
+.go-board-viewport {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  scrollbar-gutter: stable both-edges;
+}
+
+.go-board-frame.is-precision-zoom .go-board-viewport {
+  max-height: min(70dvh, 42rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: clamp(1rem, 3vw, 2rem);
+}
+
+.go-board-frame.is-precision-zoom .go-board-shell {
+  width: var(--go-precision-width);
+  max-width: none;
+}
+
+.go-board-precision {
+  margin-top: 0.55rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.go-board-precision__action {
+  min-height: 2.5rem;
+  flex: 0 0 auto;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ink-500) 24%, transparent);
+  border-radius: var(--radius-pill);
+  background: var(--paper-100);
+  color: var(--ink-700);
+  font-weight: 740;
+  cursor: pointer;
+}
+
+.go-board-precision__action[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--accent-500) 45%, transparent);
+  background: var(--accent-100);
+  color: var(--accent-600);
+}
+
 .go-board-shell {
   position: relative;
   width: min(100%, 46rem);
@@ -178,21 +231,26 @@
 .go-highlight--liberty {
   fill: rgb(255 248 217 / 0.7);
   stroke: rgb(91 111 69 / 0.95);
+  stroke-dasharray: 4 7;
 }
 
 .go-highlight--warning {
   fill: rgb(174 77 62 / 0.18);
   stroke: rgb(151 66 54 / 0.95);
+  stroke-dasharray: 14 8;
 }
 
 .go-highlight--success {
   fill: rgb(58 129 89 / 0.18);
   stroke: rgb(52 118 81 / 0.95);
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
 }
 
 .go-highlight--selected {
   fill: rgb(47 111 221 / 0.14);
   stroke: rgb(47 111 221 / 0.9);
+  stroke-width: 7;
 }
 
 .go-highlight--pulse {
@@ -328,4 +386,51 @@
   .go-board-shell {
     -webkit-tap-highlight-color: transparent;
   }
+}
+
+
+@media (max-width: 620px) {
+  .go-board-precision {
+    align-items: stretch;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .go-board-precision__action {
+    width: 100%;
+  }
+}
+
+@media (max-height: 640px) and (min-width: 761px) {
+  .go-board-frame:not(.is-precision-zoom) {
+    width: min(100%, calc(100dvh - 6rem));
+  }
+}
+
+@media (prefers-contrast: more) {
+  .go-board__grid {
+    stroke: rgb(48 35 22 / 0.96);
+    stroke-width: 2.8;
+  }
+
+  .go-board__keyboard-cursor {
+    stroke-width: 6;
+  }
+
+  .go-highlight {
+    stroke-width: 7;
+  }
+}
+
+html[data-high-contrast='true'] .go-board__grid {
+  stroke: rgb(48 35 22 / 0.98);
+  stroke-width: 2.8;
+}
+
+html[data-high-contrast='true'] .go-board__keyboard-cursor {
+  stroke-width: 6;
+}
+
+html[data-high-contrast='true'] .go-highlight {
+  stroke-width: 7;
 }
