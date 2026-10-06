@@ -151,6 +151,7 @@ export function GoBoard({
   const blackStoneFill = `url(#${blackStoneId})`;
   const whiteStoneFill = `url(#${whiteStoneId})`;
   const previousBoardRef = useRef<Board | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
   const boardShellRef = useRef<HTMLDivElement | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const keyboardNavigationRef = useRef(false);
@@ -160,6 +161,7 @@ export function GoBoard({
     getPreferences,
   );
   const [precisionZoom, setPrecisionZoom] = useState(false);
+  const [frameWidth, setFrameWidth] = useState(0);
   const [entered, setEntered] = useState<readonly StoneAtPoint[]>([]);
   const [exiting, setExiting] = useState<readonly StoneAtPoint[]>([]);
   const [hoveredPoint, setHoveredPoint] = useState<Point | null>(null);
@@ -171,12 +173,15 @@ export function GoBoard({
   const starPoints = useMemo(() => getStarPoints(board.size), [board.size]);
   const coordinatesVisible =
     showCoordinates ?? preferences.showCoordinates;
-  const canPrecisionZoom =
-    interactive && board.size >= 13;
   const precisionWidth = useMemo(
     () => getPrecisionBoardWidth(board.size),
     [board.size],
   );
+  const canPrecisionZoom =
+    interactive &&
+    board.size >= 13 &&
+    frameWidth > 0 &&
+    precisionWidth > frameWidth + 1;
   const blackCount = useMemo(
     () =>
       board.intersections.filter(
@@ -222,6 +227,53 @@ export function GoBoard({
       y: clamp(current.y, 0, board.size - 1),
     }));
   }, [board.size]);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return undefined;
+
+    const updateWidth = () => {
+      setFrameWidth(frame.clientWidth);
+    };
+
+    updateWidth();
+
+    if (
+      typeof ResizeObserver === 'undefined'
+    ) {
+      window.addEventListener(
+        'resize',
+        updateWidth,
+      );
+
+      return () => {
+        window.removeEventListener(
+          'resize',
+          updateWidth,
+        );
+      };
+    }
+
+    const observer =
+      new ResizeObserver(updateWidth);
+    observer.observe(frame);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [board.size]);
+
+  useEffect(() => {
+    if (
+      precisionZoom &&
+      !canPrecisionZoom
+    ) {
+      setPrecisionZoom(false);
+    }
+  }, [
+    canPrecisionZoom,
+    precisionZoom,
+  ]);
 
   useEffect(() => {
     onFocusPointChange?.(focusPoint);
@@ -420,6 +472,7 @@ export function GoBoard({
 
   return (
     <div
+      ref={frameRef}
       className={[
         'go-board-frame',
         precisionZoom

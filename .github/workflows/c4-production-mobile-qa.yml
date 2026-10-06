@@ -1,0 +1,53 @@
+name: c4-production-mobile-qa
+
+on:
+  workflow_run:
+    workflows: ["Deploy Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-production:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout deployed source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify C4 contract
+        run: npm run check:c4
+
+      - name: Install mobile browser engines
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: Qualify canonical mobile PWA
+        run: npm run qa:c4:emulation
+        env:
+          PLAYWRIGHT_BASE_URL: https://thiepn.dev/go/
+
+      - name: Upload production C4 failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c4-production-mobile-${{ github.run_id }}
+          path: |
+            playwright-report-c4
+            test-results
+          if-no-files-found: ignore
+          retention-days: 30

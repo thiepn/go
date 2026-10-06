@@ -633,7 +633,7 @@ is finite certification and release work.
 - **C1 — Canonical /go/ Deployment** — complete
 - **C2 — Live KataGo Runtime** — rc.3 implementation complete; live Vercel/engine activation blocked by external authorization
 - **C3 — Production Account & Sync Certification** — rc.4 implementation complete; public production smoke and dedicated credential/manual auth gates pending
-- **C4 — Physical Mobile & PWA Qualification**
+- **C4 — Physical Mobile & PWA Qualification** — rc.5 implementation complete; automated device-class qualification added, physical hardware evidence pending
 - **C5 — Accessibility Certification**
 - **C6 — M1 Rules & Game Integrity Certification**
 - **C7 — M2/M3 Novice Learning Pilot**

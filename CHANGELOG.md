@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.0-rc.5 — C4 physical mobile & PWA candidate
+
+Supersedes rc.4 after C4 identified incomplete safe-area containment while
+`viewport-fit=cover` was enabled.
+
+Changes:
+- protects all four mobile safe-area edges, including top cutouts and the
+  bottom home-indicator region;
+- bounds the top-level app height to the usable safe viewport;
+- detects browser, standalone, minimal-ui, fullscreen, and iOS standalone
+  launch modes;
+- surfaces browser-versus-installed launch mode in Device & accessibility;
+- adds production-mode Android-phone, iPhone-WebKit, and iPad-WebKit
+  qualification;
+- verifies portrait/landscape reflow, offline controlled reload, local progress
+  persistence, 9×9/13×13/19×19 touch placement, and responsive Precision Zoom;
+- keeps true offline cold launch as a physical-device evidence gate;
+- adds a real-hardware evidence checklist. Emulation is never accepted as a
+  substitute for physical-device certification.
+
 ## 1.0.0-rc.4 — C3 account certification candidate
 
 Supersedes rc.3 after C3 found that Go could initiate password recovery but did

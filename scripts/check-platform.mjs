@@ -69,6 +69,24 @@ if (!index.includes('viewport-fit=cover')) {
   );
 }
 
+const globalCss = readFileSync(
+  'src/styles/global.css',
+  'utf8',
+);
+
+for (const inset of [
+  'safe-area-inset-top',
+  'safe-area-inset-right',
+  'safe-area-inset-bottom',
+  'safe-area-inset-left',
+]) {
+  if (!globalCss.includes(inset)) {
+    throw new Error(
+      `Mobile safe-area containment is missing ${inset}.`,
+    );
+  }
+}
+
 const serviceWorker = readFileSync(
   'public/sw.js',
   'utf8',
