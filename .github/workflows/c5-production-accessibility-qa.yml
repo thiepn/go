@@ -1,0 +1,53 @@
+name: c5-production-accessibility-qa
+
+on:
+  workflow_run:
+    workflows: ["Deploy Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  accessibility-production:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout deployed source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify C5 contract
+        run: npm run check:c5
+
+      - name: Install accessibility browser engines
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Qualify canonical accessibility surface
+        run: npm run qa:c5:accessibility
+        env:
+          PLAYWRIGHT_BASE_URL: https://thiepn.dev/go/
+
+      - name: Upload production C5 failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c5-production-accessibility-${{ github.run_id }}
+          path: |
+            playwright-report-c5
+            test-results
+          if-no-files-found: ignore
+          retention-days: 30
