@@ -53,7 +53,9 @@ jobs:
           THIEPN_RELEASE_SHA: ${{ steps.release.outputs.sha }}
 
       - name: Verify release baseline
-        run: npm run check:release
+        run: |
+          npm run check:platform
+          npm run check:release
 
       - name: Verify deploy artifact
         shell: bash
