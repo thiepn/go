@@ -1,9 +1,9 @@
 export interface StorageLike {
-  readonly length: number;
-  key(index: number): string | null;
+  readonly length?: number;
+  key?(index: number): string | null;
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
-  removeItem(key: string): void;
+  removeItem?(key: string): void;
 }
 
 export const APP_STORAGE_PREFIX = 'thiepn-go:';
@@ -33,17 +33,20 @@ function localStorageOrNull(): StorageLike | null {
   if (typeof window === 'undefined') return null;
 
   try {
-    const storage = window.localStorage;
-    const probe = '__thiepn_go_storage_probe__';
-    storage.setItem(probe, '1');
-    storage.removeItem(probe);
-    return storage;
+    return window.localStorage;
   } catch {
     return null;
   }
 }
 
 function recoveryKeys(storage: StorageLike): string[] {
+  if (
+    typeof storage.length !== 'number' ||
+    typeof storage.key !== 'function'
+  ) {
+    return [];
+  }
+
   const keys: string[] = [];
 
   for (let index = 0; index < storage.length; index += 1) {
@@ -65,7 +68,7 @@ function trimRecoveryEntries(storage: StorageLike): void {
     if (!oldest) break;
 
     try {
-      storage.removeItem(oldest);
+      storage.removeItem?.(oldest);
     } catch {
       return;
     }
@@ -89,7 +92,7 @@ export function quarantineStoredValue(
   }
 
   try {
-    storage.removeItem(sourceKey);
+    storage.removeItem?.(sourceKey);
   } catch {
     // The caller still receives a safe fallback.
   }
