@@ -55,7 +55,7 @@ function finiteNumber(value) {
   );
 }
 
-function sanitizeQuery(query) {
+export function sanitizeQuery(query) {
   if (
     !query ||
     typeof query !== 'object' ||
