@@ -25,8 +25,13 @@ const manifest = JSON.parse(
   ),
 );
 
-if (manifest.start_url !== '/') {
-  throw new Error('PWA start_url must remain rooted at /.');
+if (
+  manifest.start_url !== '/go/' ||
+  manifest.scope !== '/go/'
+) {
+  throw new Error(
+    'PWA start_url and scope must remain rooted at /go/.',
+  );
 }
 
 if (manifest.display !== 'standalone') {
@@ -49,8 +54,13 @@ for (const size of ['192x192', '512x512']) {
 
 const index = readFileSync('index.html', 'utf8');
 
-if (!index.includes('rel="manifest"')) {
-  throw new Error('index.html must link the PWA manifest.');
+if (
+  !index.includes('rel="manifest"') ||
+  !index.includes('href="/go/manifest.webmanifest"')
+) {
+  throw new Error(
+    'index.html must link the canonical /go/ PWA manifest.',
+  );
 }
 
 if (!index.includes('viewport-fit=cover')) {
@@ -76,6 +86,9 @@ if (
   ) ||
   !serviceWorker.includes(
     '__BUILD_CACHE__',
+  ) ||
+  !serviceWorker.includes(
+    '__APP_BASE__',
   )
 ) {
   throw new Error(
@@ -95,6 +108,9 @@ if (existsSync('dist/sw.js')) {
     ) ||
     builtServiceWorker.includes(
       '__BUILD_CACHE__',
+    ) ||
+    builtServiceWorker.includes(
+      '__APP_BASE__',
     )
   ) {
     throw new Error(
@@ -104,7 +120,7 @@ if (existsSync('dist/sw.js')) {
 
   if (
     !builtServiceWorker.includes(
-      '/assets/',
+      '/go/assets/',
     )
   ) {
     throw new Error(
@@ -114,11 +130,42 @@ if (existsSync('dist/sw.js')) {
 
   if (
     !builtServiceWorker.includes(
+      "const APP_BASE = '/go/';",
+    ) ||
+    !builtServiceWorker.includes(
       "url.pathname.startsWith('/api/')",
     )
   ) {
     throw new Error(
       'Built service worker must keep KataGo API traffic out of caches.',
+    );
+  }
+}
+
+if (existsSync('dist/index.html')) {
+  const builtIndex = readFileSync(
+    'dist/index.html',
+    'utf8',
+  );
+
+  if (
+    !builtIndex.includes('/go/assets/') ||
+    !builtIndex.includes(
+      '/go/manifest.webmanifest',
+    )
+  ) {
+    throw new Error(
+      'Production HTML must reference assets and manifest under /go/.',
+    );
+  }
+
+  if (
+    /(?:src|href)="\/(?:assets|manifest\.webmanifest|icon-)/.test(
+      builtIndex,
+    )
+  ) {
+    throw new Error(
+      'Production HTML contains a root-scoped app asset.',
     );
   }
 }
