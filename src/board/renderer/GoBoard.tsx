@@ -285,10 +285,12 @@ export function GoBoard({
   };
 
 
-  const pointFromPointer = (
-    event: PointerEvent<SVGRectElement>,
+  const pointFromClient = (
+    clientX: number,
+    clientY: number,
+    target: SVGRectElement,
   ): Point | null => {
-    const svg = event.currentTarget.ownerSVGElement;
+    const svg = target.ownerSVGElement;
     if (!svg) return null;
 
     const rect = svg.getBoundingClientRect();
@@ -298,8 +300,8 @@ export function GoBoard({
 
     return svgPositionToPoint(
       geometry,
-      ((event.clientX - rect.left) / rect.width) * 1000,
-      ((event.clientY - rect.top) / rect.height) * 1000,
+      ((clientX - rect.left) / rect.width) * 1000,
+      ((clientY - rect.top) / rect.height) * 1000,
     );
   };
 
@@ -747,7 +749,11 @@ export function GoBoard({
                 return;
               }
 
-              const point = pointFromPointer(event);
+              const point = pointFromClient(
+                event.clientX,
+                event.clientY,
+                event.currentTarget,
+              );
               if (point) setHoveredPoint(point);
             }}
             onPointerLeave={() =>
@@ -755,11 +761,19 @@ export function GoBoard({
             }
             onPointerDown={(event) => {
               keyboardNavigationRef.current = false;
-              const point = pointFromPointer(event);
+              const point = pointFromClient(
+                event.clientX,
+                event.clientY,
+                event.currentTarget,
+              );
               if (point) setFocusPoint(point);
             }}
             onClick={(event) => {
-              const point = pointFromPointer(event);
+              const point = pointFromClient(
+                event.clientX,
+                event.clientY,
+                event.currentTarget,
+              );
               if (point) activate(point);
             }}
           />
