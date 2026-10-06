@@ -363,7 +363,10 @@ function mergeProblemHistory(
   remote: ProblemHistory,
   local: ProblemHistory,
 ): ProblemHistory {
-  const result: ProblemHistory = {
+  const result: Record<
+    string,
+    ProblemHistoryEntry
+  > = {
     ...remote,
   };
 
