@@ -458,11 +458,19 @@ for (const size of [
         await expect(zoom)
           .toBeVisible();
         await zoom.click();
-        await expect(zoom)
-          .toHaveAttribute(
-            'aria-pressed',
-            'true',
-          );
+
+        await expect(
+          page.getByRole(
+            'button',
+            {
+              name:
+                'Fit whole board',
+            },
+          ),
+        ).toHaveAttribute(
+          'aria-pressed',
+          'true',
+        );
 
         const dimensions =
           await page
