@@ -1,0 +1,46 @@
+name: c5-accessibility-qa
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  accessibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify C5 contract
+        run: npm run check:c5
+
+      - name: Install accessibility browser engines
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run accessibility qualification
+        run: npm run qa:c5:accessibility
+
+      - name: Upload C5 failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c5-accessibility-${{ github.run_id }}
+          path: |
+            playwright-report-c5
+            test-results
+          if-no-files-found: ignore
+          retention-days: 30
