@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "candidate": "1.0.0-rc.1",
+  "profiles": [
+    {
+      "id": "guest-fresh",
+      "purpose": "Zero-knowledge first launch and beginner journey",
+      "account": "signed-out",
+      "localState": "fresh",
+      "requiredFrom": "C1"
+    },
+    {
+      "id": "guest-post-beginner",
+      "purpose": "Unlocked Practice, Play, Review, Study, Progress, and Coach shell qualification",
+      "account": "signed-out",
+      "localState": "post-beginner",
+      "requiredFrom": "C1"
+    },
+    {
+      "id": "signed-in-fresh",
+      "purpose": "First account sign-in with pre-existing local learning data",
+      "account": "dedicated C3 test identity with no pre-existing Go cloud row",
+      "localState": "post-beginner",
+      "requiredFrom": "C3"
+    },
+    {
+      "id": "signed-in-returning",
+      "purpose": "Returning account with cloud Go state on a second browser/device",
+      "account": "dedicated C3 returning test identity",
+      "localState": "empty before sync",
+      "requiredFrom": "C3"
+    },
+    {
+      "id": "sync-conflict-pair",
+      "purpose": "Two-device optimistic-concurrency and monotonic merge qualification",
+      "account": "one dedicated C3 identity used concurrently on two isolated clients",
+      "localState": "divergent valid progress created through product flows",
+      "requiredFrom": "C3"
+    },
+    {
+      "id": "offline-returning",
+      "purpose": "Previously signed-in learner continues locally without network and resyncs later",
+      "account": "valid prior session",
+      "localState": "valid returning state",
+      "requiredFrom": "C3"
+    },
+    {
+      "id": "experienced-learner",
+      "purpose": "Review, mastery diagnosis, Coach, transfer, and long-session certification",
+      "account": "optional",
+      "localState": "must be produced through real lessons/practice/play/review flows rather than hand-authored mastery evidence",
+      "requiredFrom": "C9"
+    }
+  ],
+  "credentialPolicy": "No test email address, password, OAuth token, recovery secret, or session token may be committed to the repository. Concrete C3 credentials are provisioned out-of-band and may be destroyed after certification."
+}
