@@ -100,3 +100,28 @@ export function getPrecisionBoardWidth(
       gridFraction,
   );
 }
+
+
+export function svgPositionToPoint(
+  geometry: BoardGeometry,
+  x: number,
+  y: number,
+): Point {
+  const boardX = Math.round(
+    (x - geometry.inset) / geometry.spacing,
+  );
+  const boardY = Math.round(
+    (y - geometry.inset) / geometry.spacing,
+  );
+
+  return {
+    x: Math.min(
+      geometry.size - 1,
+      Math.max(0, boardX),
+    ),
+    y: Math.min(
+      geometry.size - 1,
+      Math.max(0, boardY),
+    ),
+  };
+}
