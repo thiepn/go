@@ -1,3 +1,11 @@
+import {
+  applyCors,
+  consumeRateLimit,
+  fetchWithTimeout,
+  handlePreflight,
+  setRateHeaders,
+} from './_shared.js';
+
 const MAX_BODY_BYTES = 2_000_000;
 
 async function bodyOf(request) {
@@ -233,6 +241,17 @@ export default async function handler(
   request,
   response,
 ) {
+  if (handlePreflight(request, response)) {
+    return;
+  }
+
+  if (!applyCors(request, response)) {
+    response.status(403).json({
+      error: 'Origin not allowed.',
+    });
+    return;
+  }
+
   if (request.method !== 'POST') {
     response.setHeader(
       'Allow',
@@ -240,6 +259,16 @@ export default async function handler(
     );
     response.status(405).json({
       error: 'Method not allowed.',
+    });
+    return;
+  }
+
+  const limit = consumeRateLimit(request);
+  setRateHeaders(response, limit);
+
+  if (!limit.allowed) {
+    response.status(429).json({
+      error: 'KataGo analysis rate limit exceeded.',
     });
     return;
   }
@@ -259,17 +288,7 @@ export default async function handler(
     const rawQuery = await bodyOf(request);
     const query = sanitizeQuery(rawQuery);
 
-    const controller =
-      new AbortController();
-    const timer = setTimeout(
-      () => controller.abort(),
-      Number(
-        process.env.KATAGO_PROXY_TIMEOUT_MS ??
-          120000,
-      ),
-    );
-
-    const upstream = await fetch(
+    const upstream = await fetchWithTimeout(
       `${bridgeUrl.replace(/\/$/, '')}/analyze`,
       {
         method: 'POST',
@@ -285,11 +304,8 @@ export default async function handler(
             : {}),
         },
         body: JSON.stringify(query),
-        signal: controller.signal,
       },
     );
-
-    clearTimeout(timer);
 
     const text =
       await upstream.text();
