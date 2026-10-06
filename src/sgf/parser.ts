@@ -435,6 +435,20 @@ function rawTreeToDocument(
   raw: RawNode,
   index: number,
 ): StudyDocument {
+  const gameType = first(
+    raw.properties,
+    'GM',
+  );
+
+  if (
+    gameType !== undefined &&
+    gameType !== '1'
+  ) {
+    throw new Error(
+      `Unsupported SGF game type GM[${gameType}]. THIEPN Go only imports Go game trees.`,
+    );
+  }
+
   const boardSize = parseBoardSize(
     first(raw.properties, 'SZ'),
   );
