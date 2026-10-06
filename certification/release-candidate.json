@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "candidate": "1.0.0-rc.2",
+  "candidate": "1.0.0-rc.3",
   "track": "v1.0",
-  "phase": "C1",
+  "phase": "C2",
   "status": "frozen",
   "canonicalUrl": "https://thiepn.dev/go/",
   "canonicalPath": "/go/",
@@ -30,6 +30,6 @@
     "C14",
     "C15"
   ],
-  "supersedes": "1.0.0-rc.1",
-  "invalidationReason": "C1 found root-scoped Vite/PWA paths incompatible with the frozen canonical /go/ deployment target."
+  "supersedes": "1.0.0-rc.2",
+  "invalidationReason": "C2 adds the external KataGo proxy endpoint contract and production runtime hardening required by the static GitHub Pages deployment."
 }
