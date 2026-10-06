@@ -7,12 +7,34 @@ const APP_SHELL = [
   '/icon.svg',
 ];
 
+async function cacheAppShell() {
+  const cache = await caches.open(SHELL_CACHE);
+  await cache.addAll(APP_SHELL);
+
+  const root = await cache.match('/');
+  if (!root) return;
+
+  const html = await root.clone().text();
+  const assetPaths = [
+    ...html.matchAll(/(?:src|href)="([^"]+)"/g),
+  ]
+    .map((match) => match[1])
+    .filter(
+      (path) =>
+        path.startsWith('/assets/') ||
+        path.startsWith('/src/'),
+    );
+
+  await Promise.allSettled(
+    [...new Set(assetPaths)].map((path) =>
+      cache.add(path),
+    ),
+  );
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches
-      .open(SHELL_CACHE)
-      .then((cache) => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting()),
+    cacheAppShell().then(() => self.skipWaiting()),
   );
 });
 
