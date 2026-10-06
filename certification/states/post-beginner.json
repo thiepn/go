@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "post-beginner",
+  "description": "Minimal valid unlock state for testing post-beginner workspaces without inventing mastery evidence.",
+  "localStorage": {
+    "thiepn-go:guided:first-9x9:complete": true,
+    "thiepn-go:course:go-foundations:v1": {
+      "nextLessonIndex": 12
+    }
+  }
+}
