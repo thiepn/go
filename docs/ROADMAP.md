@@ -634,7 +634,7 @@ is finite certification and release work.
 - **C2 — Live KataGo Runtime** — rc.3 implementation complete; live Vercel/engine activation blocked by external authorization
 - **C3 — Production Account & Sync Certification** — rc.4 implementation complete; public production smoke and dedicated credential/manual auth gates pending
 - **C4 — Physical Mobile & PWA Qualification** — rc.5 implementation complete; automated device-class qualification added, physical hardware evidence pending
-- **C5 — Accessibility Certification**
+- **C5 — Accessibility Certification** — rc.6 implementation complete; automated accessibility qualification added, assistive-technology/real-OS evidence pending
 - **C6 — M1 Rules & Game Integrity Certification**
 - **C7 — M2/M3 Novice Learning Pilot**
 - **C8 — Pedagogy Hardening**

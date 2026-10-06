@@ -55,16 +55,34 @@ const c4Test = readFileSync(
   'utf8',
 );
 
+const currentPhase =
+  Number.parseInt(
+    candidate.phase.slice(1),
+    10,
+  );
+
 if (
-  candidate.phase !== 'C4' ||
+  !Number.isInteger(currentPhase) ||
+  currentPhase < 4 ||
   checklist.phase !== 'C4' ||
-  checklist.candidate !==
-    candidate.candidate ||
+  !/^1\.0\.0-rc\.\d+$/.test(
+    checklist.candidate,
+  ) ||
   matrix.candidate !==
     candidate.candidate
 ) {
   throw new Error(
-    'C4 candidate, matrix, and physical checklist are not aligned.',
+    'C4 frozen evidence or current release matrix is not valid.',
+  );
+}
+
+if (
+  candidate.phase === 'C4' &&
+  checklist.candidate !==
+    candidate.candidate
+) {
+  throw new Error(
+    'While C4 is current, its checklist must match the active candidate.',
   );
 }
 
@@ -145,5 +163,5 @@ for (const required of [
 }
 
 console.log(
-  `C4 qualification contract verified for ${candidate.candidate}.`,
+  `C4 frozen qualification contract verified (evidence ${checklist.candidate}; current ${candidate.candidate}).`,
 );

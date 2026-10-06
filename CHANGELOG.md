@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.0-rc.6 — C5 accessibility candidate
+
+Supersedes rc.5 after C5 identified WCAG AA contrast regressions on some card
+and dark-theme text surfaces and an incomplete Windows forced-colors rendering
+contract for the SVG Go board.
+
+Changes:
+- raises secondary, accent, and error text tokens to an AA contrast floor on
+  light and dark paper surfaces;
+- preserves a 3:1 focus-indicator contrast floor;
+- renders the Go board explicitly with system colors in forced-colors mode;
+- removes board gradients/shadows where they would undermine forced colors;
+- exposes an assistive-technology role description for the interactive board;
+- adds three-engine 320 CSS px reflow qualification;
+- adds keyboard-only lesson and independent-play journeys;
+- adds reduced-motion and forced-colors runtime checks;
+- adds a static contrast regression gate;
+- freezes VoiceOver, TalkBack, Windows High Contrast, browser-zoom,
+  reduced-motion, and larger-text empirical evidence requirements.
+
 ## 1.0.0-rc.5 — C4 physical mobile & PWA candidate
 
 Supersedes rc.4 after C4 identified incomplete safe-area containment while

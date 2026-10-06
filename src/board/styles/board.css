@@ -423,3 +423,86 @@ html[data-high-contrast='true'] .go-board__keyboard-cursor {
 html[data-high-contrast='true'] .go-highlight {
   stroke-width: 7;
 }
+
+
+@media (forced-colors: active) {
+  .go-board-shell {
+    forced-color-adjust: none;
+    outline-color: Highlight;
+  }
+
+  .go-board__surface {
+    fill: Canvas !important;
+    stroke: CanvasText;
+    stroke-width: 4;
+    filter: none;
+  }
+
+  .go-board__grain {
+    display: none;
+  }
+
+  .go-board__grid {
+    stroke: CanvasText;
+  }
+
+  .go-board__stars {
+    fill: CanvasText;
+  }
+
+  .go-stone--black .go-stone__body {
+    fill: CanvasText !important;
+    stroke: CanvasText;
+  }
+
+  .go-stone--white .go-stone__body {
+    fill: Canvas !important;
+    stroke: CanvasText;
+    stroke-width: 4;
+  }
+
+  .go-stone__shadow,
+  .go-stone__shine,
+  .go-ghost-stone {
+    display: none;
+  }
+
+  .go-board__keyboard-cursor,
+  .go-highlight,
+  .go-group-halo {
+    stroke: Highlight;
+  }
+
+  .go-highlight--liberty,
+  .go-highlight--warning,
+  .go-highlight--success,
+  .go-highlight--selected {
+    fill: Canvas;
+  }
+
+  .go-last-move--on-black,
+  .go-last-move--on-white,
+  .go-marker,
+  .go-marker-dot--neutral,
+  .go-marker-dot--accent,
+  .go-marker-dot--warning,
+  .go-board__coordinates {
+    fill: CanvasText;
+    stroke: Canvas;
+  }
+
+  .go-ownership--black {
+    fill: CanvasText;
+  }
+
+  .go-ownership--white {
+    fill: Canvas;
+    stroke: CanvasText;
+  }
+
+  .go-board-precision__action {
+    border-color: ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+}

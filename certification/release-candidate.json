@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "candidate": "1.0.0-rc.5",
+  "candidate": "1.0.0-rc.6",
   "track": "v1.0",
-  "phase": "C4",
+  "phase": "C5",
   "status": "frozen",
   "canonicalUrl": "https://thiepn.dev/go/",
   "canonicalPath": "/go/",
@@ -30,6 +30,6 @@
     "C14",
     "C15"
   ],
-  "supersedes": "1.0.0-rc.4",
-  "invalidationReason": "C4 found that viewport-fit=cover was enabled while only horizontal safe-area insets were applied globally, leaving top and bottom installed-mobile UI vulnerable to display cutouts and the home-indicator region."
+  "supersedes": "1.0.0-rc.5",
+  "invalidationReason": "C5 found WCAG AA text-contrast failures on card/dark surfaces and incomplete explicit rendering for the SVG Go board in forced-colors mode."
 }
