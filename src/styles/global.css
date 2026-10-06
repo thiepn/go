@@ -3,17 +3,27 @@
 }
 
 html {
+  min-height: 100%;
   font-family: var(--font-ui);
   background: var(--paper-50);
   color: var(--ink-950);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  min-height: 100dvh;
+  overflow-wrap: anywhere;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 button,
@@ -27,7 +37,12 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-button:focus-visible {
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
@@ -160,6 +175,21 @@ h1 {
   margin: 0.8rem 0 0;
   color: var(--ink-500);
   font-size: 0.82rem;
+}
+
+.home-utility-action {
+  min-height: 2.75rem;
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.85rem;
+  border: 0;
+  background: transparent;
+  color: var(--ink-500);
+  font-weight: 680;
+  cursor: pointer;
+}
+
+.home-utility-action:hover {
+  color: var(--accent-600);
 }
 
 .lesson-shell {
@@ -372,5 +402,36 @@ h1 {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+
+@media (pointer: coarse) {
+  button,
+  select,
+  input:not([type='checkbox']):not([type='radio']) {
+    min-height: 44px;
+  }
+}
+
+html[data-reduce-motion='true'] *,
+html[data-reduce-motion='true'] *::before,
+html[data-reduce-motion='true'] *::after {
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+@media (forced-colors: active) {
+  button,
+  input,
+  textarea,
+  select {
+    border-color: ButtonText;
+  }
+
+  .go-board-shell {
+    forced-color-adjust: none;
   }
 }
