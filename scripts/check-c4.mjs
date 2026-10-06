@@ -112,9 +112,8 @@ for (const requirement of [
   'safe areas and rotation',
   'offline cold app launch',
   'Launch mode',
-  '9×9 board accepts touch',
-  '13×13 board accepts touch',
-  '19×19 board accepts touch',
+  'for (const size of [',
+  'board accepts touch',
   'Precision zoom',
 ]) {
   if (!c4Test.includes(requirement)) {
