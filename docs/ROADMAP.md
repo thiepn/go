@@ -632,7 +632,7 @@ is finite certification and release work.
 - **C0 — Release Baseline & Freeze** — complete
 - **C1 — Canonical /go/ Deployment** — complete
 - **C2 — Live KataGo Runtime** — rc.3 implementation complete; live Vercel/engine activation blocked by external authorization
-- **C3 — Production Account & Sync Certification**
+- **C3 — Production Account & Sync Certification** — rc.4 implementation complete; public production smoke and dedicated credential/manual auth gates pending
 - **C4 — Physical Mobile & PWA Qualification**
 - **C5 — Accessibility Certification**
 - **C6 — M1 Rules & Game Integrity Certification**
