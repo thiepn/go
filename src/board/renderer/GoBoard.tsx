@@ -24,6 +24,7 @@ import {
   getPrecisionBoardWidth,
   getStarPoints,
   pointToSvg,
+  svgPositionToPoint,
 } from '../model/geometry';
 import {
   getPreferences,
@@ -281,6 +282,27 @@ export function GoBoard({
   const activate = (point: Point) => {
     if (!interactive) return;
     onIntersectionIntent?.(point);
+  };
+
+
+  const pointFromClient = (
+    clientX: number,
+    clientY: number,
+    target: SVGRectElement,
+  ): Point | null => {
+    const svg = target.ownerSVGElement;
+    if (!svg) return null;
+
+    const rect = svg.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) {
+      return null;
+    }
+
+    return svgPositionToPoint(
+      geometry,
+      ((clientX - rect.left) / rect.width) * 1000,
+      ((clientY - rect.top) / rect.height) * 1000,
+    );
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -710,33 +732,51 @@ export function GoBoard({
         </g>
 
         {interactive && (
-          <g className="go-board__targets">
-            {board.intersections.map((_, index) => {
-              const point = indexToPoint(board, index);
-              const position = pointToSvg(geometry, point);
+          <rect
+            className="go-board__target-surface"
+            x={geometry.inset - geometry.hitRadius}
+            y={geometry.inset - geometry.hitRadius}
+            width={
+              geometry.gridSize +
+              geometry.hitRadius * 2
+            }
+            height={
+              geometry.gridSize +
+              geometry.hitRadius * 2
+            }
+            onPointerMove={(event) => {
+              if (event.pointerType === 'touch') {
+                return;
+              }
 
-              return (
-                <circle
-                  key={`target-${pointKey(point)}`}
-                  className="go-board__target"
-                  cx={position.x}
-                  cy={position.y}
-                  r={geometry.hitRadius}
-                  onPointerEnter={(event: PointerEvent<SVGCircleElement>) => {
-                    if (event.pointerType !== 'touch') {
-                      setHoveredPoint(point);
-                    }
-                  }}
-                  onPointerLeave={() => setHoveredPoint(null)}
-                  onPointerDown={() => {
-                    keyboardNavigationRef.current = false;
-                    setFocusPoint(point);
-                  }}
-                  onClick={() => activate(point)}
-                />
+              const point = pointFromClient(
+                event.clientX,
+                event.clientY,
+                event.currentTarget,
               );
-            })}
-          </g>
+              if (point) setHoveredPoint(point);
+            }}
+            onPointerLeave={() =>
+              setHoveredPoint(null)
+            }
+            onPointerDown={(event) => {
+              keyboardNavigationRef.current = false;
+              const point = pointFromClient(
+                event.clientX,
+                event.clientY,
+                event.currentTarget,
+              );
+              if (point) setFocusPoint(point);
+            }}
+            onClick={(event) => {
+              const point = pointFromClient(
+                event.clientX,
+                event.clientY,
+                event.currentTarget,
+              );
+              if (point) activate(point);
+            }}
+          />
         )}
 
         {interactive && (

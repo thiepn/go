@@ -8,6 +8,7 @@ import {
   getPrecisionBoardWidth,
   getStarPoints,
   pointToSvg,
+  svgPositionToPoint,
 } from './geometry';
 
 describe('board geometry', () => {
@@ -46,6 +47,30 @@ describe('board geometry', () => {
         PRECISION_TOUCH_SPACING,
       );
     }
+  });
+
+  it('maps arbitrary SVG positions to the nearest valid intersection', () => {
+    const geometry = getBoardGeometry(19);
+
+    expect(
+      svgPositionToPoint(
+        geometry,
+        geometry.inset,
+        geometry.inset,
+      ),
+    ).toEqual({ x: 0, y: 0 });
+
+    expect(
+      svgPositionToPoint(
+        geometry,
+        geometry.inset + geometry.gridSize,
+        geometry.inset + geometry.gridSize,
+      ),
+    ).toEqual({ x: 18, y: 18 });
+
+    expect(
+      svgPositionToPoint(geometry, -100, 1200),
+    ).toEqual({ x: 0, y: 18 });
   });
 
   it('uses standard Go coordinate letters that skip I', () => {

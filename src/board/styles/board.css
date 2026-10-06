@@ -1,11 +1,15 @@
 .go-board-frame {
   width: min(100%, 46rem);
+  max-width: 100%;
   min-width: 0;
+  overflow-x: clip;
+  contain: inline-size;
 }
 
 .go-board-viewport {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   overflow: visible;
   scrollbar-gutter: stable both-edges;
 }
@@ -192,16 +196,10 @@
   stroke-width: 1.5;
 }
 
-.go-board__targets {
+.go-board__target-surface {
   fill: transparent;
-  cursor: pointer;
-}
-
-.go-board__target {
-  fill: transparent;
-  stroke: transparent;
-  stroke-width: 2;
   pointer-events: all;
+  cursor: pointer;
 }
 
 .go-board__keyboard-cursor {
@@ -333,11 +331,6 @@
   fill: #9f4f43;
 }
 
-@media (hover: hover) {
-  .go-board__target:hover {
-    fill: rgb(255 255 255 / 0.035);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .go-stone--entering,
@@ -379,10 +372,6 @@
 
 
 @media (pointer: coarse) {
-  .go-board__target {
-    stroke-width: 7;
-  }
-
   .go-board-shell {
     -webkit-tap-highlight-color: transparent;
   }

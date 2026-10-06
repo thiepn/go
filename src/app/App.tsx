@@ -3,44 +3,94 @@ import {
   Suspense,
   useEffect,
   useState,
+  type ReactNode,
 } from 'react';
 
 import {
-  AccountPanel,
   FIRST_GAME_COMPLETE_KEY,
   useAccount,
 } from '../account';
-import {
-  allProblems,
-  beginnerCourse,
-  beginnerProblems,
-  developingCourse,
-  developingProblems,
-  firstGuidedGame,
-} from '../content';
-import { CoachHub } from '../coach/player';
 import { markCoachPracticeComplete } from '../coach/store';
-import { GuidedGamePlayer } from '../guided';
-import {
-  CoursePlayer,
-  type CourseDefinition,
-} from '../learning';
-import { MasteryDashboard } from '../mastery/player';
 import { resolveConceptIds } from '../mastery/graph';
 import {
   loadMasteryEvidence,
   recordMasteryEvidence,
 } from '../mastery/store';
-import { PlayHub } from '../play/player';
 import type { SavedGameRecord } from '../play/types';
-import { StudyHub } from '../study/player';
-import { ReviewHub } from '../review/player';
-import { PracticeHub } from '../practice';
 import {
-  PlatformSettings,
   readJson,
   writeJson,
 } from '../platform';
+
+const AccountPanel = lazy(
+  () =>
+    import('../account').then((module) => ({
+      default: module.AccountPanel,
+    })),
+);
+
+const CoachHub = lazy(
+  () =>
+    import('../coach/player').then((module) => ({
+      default: module.CoachHub,
+    })),
+);
+
+const GuidedGamePlayer = lazy(
+  () =>
+    import('../guided').then((module) => ({
+      default: module.GuidedGamePlayer,
+    })),
+);
+
+const CoursePlayer = lazy(
+  () =>
+    import('../learning').then((module) => ({
+      default: module.CoursePlayer,
+    })),
+);
+
+const MasteryDashboard = lazy(
+  () =>
+    import('../mastery/player').then((module) => ({
+      default: module.MasteryDashboard,
+    })),
+);
+
+const PlayHub = lazy(
+  () =>
+    import('../play/player').then((module) => ({
+      default: module.PlayHub,
+    })),
+);
+
+const StudyHub = lazy(
+  () =>
+    import('../study/player').then((module) => ({
+      default: module.StudyHub,
+    })),
+);
+
+const ReviewHub = lazy(
+  () =>
+    import('../review/player').then((module) => ({
+      default: module.ReviewHub,
+    })),
+);
+
+const PracticeHub = lazy(
+  () =>
+    import('../practice').then((module) => ({
+      default: module.PracticeHub,
+    })),
+);
+
+const PlatformSettings = lazy(
+  () =>
+    import('../platform').then((module) => ({
+      default: module.PlatformSettings,
+    })),
+);
 
 const ContentAuthoringStudio = lazy(
   () =>
@@ -48,6 +98,32 @@ const ContentAuthoringStudio = lazy(
       default: module.ContentAuthoringStudio,
     })),
 );
+
+function ModeFallback() {
+  return (
+    <main
+      className="app-shell"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <p>Loading…</p>
+    </main>
+  );
+}
+
+function ModeBoundary({
+  children,
+}: {
+  readonly children: ReactNode;
+}) {
+  return (
+    <Suspense fallback={<ModeFallback />}>
+      {children}
+    </Suspense>
+  );
+}
+
+type ContentModule = typeof import('../content');
 
 type AppMode =
   | 'home'
@@ -85,8 +161,10 @@ export function App() {
     if (typeof window === 'undefined') return false;
     return new URLSearchParams(window.location.search).get('studio') === '1';
   });
-  const [activeCourse, setActiveCourse] =
-    useState<CourseDefinition>(beginnerCourse);
+  const [content, setContent] =
+    useState<ContentModule | null>(null);
+  const [activeCourseId, setActiveCourseId] =
+    useState<'beginner' | 'developing'>('beginner');
   const [practiceUnlocked, setPracticeUnlocked] = useState(
     () => hasFirstGameComplete(),
   );
@@ -125,6 +203,42 @@ export function App() {
     };
   }, []);
 
+
+  const preloadLearningContent = () => {
+    if (content) return;
+
+    void import('../content').then(
+      (module) => {
+        setContent(module);
+      },
+    );
+  };
+
+  const contentRequired =
+    mode !== 'home' &&
+    mode !== 'settings' &&
+    mode !== 'account';
+
+  useEffect(() => {
+    if (!contentRequired || content) {
+      return;
+    }
+
+    let active = true;
+
+    void import('../content').then(
+      (module) => {
+        if (active) {
+          setContent(module);
+        }
+      },
+    );
+
+    return () => {
+      active = false;
+    };
+  }, [content, contentRequired]);
+
   if (studioOpen) {
     return (
       <Suspense
@@ -155,19 +269,29 @@ export function App() {
 
   if (mode === 'settings') {
     return (
-      <PlatformSettings
-        onExit={() => setMode('home')}
-      />
+      <ModeBoundary>
+        <PlatformSettings
+          onExit={() => setMode('home')}
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'account') {
     return (
-      <AccountPanel
-        onExit={() => setMode('home')}
-      />
+      <ModeBoundary>
+        <AccountPanel
+          onExit={() => setMode('home')}
+        />
+      </ModeBoundary>
     );
   }
+
+  if (contentRequired && !content) {
+    return <ModeFallback />;
+  }
+
+  const resolvedContent = content;
 
   const evidencedConcepts = new Set(
     loadMasteryEvidence().map(
@@ -175,7 +299,7 @@ export function App() {
     ),
   );
   const unlockedDevelopingProblems =
-    developingProblems.filter(
+    resolvedContent?.developingProblems.filter(
       (problem) =>
         resolveConceptIds(
           problem.concept,
@@ -186,34 +310,43 @@ export function App() {
             ),
         ),
     );
-  const practiceProblems = [
-    ...beginnerProblems,
-    ...unlockedDevelopingProblems,
-  ];
+  const practiceProblems = resolvedContent
+    ? [
+        ...resolvedContent.beginnerProblems,
+        ...(unlockedDevelopingProblems ?? []),
+      ]
+    : [];
 
   if (mode === 'course') {
     return (
-      <CoursePlayer
-        course={activeCourse}
+      <ModeBoundary>
+        <CoursePlayer
+        course={
+          activeCourseId === 'beginner'
+            ? resolvedContent!.beginnerCourse
+            : resolvedContent!.developingCourse
+        }
         onExit={() => setMode('home')}
         onReadyForGame={
-          activeCourse.id === beginnerCourse.id
+          activeCourseId === 'beginner'
             ? () => setMode('guided-game')
             : undefined
         }
         onCompletionAction={
-          activeCourse.id === developingCourse.id
+          activeCourseId === 'developing'
             ? () => setMode('coach')
             : undefined
         }
-      />
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'guided-game') {
     return (
-      <GuidedGamePlayer
-        scenario={firstGuidedGame}
+      <ModeBoundary>
+        <GuidedGamePlayer
+        scenario={resolvedContent!.firstGuidedGame}
         onExit={() => setMode('home')}
         onComplete={(result) => {
           const now = Date.now();
@@ -243,13 +376,15 @@ export function App() {
           setPracticeUnlocked(true);
           setMode('home');
         }}
-      />
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'practice') {
     return (
-      <PracticeHub
+      <ModeBoundary>
+        <PracticeHub
         problems={practiceProblems}
         focusedTags={practiceFocus}
         onComplete={(summary) => {
@@ -270,13 +405,15 @@ export function App() {
             setMode('home');
           }
         }}
-      />
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'play') {
     return (
-      <PlayHub
+      <ModeBoundary>
+        <PlayHub
         coachObjective={coachObjective}
         onExit={() => {
           if (coachPlayPlanId) {
@@ -300,13 +437,15 @@ export function App() {
           setReviewRecord(record);
           setMode('review');
         }}
-      />
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'coach') {
     return (
-      <CoachHub
+      <ModeBoundary>
+        <CoachHub
         problems={practiceProblems}
         onExit={() => setMode('home')}
         onPractice={(tags, planId) => {
@@ -328,13 +467,15 @@ export function App() {
           setReviewReturnToCoach(true);
           setMode('review');
         }}
-      />
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'review') {
     return (
-      <ReviewHub
+      <ModeBoundary>
+        <ReviewHub
         initialRecord={reviewRecord}
         onExit={() => {
           setReviewRecord(null);
@@ -357,32 +498,37 @@ export function App() {
           setReviewReturnToCoach(false);
           setMode('study');
         }}
-      />
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'study') {
     return (
-      <StudyHub
+      <ModeBoundary>
+        <StudyHub
         initialRecord={studyRecord}
         onExit={() => {
           setStudyRecord(null);
           setMode('home');
         }}
-      />
+        />
+      </ModeBoundary>
     );
   }
 
   if (mode === 'progress') {
     return (
-      <MasteryDashboard
-        problems={allProblems}
+      <ModeBoundary>
+        <MasteryDashboard
+        problems={resolvedContent!.allProblems}
         onExit={() => setMode('home')}
         onPractice={(tags) => {
           setPracticeFocus(tags);
           setMode('practice');
         }}
-      />
+        />
+      </ModeBoundary>
     );
   }
 
@@ -406,11 +552,13 @@ export function App() {
           <button
             className="primary-action"
             type="button"
+            onPointerEnter={preloadLearningContent}
+            onFocus={preloadLearningContent}
             onClick={() => {
-              setActiveCourse(
+              setActiveCourseId(
                 practiceUnlocked
-                  ? developingCourse
-                  : beginnerCourse,
+                  ? 'developing'
+                  : 'beginner',
               );
               setMode('course');
             }}
