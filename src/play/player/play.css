@@ -292,6 +292,8 @@
   grid-area: board;
   position: relative;
   width: min(100%, 48rem);
+  max-width: 100%;
+  min-width: 0;
   justify-self: center;
 }
 
