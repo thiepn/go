@@ -26,6 +26,7 @@ import type { SavedGameRecord } from '../play/types';
 import { StudyHub } from '../study/player';
 import { ReviewHub } from '../review/player';
 import { PracticeHub } from '../practice';
+import { ContentAuthoringStudio } from '../studio';
 
 type AppMode =
   | 'home'
@@ -66,6 +67,10 @@ function markFirstGameComplete(): void {
 
 export function App() {
   const [mode, setMode] = useState<AppMode>('home');
+  const [studioOpen, setStudioOpen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return new URLSearchParams(window.location.search).get('studio') === '1';
+  });
   const [activeCourse, setActiveCourse] =
     useState<CourseDefinition>(beginnerCourse);
   const [practiceUnlocked, setPracticeUnlocked] = useState(
@@ -85,6 +90,26 @@ export function App() {
     useState<string | null>(null);
   const [reviewReturnToCoach, setReviewReturnToCoach] =
     useState(false);
+
+  if (studioOpen) {
+    return (
+      <ContentAuthoringStudio
+        onExit={() => {
+          if (typeof window !== 'undefined') {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('studio');
+            window.history.replaceState(
+              window.history.state,
+              '',
+              url,
+            );
+          }
+
+          setStudioOpen(false);
+        }}
+      />
+    );
+  }
 
   const evidencedConcepts = new Set(
     loadMasteryEvidence().map(

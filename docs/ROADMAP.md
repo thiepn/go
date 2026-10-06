@@ -466,37 +466,61 @@ Certification note:
 
 ## P13 — Developing-Player Curriculum
 
-Status: **next**
+Status: **complete**
 
-Expand into:
-- reading;
-- ladders;
-- nets;
-- snapback;
-- capturing races;
-- life/death;
-- shape;
-- cutting/connection;
-- influence;
-- attack/defense;
-- invasions/reductions;
-- endgame;
-- opening principles;
-- introductory joseki.
+Implemented:
+- separate post-beginner course while preserving the beginner path;
+- tactical reading and forcing sequences;
+- true engine-backed ladders;
+- true two-route nets;
+- snapback capture/recapture;
+- equal-liberty capturing races;
+- false eyes, vital points, and seki;
+- shape, cutting/connection, weak groups, and attack/defense;
+- influence, invasion, reduction, sente/gote, and endgame;
+- opening principles and introductory joseki;
+- expanded mastery graph and coach objectives;
+- developing-player focused practice modes;
+- practice unlock only after concept exposure;
+- combined adaptive practice corpus.
+
+Validation:
+- developing curriculum structure;
+- expanded knowledge graph;
+- every authored developing problem replayed through the Go engine;
+- corrected ladder, net, snapback, semeai, and seki examples after replay verification.
 
 ## P14 — Content Authoring Studio
 
-Build internal tooling for:
-- board setup;
-- lesson steps;
-- problem trees;
-- explanations;
-- hint ladders;
-- misconception branches;
-- animation timelines;
-- validation.
+Status: **implementation complete**
+
+Implemented:
+- hidden internal authoring workspace via `?studio=1`;
+- visual board setup editor using the production SVG board and coordinate model;
+- lesson/problem mode switching with separate local drafts;
+- known-valid starter templates;
+- lesson metadata and step builder;
+- step add, duplicate, reorder, remove, and interaction conversion;
+- progressive hint-ladder editing;
+- misconception-specific point feedback editing;
+- choreography cue timing editor;
+- problem metadata and root solution-branch editor;
+- canonical JSON source editor for the complete schema;
+- JSON import, formatting, copy, export, and local autosave;
+- production-validator issue reporting;
+- preview gating until content is valid;
+- real `LessonPlayer` / `ProblemPlayer` runtime preview;
+- focused model tests for templates, board editing, summaries, and parse failures;
+- authoring workflow/boundary documentation.
+
+Boundary:
+- the studio intentionally does not publish directly to GitHub or introduce a second content format;
+- advanced nested branches and presentation-effect payloads remain available in canonical JSON;
+- repository review and engine replay tests remain required before authored content becomes shipped curriculum.
 
 ## P15 — Production Hardening
+
+Status: **next**
 
 Audit:
 - mobile;

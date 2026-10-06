@@ -1,7 +1,7 @@
 import type { LessonDefinition } from '../../learning/runtime';
 
-const blackPoint = { x: 1, y: 1 } as const;
-const whitePoint = { x: 3, y: 3 } as const;
+const blackPoint = { x: 2, y: 2 } as const;
+const whitePoint = { x: 4, y: 4 } as const;
 
 export const scoringLesson: LessonDefinition = {
   id: 'foundation-scoring',
@@ -9,18 +9,18 @@ export const scoringLesson: LessonDefinition = {
   concept: 'scoring',
   prerequisiteConcepts: ['dead-stones'],
   initialBoard: {
-    size: 5,
+    size: 7,
     black: [
-      { x: 1, y: 0 },
-      { x: 0, y: 1 },
       { x: 2, y: 1 },
       { x: 1, y: 2 },
-    ],
-    white: [
       { x: 3, y: 2 },
       { x: 2, y: 3 },
+    ],
+    white: [
       { x: 4, y: 3 },
       { x: 3, y: 4 },
+      { x: 5, y: 4 },
+      { x: 4, y: 5 },
     ],
   },
   steps: [
