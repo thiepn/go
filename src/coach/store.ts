@@ -1,3 +1,8 @@
+import {
+  isRecord,
+  readJson,
+  writeJson,
+} from '../platform/storage';
 import type {
   CoachPlan,
   CoachPracticeSummary,
@@ -18,58 +23,40 @@ function emptyState(): CoachStoreState {
   };
 }
 
+function isCoachStoreState(
+  value: unknown,
+): value is CoachStoreState {
+  return (
+    isRecord(value) &&
+    (value.activePlanId === null ||
+      typeof value.activePlanId === 'string') &&
+    Array.isArray(value.plans) &&
+    value.plans.every(
+      (plan) =>
+        isRecord(plan) &&
+        typeof plan.id === 'string',
+    )
+  );
+}
+
 export function loadCoachState(): CoachStoreState {
-  if (typeof window === 'undefined') {
-    return emptyState();
-  }
-
-  try {
-    const raw =
-      window.localStorage.getItem(
-        COACH_PLANS_STORAGE_KEY,
-      );
-
-    if (!raw) return emptyState();
-
-    const parsed =
-      JSON.parse(raw) as Partial<CoachStoreState>;
-
-    return {
-      activePlanId:
-        typeof parsed.activePlanId ===
-        'string'
-          ? parsed.activePlanId
-          : null,
-      plans:
-        Array.isArray(parsed.plans)
-          ? parsed.plans as CoachPlan[]
-          : [],
-    };
-  } catch {
-    return emptyState();
-  }
+  return readJson(
+    COACH_PLANS_STORAGE_KEY,
+    emptyState,
+    isCoachStoreState,
+  );
 }
 
 export function saveCoachState(
   state: CoachStoreState,
 ): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  try {
-    window.localStorage.setItem(
-      COACH_PLANS_STORAGE_KEY,
-      JSON.stringify({
-        activePlanId:
-          state.activePlanId,
-        plans:
-          state.plans.slice(0, 12),
-      }),
-    );
-  } catch {
-    // Coaching remains usable without persistence.
-  }
+  writeJson(
+    COACH_PLANS_STORAGE_KEY,
+    {
+      activePlanId: state.activePlanId,
+      plans: state.plans.slice(0, 12),
+    },
+  );
 }
 
 export function activeCoachPlan(): CoachPlan | null {
