@@ -35,6 +35,13 @@ const DRAFT_KEYS: Record<AuthoringKind, string> = {
   problem: 'thiepn-go:studio:problem-draft',
 };
 
+type DeepMutable<T> =
+  T extends readonly (infer U)[]
+    ? DeepMutable<U>[]
+    : T extends object
+      ? { -readonly [K in keyof T]: DeepMutable<T[K]> }
+      : T;
+
 const LESSON_KINDS: readonly LessonInteractionKind[] = [
   'continue',
   'play-move',
@@ -268,26 +275,28 @@ export function ContentAuthoringStudio({
     }
   }, [lesson?.steps?.length, selectedStep]);
 
-  const commit = (
-    next: LessonDefinition | ProblemDefinition,
-  ) => {
+  const commit = (next: unknown) => {
     setSource(JSON.stringify(next, null, 2));
   };
 
   const updateLesson = (
-    updater: (draft: LessonDefinition) => void,
+    updater: (draft: DeepMutable<LessonDefinition>) => void,
   ) => {
     if (!lesson) return;
-    const draft = deepClone(lesson);
+    const draft = deepClone(
+      lesson,
+    ) as DeepMutable<LessonDefinition>;
     updater(draft);
     commit(draft);
   };
 
   const updateProblem = (
-    updater: (draft: ProblemDefinition) => void,
+    updater: (draft: DeepMutable<ProblemDefinition>) => void,
   ) => {
     if (!problem) return;
-    const draft = deepClone(problem);
+    const draft = deepClone(
+      problem,
+    ) as DeepMutable<ProblemDefinition>;
     updater(draft);
     commit(draft);
   };
@@ -381,7 +390,7 @@ export function ContentAuthoringStudio({
     updateLesson((draft) => {
       const step = draft.steps[selectedStep];
       if (!step) return;
-      (step as Record<string, unknown>)[field] = value;
+      (step as unknown as Record<string, unknown>)[field] = value;
     });
   };
 
@@ -393,10 +402,9 @@ export function ContentAuthoringStudio({
       if (!current) return;
 
       const steps = [...draft.steps];
-      steps[selectedStep] = makeLessonStep(
-        nextKind,
-        current,
-      );
+      steps[selectedStep] = deepClone(
+        makeLessonStep(nextKind, current as LessonStep),
+      ) as DeepMutable<LessonStep>;
       draft.steps = steps;
     });
   };
@@ -406,11 +414,11 @@ export function ContentAuthoringStudio({
       const nextIndex = draft.steps.length + 1;
       draft.steps = [
         ...draft.steps,
-        {
+        deepClone({
           ...makeLessonStep('continue'),
           id: `step-${nextIndex}`,
           title: `Step ${nextIndex}`,
-        },
+        }) as DeepMutable<LessonStep>,
       ];
     });
     setSelectedStep(lesson?.steps.length ?? 0);
@@ -612,8 +620,12 @@ export function ContentAuthoringStudio({
   const updateRootBranch = (
     index: number,
     updater: (
-      branch: ProblemDefinition['root']['branches'][number],
-    ) => ProblemDefinition['root']['branches'][number],
+      branch: DeepMutable<
+        ProblemDefinition['root']['branches'][number]
+      >,
+    ) => DeepMutable<
+      ProblemDefinition['root']['branches'][number]
+    >,
   ) => {
     updateProblem((draft) => {
       const branches = [...draft.root.branches];
