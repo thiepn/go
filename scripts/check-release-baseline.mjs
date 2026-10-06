@@ -194,6 +194,10 @@ const browserWorkflow = readFileSync(
   '.github/workflows/browser-qa.yml',
   'utf8',
 );
+const deployWorkflow = readFileSync(
+  '.github/workflows/deploy-pages.yml',
+  'utf8',
+);
 const playwright = readFileSync(
   'playwright.config.ts',
   'utf8',
@@ -205,6 +209,7 @@ for (const [
 ] of [
   ['verify', verifyWorkflow],
   ['browser-qa', browserWorkflow],
+  ['deploy-pages', deployWorkflow],
 ]) {
   if (
     !workflow.includes(
@@ -220,10 +225,26 @@ for (const [
 if (
   !verifyWorkflow.includes(
     'npm run check:release',
+  ) ||
+  !deployWorkflow.includes(
+    'npm run check:release',
   )
 ) {
   throw new Error(
-    'verify workflow must enforce the C0 release baseline.',
+    'Verify and production deployment workflows must enforce the C0 release baseline.',
+  );
+}
+
+if (
+  !deployWorkflow.includes(
+    'THIEPN_RELEASE_SHA:',
+  ) ||
+  !deployWorkflow.includes(
+    'dist/release.json',
+  )
+) {
+  throw new Error(
+    'Production deployment must stamp and verify release source metadata.',
   );
 }
 
