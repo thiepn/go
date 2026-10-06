@@ -48,6 +48,12 @@ export function AccountPanel({
     useState<string | null>(null);
   const [deleteArmed, setDeleteArmed] =
     useState(false);
+  const [recoveryPassword, setRecoveryPassword] =
+    useState('');
+  const [
+    recoveryPasswordConfirm,
+    setRecoveryPasswordConfirm,
+  ] = useState('');
   const importRef =
     useRef<HTMLInputElement | null>(null);
 
@@ -308,6 +314,86 @@ export function AccountPanel({
                 </button>
               )}
             </div>
+          </section>
+        )}
+
+        {account.recoveryMode && (
+          <section className="account-card account-card--recovery">
+            <h2>Choose a new password</h2>
+            <p>
+              This device opened a valid THIEPN Account recovery session.
+              Set the new password here to finish recovery.
+            </p>
+
+            <form
+              className="account-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+
+                if (
+                  recoveryPassword !==
+                  recoveryPasswordConfirm
+                ) {
+                  setLocalMessage(
+                    'The new passwords do not match.',
+                  );
+                  return;
+                }
+
+                void run(async () => {
+                  await account.completePasswordRecovery(
+                    recoveryPassword,
+                  );
+                  setRecoveryPassword('');
+                  setRecoveryPasswordConfirm('');
+                });
+              }}
+            >
+              <label>
+                New password
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  minLength={8}
+                  value={recoveryPassword}
+                  onChange={(event) =>
+                    setRecoveryPassword(
+                      event.target.value,
+                    )
+                  }
+                  required
+                />
+              </label>
+
+              <label>
+                Confirm new password
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  minLength={8}
+                  value={recoveryPasswordConfirm}
+                  onChange={(event) =>
+                    setRecoveryPasswordConfirm(
+                      event.target.value,
+                    )
+                  }
+                  required
+                />
+              </label>
+
+              <button
+                className="primary-action account-primary"
+                type="submit"
+                disabled={
+                  busy ||
+                  recoveryPassword.length < 8 ||
+                  recoveryPassword !==
+                    recoveryPasswordConfirm
+                }
+              >
+                Update password
+              </button>
+            </form>
           </section>
         )}
 
