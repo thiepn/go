@@ -6,6 +6,11 @@ import {
   readFileSync,
 } from 'node:fs';
 
+test.skip(
+  !process.env.EXPECTED_RELEASE_SHA,
+  'Canonical deployment QA only runs after a production deploy.',
+);
+
 const candidate = JSON.parse(
   readFileSync(
     'certification/release-candidate.json',
