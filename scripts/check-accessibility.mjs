@@ -41,6 +41,11 @@ const required = [
   ],
   [
     board,
+    'aria-roledescription',
+    'Interactive board must expose a screen-reader role description.',
+  ],
+  [
+    board,
     'Precision zoom',
     'Large boards must preserve the precision zoom variant.',
   ],
@@ -73,6 +78,21 @@ const required = [
     preferences,
     'showCoordinates',
     'Board-coordinate preference must remain available.',
+  ],
+  [
+    boardCss,
+    '@media (forced-colors: active)',
+    'Go board must provide explicit forced-colors rendering.',
+  ],
+  [
+    boardCss,
+    'CanvasText',
+    'Forced-colors board must use system text colors.',
+  ],
+  [
+    boardCss,
+    'Highlight',
+    'Forced-colors board must preserve focus/highlight state.',
   ],
 ];
 
