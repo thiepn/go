@@ -70,4 +70,57 @@ if (!serviceWorker.includes("url.pathname.startsWith('/api/')")) {
   );
 }
 
+if (
+  !serviceWorker.includes(
+    '/*__GENERATED_ASSETS__*/ []',
+  ) ||
+  !serviceWorker.includes(
+    '__BUILD_CACHE__',
+  )
+) {
+  throw new Error(
+    'Source service worker must retain build-time precache markers.',
+  );
+}
+
+if (existsSync('dist/sw.js')) {
+  const builtServiceWorker = readFileSync(
+    'dist/sw.js',
+    'utf8',
+  );
+
+  if (
+    builtServiceWorker.includes(
+      '/*__GENERATED_ASSETS__*/ []',
+    ) ||
+    builtServiceWorker.includes(
+      '__BUILD_CACHE__',
+    )
+  ) {
+    throw new Error(
+      'Production service worker still contains unresolved build markers.',
+    );
+  }
+
+  if (
+    !builtServiceWorker.includes(
+      '/assets/',
+    )
+  ) {
+    throw new Error(
+      'Production service worker must precache generated code-split assets.',
+    );
+  }
+
+  if (
+    !builtServiceWorker.includes(
+      "url.pathname.startsWith('/api/')",
+    )
+  ) {
+    throw new Error(
+      'Built service worker must keep KataGo API traffic out of caches.',
+    );
+  }
+}
+
 console.log('Platform assets verified.');
