@@ -27,7 +27,7 @@ const requiredFiles = [
 for (const path of requiredFiles) {
   if (!existsSync(path)) {
     throw new Error(
-      `C0 release baseline is missing ${path}.`,
+      `Release baseline is missing ${path}.`,
     );
   }
 }
@@ -200,6 +200,10 @@ const deployWorkflow = readFileSync(
   '.github/workflows/deploy-pages.yml',
   'utf8',
 );
+const canonicalWorkflow = readFileSync(
+  '.github/workflows/canonical-deploy-qa.yml',
+  'utf8',
+);
 const playwright = readFileSync(
   'playwright.config.ts',
   'utf8',
@@ -212,6 +216,7 @@ for (const [
   ['verify', verifyWorkflow],
   ['browser-qa', browserWorkflow],
   ['deploy-pages', deployWorkflow],
+  ['canonical-deploy-qa', canonicalWorkflow],
 ]) {
   if (
     !workflow.includes(
@@ -247,6 +252,22 @@ if (
 ) {
   throw new Error(
     'Production deployment must stamp and verify release source metadata.',
+  );
+}
+
+if (
+  !canonicalWorkflow.includes(
+    'https://thiepn.dev/go/',
+  ) ||
+  !canonicalWorkflow.includes(
+    'EXPECTED_RELEASE_SHA:',
+  ) ||
+  !canonicalWorkflow.includes(
+    'npm run qa:canonical',
+  )
+) {
+  throw new Error(
+    'Canonical deployment workflow must certify the live /go/ release and exact source SHA.',
   );
 }
 
