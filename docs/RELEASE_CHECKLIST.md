@@ -1,6 +1,6 @@
 # v1.0 Release Checklist
 
-Candidate: **1.0.0-rc.2**
+Candidate: **1.0.0-rc.3**
 
 This checklist is the release control surface. Individual phase documents hold
 the detailed evidence.
@@ -20,11 +20,11 @@ the detailed evidence.
 
 ## C1 — Canonical deployment
 
-- [ ] `https://thiepn.dev/go/` serves the candidate.
-- [ ] No asset/root-path leakage.
-- [ ] Refresh and navigation work at canonical path.
-- [ ] Manifest/start URL/scope are correct.
-- [ ] Service-worker install/update/offline behavior passes.
+- [x] `https://thiepn.dev/go/` serves the candidate.
+- [x] No asset/root-path leakage.
+- [x] Refresh and navigation work at canonical path.
+- [x] Manifest/start URL/scope are correct.
+- [x] Service-worker install/update/offline behavior passes.
 
 ## C2 — KataGo production runtime
 
