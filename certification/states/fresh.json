@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "fresh",
+  "description": "No Go local state. Use for true first-launch qualification.",
+  "localStorage": {}
+}
