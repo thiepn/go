@@ -10,6 +10,24 @@ import { join, posix } from 'node:path';
 const distDir = 'dist';
 const assetDir = join(distDir, 'assets');
 const swPath = join(distDir, 'sw.js');
+const candidate = JSON.parse(
+  readFileSync(
+    'certification/release-candidate.json',
+    'utf8',
+  ),
+);
+
+const appBase = candidate.canonicalPath;
+
+if (
+  typeof appBase !== 'string' ||
+  !appBase.startsWith('/') ||
+  !appBase.endsWith('/')
+) {
+  throw new Error(
+    'Canonical app path must start and end with /.',
+  );
+}
 
 function walk(directory, prefix = 'assets') {
   return readdirSync(
@@ -40,14 +58,17 @@ function walk(directory, prefix = 'assets') {
   });
 }
 
-const assets = walk(assetDir)
+const generatedFiles = walk(assetDir)
   .filter((path) =>
     /\.(?:js|css|woff2?|png|svg|webp|avif)$/.test(
       path,
     ),
   )
-  .sort()
-  .map((path) => `/${path}`);
+  .sort();
+
+const assets = generatedFiles.map(
+  (path) => `${appBase}${path}`,
+);
 
 if (assets.length === 0) {
   throw new Error(
@@ -55,11 +76,11 @@ if (assets.length === 0) {
   );
 }
 
-const buildFingerprint = assets
+const buildFingerprint = generatedFiles
   .map((path) => {
     const file = join(
       distDir,
-      path.replace(/^\//, ''),
+      path,
     );
 
     return `${path}:${statSync(file).size}`;
@@ -80,10 +101,13 @@ const assetMarker =
   '/*__GENERATED_ASSETS__*/ []';
 const cacheMarker =
   '__BUILD_CACHE__';
+const baseMarker =
+  '__APP_BASE__';
 
 if (
   !serviceWorker.includes(assetMarker) ||
-  !serviceWorker.includes(cacheMarker)
+  !serviceWorker.includes(cacheMarker) ||
+  !serviceWorker.includes(baseMarker)
 ) {
   throw new Error(
     'Service-worker build markers are missing.',
@@ -102,6 +126,10 @@ serviceWorker = serviceWorker
   .replaceAll(
     cacheMarker,
     buildId,
+  )
+  .replaceAll(
+    baseMarker,
+    appBase,
   );
 
 writeFileSync(
@@ -111,5 +139,5 @@ writeFileSync(
 );
 
 console.log(
-  `Offline precache finalized: ${assets.length} generated assets, cache ${buildId}.`,
+  `Offline precache finalized: ${assets.length} generated assets at ${appBase}, cache ${buildId}.`,
 );

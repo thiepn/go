@@ -629,8 +629,8 @@ M5 is the core product outcome.
 The implementation and automated visual tracks are closed. The remaining work
 is finite certification and release work.
 
-- **C0 — Release Baseline & Freeze** — implementation complete; final branch gates pending
-- **C1 — Canonical /go/ Deployment** — next
+- **C0 — Release Baseline & Freeze** — complete
+- **C1 — Canonical /go/ Deployment** — rc.2 implementation complete; pre-merge and live post-deploy certification pending
 - **C2 — Live KataGo Runtime**
 - **C3 — Production Account & Sync Certification**
 - **C4 — Physical Mobile & PWA Qualification**

@@ -1,0 +1,51 @@
+name: canonical-deploy-qa
+
+on:
+  workflow_run:
+    workflows: ["Deploy Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-deploy:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout deployed source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Certify canonical deployment
+        run: npm run qa:canonical
+        env:
+          PLAYWRIGHT_BASE_URL: https://thiepn.dev/go/
+          EXPECTED_RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Upload canonical failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-deploy-qa-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 30

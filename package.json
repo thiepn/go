@@ -1,7 +1,7 @@
 {
   "name": "@thiepn/go",
   "private": true,
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,8 @@
     "check:a11y": "node scripts/check-accessibility.mjs",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "qa:browser": "playwright test",
-    "check:release": "node scripts/check-release-baseline.mjs"
+    "check:release": "node scripts/check-release-baseline.mjs",
+    "qa:canonical": "playwright test tests/e2e/canonical-deploy.e2e.ts --project=chromium-mobile"
   },
   "dependencies": {
     "react": "^19.1.0",

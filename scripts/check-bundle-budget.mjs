@@ -7,6 +7,13 @@ import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
 const dist = 'dist';
+const candidate = JSON.parse(
+  readFileSync(
+    'certification/release-candidate.json',
+    'utf8',
+  ),
+);
+const appBase = candidate.canonicalPath;
 const html = readFileSync(
   join(dist, 'index.html'),
   'utf8',
@@ -16,9 +23,17 @@ function assetPaths(pattern) {
   return [...html.matchAll(pattern)]
     .map((match) => match[1])
     .filter(Boolean)
-    .map((path) =>
-      path.replace(/^\//, ''),
-    );
+    .map((path) => {
+      if (!path.startsWith(appBase)) {
+        throw new Error(
+          `Initial asset URL ${path} is outside canonical base ${appBase}.`,
+        );
+      }
+
+      return path.slice(
+        appBase.length,
+      );
+    });
 }
 
 const initialJs = assetPaths(

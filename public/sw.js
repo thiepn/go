@@ -1,13 +1,14 @@
 const SHELL_CACHE = 'thiepn-go-shell-__BUILD_CACHE__';
 const RUNTIME_CACHE = 'thiepn-go-runtime-v1';
+const APP_BASE = '__APP_BASE__';
 const GENERATED_ASSETS = /*__GENERATED_ASSETS__*/ [];
 const APP_SHELL = [
-  '/',
-  '/offline.html',
-  '/manifest.webmanifest',
-  '/icon.svg',
-  '/icon-192.png',
-  '/icon-512.png',
+  APP_BASE,
+  `${APP_BASE}offline.html`,
+  `${APP_BASE}manifest.webmanifest`,
+  `${APP_BASE}icon.svg`,
+  `${APP_BASE}icon-192.png`,
+  `${APP_BASE}icon-512.png`,
   ...GENERATED_ASSETS,
 ];
 
@@ -15,7 +16,7 @@ async function cacheAppShell() {
   const cache = await caches.open(SHELL_CACHE);
   await cache.addAll(APP_SHELL);
 
-  const root = await cache.match('/');
+  const root = await cache.match(APP_BASE);
   if (!root) return;
 
   const html = await root.clone().text();
@@ -25,8 +26,8 @@ async function cacheAppShell() {
     .map((match) => match[1])
     .filter(
       (path) =>
-        path.startsWith('/assets/') ||
-        path.startsWith('/src/'),
+        path.startsWith(`${APP_BASE}assets/`) ||
+        path.startsWith(`${APP_BASE}src/`),
     );
 
   await Promise.allSettled(
@@ -75,8 +76,10 @@ async function networkFirst(request) {
   } catch {
     return (
       (await caches.match(request)) ||
-      (await caches.match('/')) ||
-      (await caches.match('/offline.html'))
+      (await caches.match(APP_BASE)) ||
+      (await caches.match(
+        `${APP_BASE}offline.html`,
+      ))
     );
   }
 }
@@ -104,7 +107,15 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith('/api/')) return;
+
+  if (
+    url.pathname.startsWith('/api/') ||
+    url.pathname.startsWith(
+      `${APP_BASE}api/`,
+    )
+  ) {
+    return;
+  }
 
   if (request.mode === 'navigate') {
     event.respondWith(networkFirst(request));

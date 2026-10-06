@@ -8,9 +8,14 @@ export async function registerServiceWorker(): Promise<boolean> {
   }
 
   try {
-    await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-    });
+    const appBase = import.meta.env.BASE_URL;
+
+    await navigator.serviceWorker.register(
+      `${appBase}sw.js`,
+      {
+        scope: appBase,
+      },
+    );
     return true;
   } catch {
     return false;

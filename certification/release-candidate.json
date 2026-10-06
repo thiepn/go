@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "candidate": "1.0.0-rc.1",
+  "candidate": "1.0.0-rc.2",
   "track": "v1.0",
-  "phase": "C0",
+  "phase": "C1",
   "status": "frozen",
   "canonicalUrl": "https://thiepn.dev/go/",
   "canonicalPath": "/go/",
@@ -29,5 +29,7 @@
     "C13",
     "C14",
     "C15"
-  ]
+  ],
+  "supersedes": "1.0.0-rc.1",
+  "invalidationReason": "C1 found root-scoped Vite/PWA paths incompatible with the frozen canonical /go/ deployment target."
 }

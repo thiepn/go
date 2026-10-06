@@ -43,7 +43,7 @@ test.beforeEach(async ({ page }) => {
 test('home remains readable without horizontal overflow', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   await expect(
     page.getByRole('heading', {
@@ -80,7 +80,7 @@ test('large-text high-contrast lesson remains keyboard-operable', async ({
     { key: preferenceKey },
   );
 
-  await page.goto('/');
+  await page.goto('./');
   await page.getByRole('button', {
     name: 'Start learning',
   }).click();
@@ -138,7 +138,7 @@ test('19x19 play uses one hit surface and contained precision zoom', async ({
     { key: firstGameKey },
   );
 
-  await page.goto('/');
+  await page.goto('./');
   await page.getByRole('button', {
     name: 'Play',
   }).click();
