@@ -22,6 +22,9 @@ describe('platform preferences', () => {
       sound: true,
       haptics: false,
       reduceMotion: false,
+      highContrast: false,
+      largeText: false,
+      showCoordinates: false,
     });
   });
 });
