@@ -1,5 +1,6 @@
-const SHELL_CACHE = 'thiepn-go-shell-v1';
+const SHELL_CACHE = 'thiepn-go-shell-__BUILD_CACHE__';
 const RUNTIME_CACHE = 'thiepn-go-runtime-v1';
+const GENERATED_ASSETS = /*__GENERATED_ASSETS__*/ [];
 const APP_SHELL = [
   '/',
   '/offline.html',
@@ -7,6 +8,7 @@ const APP_SHELL = [
   '/icon.svg',
   '/icon-192.png',
   '/icon-512.png',
+  ...GENERATED_ASSETS,
 ];
 
 async function cacheAppShell() {
