@@ -1,4 +1,4 @@
-import type { Stone } from '../go/engine';
+import type { Point, Stone } from '../go/engine';
 import {
   createStudyDocument,
   createStudyNodeId,
