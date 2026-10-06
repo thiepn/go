@@ -11,7 +11,7 @@ import type {
 export const COACH_PLANS_STORAGE_KEY =
   'thiepn-go:coach-plans:v1';
 
-interface CoachStoreState {
+export interface CoachStoreState {
   readonly activePlanId: string | null;
   readonly plans: readonly CoachPlan[];
 }
