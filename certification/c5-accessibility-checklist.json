@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "phase": "C5",
+  "candidate": "1.0.0-rc.6",
+  "target": "WCAG 2.2 AA for product UI, plus the release-specific assistive-technology checks below",
+  "evidencePolicy": "Automated browser evidence may certify DOM/keyboard/reflow/media-query behavior. VoiceOver, TalkBack, actual browser zoom, and Windows High Contrast must be executed in the named real OS/assistive-technology environment and may not be inferred from emulation.",
+  "automated": [
+    "keyboard-only fresh lesson entry and interactive board operation",
+    "keyboard-only independent-play entry and move placement",
+    "320 CSS px reflow in Chromium, Firefox, and WebKit",
+    "large-text plus high-contrast reflow at 320 CSS px",
+    "interactive board accessible name, role description, keyboard shortcuts, instructions, and live focused-coordinate status",
+    "Chromium forced-colors board structure and visible focus",
+    "prefers-reduced-motion transition and board-animation suppression",
+    "AA text-token contrast on light and dark paper surfaces",
+    "3:1 focus-indicator contrast on light and dark paper surfaces"
+  ],
+  "manual": [
+    {
+      "id": "voiceover-ios",
+      "required": true,
+      "environment": "Current iPhone/iPad Safari or installed Home Screen app with VoiceOver",
+      "checks": [
+        "Home controls are announced with meaningful names and roles",
+        "Lesson heading/instruction order is understandable",
+        "Interactive Go board is announced by label and custom role description",
+        "Board instructions are discoverable",
+        "Focused/interacted coordinates and stone state are announced without duplicate SVG noise",
+        "Feedback/status/error messages are announced",
+        "Precision Zoom control state is announced",
+        "No focus trap prevents leaving the board or returning home"
+      ]
+    },
+    {
+      "id": "talkback-android",
+      "required": true,
+      "environment": "Current Android Chrome or installed PWA with TalkBack",
+      "checks": [
+        "Home controls are announced with meaningful names and roles",
+        "Lesson and Play setup reading order is coherent",
+        "Interactive board label/instructions/status are discoverable",
+        "Board interaction does not create duplicate SVG announcements",
+        "Feedback/status/error messages are announced",
+        "Precision Zoom control state is announced",
+        "No focus trap prevents leaving the board or app section"
+      ]
+    },
+    {
+      "id": "windows-forced-colors",
+      "required": true,
+      "environment": "Windows current stable Edge/Chrome with Windows High Contrast / forced colors",
+      "checks": [
+        "Text, controls, focus, board grid, black/white stones, last move, and teaching highlights remain distinguishable",
+        "No critical meaning depends on preserved author colors",
+        "Disabled and selected states remain identifiable"
+      ]
+    },
+    {
+      "id": "browser-zoom",
+      "required": true,
+      "environment": "Desktop Chromium and Firefox; Safari where available",
+      "checks": [
+        "200% browser zoom preserves all core controls and reading order",
+        "400% browser zoom preserves reflow without two-dimensional page scrolling outside the Go board/game exception",
+        "Focused controls are not obscured",
+        "Precision board scrolling remains contained inside its viewport"
+      ]
+    },
+    {
+      "id": "reduced-motion",
+      "required": true,
+      "environment": "At least one desktop OS and one mobile OS with Reduce Motion enabled",
+      "checks": [
+        "Decorative transitions and stone/highlight animation are suppressed",
+        "No essential state change relies on animation",
+        "Scrolling/focus movement remains usable"
+      ]
+    },
+    {
+      "id": "larger-text-contrast",
+      "required": true,
+      "environment": "Canonical production app",
+      "checks": [
+        "Larger interface text does not clip labels or controls",
+        "Higher contrast remains readable in light and dark system themes",
+        "320px-equivalent narrow layout remains usable"
+      ]
+    }
+  ],
+  "recordFields": [
+    "environment/device",
+    "OS version",
+    "browser version",
+    "assistive technology and version if applicable",
+    "display/theme/zoom setting",
+    "pass/fail",
+    "defect severity if failed",
+    "evidence reference",
+    "tester",
+    "timestamp"
+  ]
+}
