@@ -1,7 +1,7 @@
 {
   "name": "@thiepn/go",
   "private": true,
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,7 +19,9 @@
     "qa:canonical": "playwright test tests/e2e/canonical-deploy.e2e.ts --project=chromium-mobile",
     "qa:katago:live": "node scripts/check-katago-live.mjs",
     "qa:account:public": "playwright test tests/e2e/account-production.e2e.ts --project=chromium-mobile",
-    "qa:account:credentialed": "playwright test tests/e2e/account-credentialed.e2e.ts --project=chromium-mobile"
+    "qa:account:credentialed": "playwright test tests/e2e/account-credentialed.e2e.ts --project=chromium-mobile",
+    "check:c4": "node scripts/check-c4.mjs",
+    "qa:c4:emulation": "playwright test -c playwright.c4.config.ts"
   },
   "dependencies": {
     "react": "^19.1.0",
