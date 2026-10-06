@@ -184,6 +184,12 @@ export function App() {
     useState(false);
 
   useEffect(() => {
+    if (account.recoveryMode) {
+      setMode('account');
+    }
+  }, [account.recoveryMode]);
+
+  useEffect(() => {
     const refreshUnlock = () => {
       setPracticeUnlocked(
         hasFirstGameComplete(),

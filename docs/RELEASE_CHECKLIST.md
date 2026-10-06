@@ -1,6 +1,6 @@
 # v1.0 Release Checklist
 
-Candidate: **1.0.0-rc.3**
+Candidate: **1.0.0-rc.4**
 
 This checklist is the release control surface. Individual phase documents hold
 the detailed evidence.

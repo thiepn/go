@@ -141,11 +141,12 @@ Repository and backend implementation are complete, but the phase does not
 claim live OAuth/sync certification until the app is actually served from the
 canonical `https://thiepn.dev/go/` origin.
 
-The live smoke must cover:
+The C3 live certification must cover:
 - signed-out boot with no account dependency;
 - email/password sign-in;
 - Google OAuth return;
-- password reset return;
+- password-reset request and real recovery return;
+- recovery-session password replacement through the central SDK;
 - first sign-in merge of existing local progress;
 - two-browser/device conflict merge;
 - offline learning while a prior account session exists;
@@ -153,3 +154,16 @@ The live smoke must cover:
 - backup export/import;
 - local sign-out;
 - Go-only cloud-data deletion.
+
+C3 release candidate rc.4 adds the missing recovery-completion experience:
+Go subscribes to the central auth state before initial session resolution,
+recognizes `PASSWORD_RECOVERY`, opens Account automatically, and calls the
+central SDK's `updatePassword` from a confirmable new-password form.
+
+Automation is split deliberately:
+- `account-production-qa` is non-destructive and runs after Pages deploys;
+- `account-c3-certification` requires a dedicated disposable test account and
+  performs destructive/two-device sync checks;
+- successful Google provider return and real recovery-email return remain
+  explicit interactive evidence gates because CI must not use a personal
+  account or mailbox.

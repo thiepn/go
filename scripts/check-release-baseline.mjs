@@ -208,6 +208,14 @@ const katagoWorkflow = readFileSync(
   '.github/workflows/katago-live-qa.yml',
   'utf8',
 );
+const accountPublicWorkflow = readFileSync(
+  '.github/workflows/account-production-qa.yml',
+  'utf8',
+);
+const accountCredentialedWorkflow = readFileSync(
+  '.github/workflows/account-c3-certification.yml',
+  'utf8',
+);
 const playwright = readFileSync(
   'playwright.config.ts',
   'utf8',
@@ -222,6 +230,8 @@ for (const [
   ['deploy-pages', deployWorkflow],
   ['canonical-deploy-qa', canonicalWorkflow],
   ['katago-live-qa', katagoWorkflow],
+  ['account-production-qa', accountPublicWorkflow],
+  ['account-c3-certification', accountCredentialedWorkflow],
 ]) {
   if (
     !workflow.includes(
@@ -296,6 +306,73 @@ if (
 ) {
   throw new Error(
     'Pages deployment must inject the configured KataGo proxy base.',
+  );
+}
+
+if (
+  !accountPublicWorkflow.includes(
+    'https://thiepn.dev/go/',
+  ) ||
+  !accountPublicWorkflow.includes(
+    'npm run qa:account:public',
+  )
+) {
+  throw new Error(
+    'C3 public account workflow must smoke the canonical production app.',
+  );
+}
+
+if (
+  !accountCredentialedWorkflow.includes(
+    'C3_TEST_EMAIL',
+  ) ||
+  !accountCredentialedWorkflow.includes(
+    'C3_TEST_PASSWORD',
+  ) ||
+  !accountCredentialedWorkflow.includes(
+    'npm run qa:account:credentialed',
+  )
+) {
+  throw new Error(
+    'C3 credentialed workflow must require a dedicated destructive test account.',
+  );
+}
+
+const accountProvider = readFileSync(
+  'src/account/AccountProvider.tsx',
+  'utf8',
+);
+const accountPanel = readFileSync(
+  'src/account/AccountPanel.tsx',
+  'utf8',
+);
+
+if (
+  !accountProvider.includes(
+    'PASSWORD_RECOVERY',
+  ) &&
+  !readFileSync(
+    'src/account/recovery.ts',
+    'utf8',
+  ).includes(
+    'PASSWORD_RECOVERY',
+  )
+) {
+  throw new Error(
+    'C3 requires explicit PASSWORD_RECOVERY handling.',
+  );
+}
+
+if (
+  !accountProvider.includes(
+    'completePasswordRecovery',
+  ) ||
+  !accountPanel.includes(
+    'Update password',
+  )
+) {
+  throw new Error(
+    'C3 requires a user-facing password recovery completion flow.',
   );
 }
 

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "candidate": "1.0.0-rc.3",
+  "candidate": "1.0.0-rc.4",
   "track": "v1.0",
-  "phase": "C2",
+  "phase": "C3",
   "status": "frozen",
   "canonicalUrl": "https://thiepn.dev/go/",
   "canonicalPath": "/go/",
@@ -30,6 +30,6 @@
     "C14",
     "C15"
   ],
-  "supersedes": "1.0.0-rc.2",
-  "invalidationReason": "C2 adds the external KataGo proxy endpoint contract and production runtime hardening required by the static GitHub Pages deployment."
+  "supersedes": "1.0.0-rc.3",
+  "invalidationReason": "C3 found that password-reset initiation existed but Go did not expose the PASSWORD_RECOVERY completion flow required to set a new password."
 }

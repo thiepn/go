@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0-rc.4 — C3 account certification candidate
+
+Supersedes rc.3 after C3 found that Go could initiate password recovery but did
+not expose the recovery-session password update required to complete the flow.
+
+Changes:
+- subscribes to THIEPN Account auth state before resolving the initial session;
+- recognizes the canonical `PASSWORD_RECOVERY` event;
+- opens the account workspace automatically for recovery sessions;
+- adds a confirmable new-password form using the central SDK `updatePassword`;
+- adds non-destructive live production account smoke tests;
+- adds a dedicated destructive two-device credentialed certification workflow;
+- verifies first-sign-in merge, two-device convergence, offline local work,
+  reconnect sync, local-scope sign-out, backup/restore, and Go-only cloud delete
+  without turning a network failure into logout.
+
 ## 1.0.0-rc.2 — C1 canonical deployment candidate
 
 Supersedes rc.1 after C1 found that the frozen app was still built and registered
