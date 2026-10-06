@@ -202,6 +202,83 @@ export function PlatformSettings({
 
           <section className="platform-settings-card">
             <div>
+              <h2>Reading & contrast</h2>
+              <p>
+                Browser zoom still works normally. These options add a stable
+                in-app variant for longer study sessions.
+              </p>
+            </div>
+
+            <label className="platform-toggle">
+              <span>
+                <strong>Larger interface text</strong>
+                <small>
+                  Increase the app's base text size while preserving responsive
+                  reflow.
+                </small>
+              </span>
+              <input
+                type="checkbox"
+                checked={preferences.largeText}
+                onChange={(event) =>
+                  setPreferences({
+                    largeText: event.target.checked,
+                  })
+                }
+              />
+            </label>
+
+            <label className="platform-toggle">
+              <span>
+                <strong>Higher contrast</strong>
+                <small>
+                  Strengthen secondary text, borders, and focus treatment in
+                  addition to any operating-system contrast preference.
+                </small>
+              </span>
+              <input
+                type="checkbox"
+                checked={preferences.highContrast}
+                onChange={(event) =>
+                  setPreferences({
+                    highContrast: event.target.checked,
+                  })
+                }
+              />
+            </label>
+          </section>
+
+          <section className="platform-settings-card">
+            <div>
+              <h2>Board orientation</h2>
+              <p>
+                Coordinates provide a persistent spatial reference without
+                changing the rules or lesson content.
+              </p>
+            </div>
+
+            <label className="platform-toggle">
+              <span>
+                <strong>Show board coordinates</strong>
+                <small>
+                  Display standard Go coordinates on every board. The letter I
+                  is skipped, following Go convention.
+                </small>
+              </span>
+              <input
+                type="checkbox"
+                checked={preferences.showCoordinates}
+                onChange={(event) =>
+                  setPreferences({
+                    showCoordinates: event.target.checked,
+                  })
+                }
+              />
+            </label>
+          </section>
+
+          <section className="platform-settings-card">
+            <div>
               <h2>Offline & storage</h2>
               <p>
                 Core learning remains local-first. Engine analysis may still
