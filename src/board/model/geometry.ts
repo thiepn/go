@@ -2,6 +2,7 @@ import type { Point } from '../../go/engine';
 
 export const BOARD_VIEWBOX_SIZE = 1000;
 export const BOARD_INSET = 72;
+export const PRECISION_TOUCH_SPACING = 44;
 
 export interface BoardGeometry {
   readonly size: number;
@@ -79,4 +80,23 @@ const GO_COLUMNS = 'ABCDEFGHJKLMNOPQRSTUVWXYZ';
 export function coordinateLabel(point: Point, size: number): string {
   const column = GO_COLUMNS[point.x] ?? String(point.x + 1);
   return `${column}${size - point.y}`;
+}
+
+
+export function getPrecisionBoardWidth(
+  size: number,
+  minimumSpacing = PRECISION_TOUCH_SPACING,
+): number {
+  if (!Number.isFinite(minimumSpacing) || minimumSpacing <= 0) {
+    throw new RangeError('Minimum touch spacing must be positive.');
+  }
+
+  const geometry = getBoardGeometry(size);
+  const gridFraction =
+    geometry.gridSize / BOARD_VIEWBOX_SIZE;
+
+  return Math.ceil(
+    (minimumSpacing * (size - 1)) /
+      gridFraction,
+  );
 }

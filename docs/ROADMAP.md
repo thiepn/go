@@ -607,8 +607,8 @@ Visual development runs in parallel rather than being postponed:
 - **V8** play / scoring visuals — independent play and scoring foundation complete
 - **V9** review / variation visuals — deterministic review and SGF variation foundation complete
 - **V10** engine-analysis visualization — candidate, ownership, beginner translation and coach turning-point surfacing complete
-- **V11** responsive / accessibility variants
-- **V12** visual performance and QA
+- **V11** responsive / accessibility variants — complete implementation
+- **V12** visual performance and QA — next
 
 ## Certification milestones
 

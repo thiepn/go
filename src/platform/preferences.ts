@@ -11,12 +11,18 @@ export interface AppPreferences {
   readonly sound: boolean;
   readonly haptics: boolean;
   readonly reduceMotion: boolean;
+  readonly highContrast: boolean;
+  readonly largeText: boolean;
+  readonly showCoordinates: boolean;
 }
 
 export const DEFAULT_PREFERENCES: AppPreferences = {
   sound: false,
   haptics: true,
   reduceMotion: false,
+  highContrast: false,
+  largeText: false,
+  showCoordinates: false,
 };
 
 type Listener = () => void;
@@ -45,6 +51,18 @@ export function normalizePreferences(
       typeof value.reduceMotion === 'boolean'
         ? value.reduceMotion
         : DEFAULT_PREFERENCES.reduceMotion,
+    highContrast:
+      typeof value.highContrast === 'boolean'
+        ? value.highContrast
+        : DEFAULT_PREFERENCES.highContrast,
+    largeText:
+      typeof value.largeText === 'boolean'
+        ? value.largeText
+        : DEFAULT_PREFERENCES.largeText,
+    showCoordinates:
+      typeof value.showCoordinates === 'boolean'
+        ? value.showCoordinates
+        : DEFAULT_PREFERENCES.showCoordinates,
   };
 }
 
@@ -71,6 +89,10 @@ export function applyPreferences(
 
   document.documentElement.dataset.reduceMotion =
     preferences.reduceMotion ? 'true' : 'false';
+  document.documentElement.dataset.highContrast =
+    preferences.highContrast ? 'true' : 'false';
+  document.documentElement.dataset.largeText =
+    preferences.largeText ? 'true' : 'false';
 }
 
 function ensurePreferences(): void {
