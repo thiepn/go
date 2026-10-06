@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  BOARD_VIEWBOX_SIZE,
+  PRECISION_TOUCH_SPACING,
   coordinateLabel,
   getBoardGeometry,
+  getPrecisionBoardWidth,
   getStarPoints,
   pointToSvg,
 } from './geometry';
@@ -30,6 +33,19 @@ describe('board geometry', () => {
       { x: 2, y: 6 },
       { x: 6, y: 6 },
     ]);
+  });
+
+  it('sizes precision zoom so large boards retain touch spacing', () => {
+    for (const size of [13, 19]) {
+      const geometry = getBoardGeometry(size);
+      const width = getPrecisionBoardWidth(size);
+      const renderedSpacing =
+        (geometry.spacing / BOARD_VIEWBOX_SIZE) * width;
+
+      expect(renderedSpacing).toBeGreaterThanOrEqual(
+        PRECISION_TOUCH_SPACING,
+      );
+    }
   });
 
   it('uses standard Go coordinate letters that skip I', () => {
