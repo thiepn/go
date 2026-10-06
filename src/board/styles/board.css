@@ -1,11 +1,15 @@
 .go-board-frame {
   width: min(100%, 46rem);
+  max-width: 100%;
   min-width: 0;
+  overflow-x: clip;
+  contain: inline-size;
 }
 
 .go-board-viewport {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   overflow: visible;
   scrollbar-gutter: stable both-edges;
 }
