@@ -1,6 +1,12 @@
 import type { ProblemHistory } from '../practice/types';
 import type { ProblemDefinition } from '../practice/types';
 import {
+  isArrayOf,
+  isRecord,
+  readJson,
+  writeJson,
+} from '../platform/storage';
+import {
   createLearningEvidence,
   type LearningEvidenceInput,
 } from './evidence';
@@ -9,46 +15,37 @@ import type { MasteryEvidence } from './types';
 export const MASTERY_EVIDENCE_STORAGE_KEY =
   'thiepn-go:mastery-evidence:v1';
 
-function parseEvidence(raw: string | null): MasteryEvidence[] {
-  if (!raw) return [];
-
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed)
-      ? (parsed as MasteryEvidence[])
-      : [];
-  } catch {
-    return [];
-  }
+function isMasteryEvidence(
+  value: unknown,
+): value is MasteryEvidence {
+  return (
+    isRecord(value) &&
+    typeof value.id === 'string' &&
+    typeof value.conceptId === 'string' &&
+    typeof value.source === 'string' &&
+    typeof value.sourceId === 'string' &&
+    typeof value.outcome === 'number' &&
+    typeof value.weight === 'number' &&
+    typeof value.occurredAt === 'number'
+  );
 }
 
 export function loadMasteryEvidence(): MasteryEvidence[] {
-  if (typeof window === 'undefined') return [];
-
-  try {
-    return parseEvidence(
-      window.localStorage.getItem(
-        MASTERY_EVIDENCE_STORAGE_KEY,
-      ),
-    );
-  } catch {
-    return [];
-  }
+  return readJson(
+    MASTERY_EVIDENCE_STORAGE_KEY,
+    () => [],
+    (value): value is MasteryEvidence[] =>
+      isArrayOf(value, isMasteryEvidence),
+  );
 }
 
 export function saveMasteryEvidence(
   evidence: readonly MasteryEvidence[],
 ): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    window.localStorage.setItem(
-      MASTERY_EVIDENCE_STORAGE_KEY,
-      JSON.stringify(evidence),
-    );
-  } catch {
-    // Learning remains usable without persistence.
-  }
+  writeJson(
+    MASTERY_EVIDENCE_STORAGE_KEY,
+    evidence,
+  );
 }
 
 export function appendMasteryEvidence(
