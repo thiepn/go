@@ -1,7 +1,24 @@
+import {
+  applyCors,
+  fetchWithTimeout,
+  handlePreflight,
+} from './_shared.js';
+
 export default async function handler(
   request,
   response,
 ) {
+  if (handlePreflight(request, response)) {
+    return;
+  }
+
+  if (!applyCors(request, response)) {
+    response.status(403).json({
+      error: 'Origin not allowed.',
+    });
+    return;
+  }
+
   if (request.method !== 'GET') {
     response.setHeader('Allow', 'GET');
     response.status(405).json({
@@ -22,7 +39,7 @@ export default async function handler(
   }
 
   try {
-    const upstream = await fetch(
+    const upstream = await fetchWithTimeout(
       `${bridgeUrl.replace(/\/$/, '')}/health`,
       {
         headers: process.env
@@ -33,6 +50,7 @@ export default async function handler(
             }
           : {},
       },
+      5_000,
     );
 
     const body = await upstream

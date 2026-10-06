@@ -51,6 +51,7 @@ jobs:
         run: npm run build
         env:
           THIEPN_RELEASE_SHA: ${{ steps.release.outputs.sha }}
+          VITE_KATAGO_API_BASE: ${{ vars.KATAGO_API_BASE }}
 
       - name: Verify release baseline
         run: |

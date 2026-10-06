@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/katago/analyze.js": {
+      "maxDuration": 120
+    },
+    "api/katago/health.js": {
+      "maxDuration": 10
+    }
+  }
+}

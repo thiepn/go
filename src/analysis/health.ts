@@ -1,3 +1,7 @@
+import {
+  kataGoEndpoint,
+} from './endpoints';
+
 export interface KataGoHealth {
   readonly configured: boolean;
   readonly ready: boolean;
@@ -9,7 +13,7 @@ export async function fetchKataGoHealth(
 ): Promise<KataGoHealth> {
   try {
     const response = await fetchImpl(
-      '/api/katago/health',
+      kataGoEndpoint('health'),
       {
         headers: {
           accept: 'application/json',

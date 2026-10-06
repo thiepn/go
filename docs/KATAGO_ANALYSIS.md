@@ -1,10 +1,10 @@
 # KataGo Analysis Adapter
 
-## P11 status
+## P11 / C2 status
 
-P11's application-side integration is implemented.
+P11's application-side integration is implemented. C2 adds the production external-proxy contract, workload guards, live 9×9/13×13/19×19 certification script, and explicit bridge overload/timeout behavior.
 
-A live engine result requires an external KataGo analysis process and compatible neural-network model to be configured.
+A live engine result still requires an external KataGo analysis process and compatible neural-network model to be configured. The current C2 candidate is `1.0.0-rc.3`; live certification remains blocked until the connected Vercel team scope is re-authorized and the proxy/engine host can be activated.
 
 The rest of the Go app remains fully usable when KataGo is offline or absent.
 

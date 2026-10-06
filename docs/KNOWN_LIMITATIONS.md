@@ -29,7 +29,6 @@ These do not block v1.0 unless testing shows they prevent the product promise.
 
 These must be resolved or explicitly certified before v1.0:
 
-- canonical `https://thiepn.dev/go/` deployment;
 - production KataGo/model runtime;
 - production email/password, Google OAuth, recovery, and sync lifecycle;
 - physical Android/iOS/iPad PWA behavior;

@@ -1,0 +1,49 @@
+name: katago-live-qa
+
+on:
+  workflow_run:
+    workflows: ["Deploy Pages"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  kata-go-live:
+    if: >
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success') &&
+      vars.KATAGO_API_BASE != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Resolve release SHA
+        id: release
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            echo "sha=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout deployed source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.release.outputs.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Certify live KataGo runtime
+        run: npm run qa:katago:live
+        env:
+          KATAGO_C2_API_BASE: ${{ vars.KATAGO_API_BASE }}
+          KATAGO_C2_VISITS: "80"
+          KATAGO_C2_TIMEOUT_MS: "90000"

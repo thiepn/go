@@ -204,6 +204,10 @@ const canonicalWorkflow = readFileSync(
   '.github/workflows/canonical-deploy-qa.yml',
   'utf8',
 );
+const katagoWorkflow = readFileSync(
+  '.github/workflows/katago-live-qa.yml',
+  'utf8',
+);
 const playwright = readFileSync(
   'playwright.config.ts',
   'utf8',
@@ -217,6 +221,7 @@ for (const [
   ['browser-qa', browserWorkflow],
   ['deploy-pages', deployWorkflow],
   ['canonical-deploy-qa', canonicalWorkflow],
+  ['katago-live-qa', katagoWorkflow],
 ]) {
   if (
     !workflow.includes(
@@ -268,6 +273,29 @@ if (
 ) {
   throw new Error(
     'Canonical deployment workflow must certify the live /go/ release and exact source SHA.',
+  );
+}
+
+if (
+  !katagoWorkflow.includes(
+    'KATAGO_API_BASE',
+  ) ||
+  !katagoWorkflow.includes(
+    'npm run qa:katago:live',
+  )
+) {
+  throw new Error(
+    'C2 live KataGo certification workflow is missing.',
+  );
+}
+
+if (
+  !deployWorkflow.includes(
+    'VITE_KATAGO_API_BASE:',
+  )
+) {
+  throw new Error(
+    'Pages deployment must inject the configured KataGo proxy base.',
   );
 }
 
