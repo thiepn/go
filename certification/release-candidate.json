@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "candidate": "1.0.0-rc.1",
+  "track": "v1.0",
+  "phase": "C0",
+  "status": "frozen",
+  "canonicalUrl": "https://thiepn.dev/go/",
+  "canonicalPath": "/go/",
+  "nodeMajor": 22,
+  "baselinePolicy": "The C0 merge commit on main is the immutable rc.1 source baseline. Any source, content, dependency, schema, or deployment-behavior change after that commit creates a new rc.N candidate and invalidates affected certification evidence.",
+  "requiredChecks": [
+    "verify",
+    "browser-qa",
+    "THIEPN Account Contract"
+  ],
+  "certificationOrder": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "C10",
+    "C11",
+    "C12",
+    "C13",
+    "C14",
+    "C15"
+  ]
+}

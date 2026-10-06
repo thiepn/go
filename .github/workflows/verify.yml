@@ -20,7 +20,7 @@ jobs:
           node-version: 22
 
       - name: Install
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Test
         run: npm test
@@ -39,3 +39,6 @@ jobs:
 
       - name: Check responsive accessibility invariants
         run: npm run check:a11y
+
+      - name: Check release baseline
+        run: npm run check:release

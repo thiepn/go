@@ -45,10 +45,15 @@ jobs:
           node-version: 22
 
       - name: Install
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Build production site
         run: npm run build
+        env:
+          THIEPN_RELEASE_SHA: ${{ steps.release.outputs.sha }}
+
+      - name: Verify release baseline
+        run: npm run check:release
 
       - name: Verify deploy artifact
         shell: bash
@@ -56,6 +61,7 @@ jobs:
           test -f dist/index.html
           test -f dist/sw.js
           test -f dist/manifest.webmanifest
+          test -f dist/release.json
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

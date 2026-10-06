@@ -622,3 +622,39 @@ canonical-deployment, and learner-outcome certification remain empirical gates.
 **M5** — targeted practice measurably improves the next game.
 
 M5 is the core product outcome.
+
+
+## Certification & release track
+
+The implementation and automated visual tracks are closed. The remaining work
+is finite certification and release work.
+
+- **C0 — Release Baseline & Freeze** — implementation complete; final branch gates pending
+- **C1 — Canonical /go/ Deployment** — next
+- **C2 — Live KataGo Runtime**
+- **C3 — Production Account & Sync Certification**
+- **C4 — Physical Mobile & PWA Qualification**
+- **C5 — Accessibility Certification**
+- **C6 — M1 Rules & Game Integrity Certification**
+- **C7 — M2/M3 Novice Learning Pilot**
+- **C8 — Pedagogy Hardening**
+- **C9 — M4 Diagnosis Certification**
+- **C10 — M5 Transfer Certification**
+- **C11 — Long-Session & Failure Hardening**
+- **C12 — Release Candidate Acceptance**
+- **C13 — v1.0 Release**
+- **C14 — Real-Use Observation**
+- **C15 — Maintenance Mode**
+
+C0 freezes product scope, candidate identity, platform scope, test profiles,
+dependency resolution, severity definitions, and evidence rules. Certification
+fixes may create a new `1.0.0-rc.N`; affected evidence must then be rerun.
+
+The authoritative release control files are:
+
+- `certification/release-candidate.json`;
+- `certification/platform-matrix.json`;
+- `certification/test-profiles.json`;
+- `docs/RELEASE_BASELINE.md`;
+- `docs/RELEASE_CHECKLIST.md`;
+- `docs/KNOWN_LIMITATIONS.md`.

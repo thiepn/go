@@ -1,11 +1,11 @@
 {
   "name": "@thiepn/go",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0-rc.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/finalize-service-worker.mjs",
+    "build": "tsc -b && vite build && node scripts/finalize-service-worker.mjs && node scripts/finalize-release-metadata.mjs",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -14,7 +14,8 @@
     "check:platform": "node --check public/sw.js && node scripts/check-platform.mjs",
     "check:a11y": "node scripts/check-accessibility.mjs",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
-    "qa:browser": "playwright test"
+    "qa:browser": "playwright test",
+    "check:release": "node scripts/check-release-baseline.mjs"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -28,5 +29,8 @@
     "vite": "^7.0.0",
     "vitest": "^3.2.0",
     "@playwright/test": "^1.63.0"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

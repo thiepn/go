@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "candidate": "1.0.0-rc.1",
+  "minimumViewportWidthCssPx": 320,
+  "automated": [
+    {
+      "id": "chromium-mobile",
+      "engine": "chromium",
+      "class": "mobile-touch",
+      "viewport": "390x844",
+      "required": true
+    },
+    {
+      "id": "firefox-desktop",
+      "engine": "firefox",
+      "class": "desktop-keyboard-pointer",
+      "viewport": "1280x800",
+      "required": true
+    },
+    {
+      "id": "webkit-mobile",
+      "engine": "webkit",
+      "class": "mobile-touch",
+      "viewport": "390x844",
+      "required": true
+    }
+  ],
+  "manualRequired": [
+    {
+      "id": "android-chrome",
+      "scope": "current stable Android Chrome on a physical phone",
+      "installMode": "installed PWA",
+      "phase": "C4"
+    },
+    {
+      "id": "ios-safari",
+      "scope": "current stable iOS Safari on a physical iPhone",
+      "installMode": "Add to Home Screen",
+      "phase": "C4"
+    },
+    {
+      "id": "ipad-safari",
+      "scope": "current stable iPadOS Safari on a physical iPad or equivalent tablet",
+      "installMode": "browser and Add to Home Screen",
+      "phase": "C4"
+    },
+    {
+      "id": "desktop-chromium",
+      "scope": "current stable Chromium-family desktop browser",
+      "installMode": "browser",
+      "phase": "C4"
+    },
+    {
+      "id": "desktop-firefox",
+      "scope": "current stable Firefox desktop",
+      "installMode": "browser",
+      "phase": "C4"
+    },
+    {
+      "id": "desktop-safari",
+      "scope": "current stable Safari desktop",
+      "installMode": "browser",
+      "phase": "C4"
+    }
+  ],
+  "accessibilityRequired": [
+    {
+      "id": "voiceover-ios",
+      "scope": "VoiceOver on physical iPhone/iPad Safari",
+      "phase": "C5"
+    },
+    {
+      "id": "talkback-android",
+      "scope": "TalkBack on physical Android Chrome",
+      "phase": "C5"
+    },
+    {
+      "id": "keyboard-desktop",
+      "scope": "keyboard-only core journey on desktop",
+      "phase": "C5"
+    },
+    {
+      "id": "windows-high-contrast",
+      "scope": "Windows High Contrast / forced-colors on a real Windows browser",
+      "phase": "C5"
+    },
+    {
+      "id": "zoom-reflow",
+      "scope": "200% to 400% browser zoom and 320 CSS px reflow",
+      "phase": "C5"
+    }
+  ],
+  "supportPolicy": "For browser families without an exact pinned OS/browser version in this file, certification targets the current stable release at execution time. A materially different next stable release is treated as compatibility maintenance, not a silent expansion of the original evidence."
+}
