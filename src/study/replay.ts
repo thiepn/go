@@ -16,11 +16,47 @@ import type {
   StudySetup,
 } from './types';
 
+function validateSetup(
+  setup: StudySetup,
+): void {
+  const occupied = new Map<
+    string,
+    'black' | 'white' | 'empty'
+  >();
+
+  const register = (
+    points: readonly Point[] | undefined,
+    kind: 'black' | 'white' | 'empty',
+  ) => {
+    for (const point of points ?? []) {
+      const key = `${point.x},${point.y}`;
+      const previous = occupied.get(key);
+
+      if (
+        previous !== undefined &&
+        previous !== kind
+      ) {
+        throw new Error(
+          `Study setup contains conflicting ${previous}/${kind} edits at (${point.x}, ${point.y}).`,
+        );
+      }
+
+      occupied.set(key, kind);
+    }
+  };
+
+  register(setup.empty, 'empty');
+  register(setup.black, 'black');
+  register(setup.white, 'white');
+}
+
 function applySetup(
   game: GameState,
   setup: StudySetup | undefined,
 ): GameState {
   if (!setup) return game;
+
+  validateSetup(setup);
 
   let board = game.board;
 
