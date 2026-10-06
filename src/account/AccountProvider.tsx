@@ -17,6 +17,9 @@ import {
   type ThiepnUser,
 } from './runtime';
 import {
+  isPasswordRecoveryEvent,
+} from './recovery';
+import {
   deleteGoCloudState,
   syncGoState,
 } from './sync';
@@ -40,6 +43,7 @@ interface AccountContextValue {
   readonly lastSyncedAt: number | null;
   readonly message: string | null;
   readonly supportedOrigin: boolean;
+  readonly recoveryMode: boolean;
   signIn(
     email: string,
     password: string,
@@ -51,6 +55,9 @@ interface AccountContextValue {
   signInWithGoogle(): Promise<void>;
   requestPasswordReset(
     email: string,
+  ): Promise<void>;
+  completePasswordRecovery(
+    password: string,
   ): Promise<void>;
   signOut(): Promise<void>;
   syncNow(): Promise<void>;
@@ -115,6 +122,8 @@ export function AccountProvider({
         ? null
         : 'Account sync is available on thiepn.dev/go. This build remains fully usable locally.',
     );
+  const [recoveryMode, setRecoveryMode] =
+    useState(false);
 
   const accountRef =
     useRef<ThiepnAccount | null>(null);
@@ -230,7 +239,6 @@ export function AccountProvider({
       .then(async (account) => {
         if (!active) return;
         accountRef.current = account;
-        await resolveSession(account);
 
         subscription =
           account.onAuthStateChange(
@@ -239,6 +247,17 @@ export function AccountProvider({
 
               const nextUser =
                 session?.user ?? null;
+
+              if (
+                isPasswordRecoveryEvent(
+                  event,
+                )
+              ) {
+                setRecoveryMode(true);
+                setMessage(
+                  'Choose a new password to finish account recovery.',
+                );
+              }
 
               if (nextUser) {
                 setSignedInUser(
@@ -252,6 +271,7 @@ export function AccountProvider({
                 event === 'SIGNED_OUT' ||
                 event === 'USER_DELETED'
               ) {
+                setRecoveryMode(false);
                 userRef.current = null;
                 setUser(null);
                 setStatus('signed-out');
@@ -260,6 +280,8 @@ export function AccountProvider({
               }
             },
           );
+
+        await resolveSession(account);
       })
       .catch((error: unknown) => {
         if (!active) return;
@@ -455,6 +477,45 @@ export function AccountProvider({
       }
     }, []);
 
+  const completePasswordRecovery =
+    useCallback(
+      async (password: string) => {
+        const account =
+          accountRef.current ??
+          (await loadThiepnAccount());
+        accountRef.current = account;
+
+        try {
+          const nextUser =
+            await account.updatePassword({
+              password,
+            });
+
+          if (nextUser) {
+            setSignedInUser(
+              nextUser,
+              false,
+            );
+          }
+
+          setRecoveryMode(false);
+          setMessage(
+            'Password updated. Your account session remains signed in on this device.',
+          );
+        } catch (error) {
+          setMessage(
+            userMessage(
+              account.classifyError(
+                error,
+              ),
+            ),
+          );
+          throw error;
+        }
+      },
+      [setSignedInUser],
+    );
+
   const signOut = useCallback(async () => {
     const account = accountRef.current;
     if (!account) return;
@@ -466,6 +527,7 @@ export function AccountProvider({
     setUser(null);
     setStatus('signed-out');
     setSyncStatus('idle');
+    setRecoveryMode(false);
     setMessage(null);
   }, []);
 
@@ -497,10 +559,12 @@ export function AccountProvider({
       lastSyncedAt,
       message,
       supportedOrigin,
+      recoveryMode,
       signIn,
       signUp,
       signInWithGoogle,
       requestPasswordReset,
+      completePasswordRecovery,
       signOut,
       syncNow: runSync,
       deleteCloudData,
@@ -513,10 +577,12 @@ export function AccountProvider({
       lastSyncedAt,
       message,
       supportedOrigin,
+      recoveryMode,
       signIn,
       signUp,
       signInWithGoogle,
       requestPasswordReset,
+      completePasswordRecovery,
       signOut,
       runSync,
       deleteCloudData,
