@@ -189,7 +189,12 @@ test('mobile shell respects safe areas and rotation without overflow', async ({
 test('production service worker survives an offline controlled reload with local progress', async ({
   page,
   context,
-}) => {
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !==
+      'android-phone',
+    'Playwright WebKit offline reload is not reliable evidence for physical iOS/iPadOS. Real-device offline cold start remains mandatory.',
+  );
   await page.goto('./', {
     waitUntil: 'networkidle',
   });
@@ -280,7 +285,7 @@ test('production service worker survives an offline controlled reload with local
 
   await expect(
     offlinePage.locator(
-      '.lesson-shell',
+      '.lesson-player',
     ),
   ).toBeVisible();
 
