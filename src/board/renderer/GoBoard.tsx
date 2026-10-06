@@ -4,6 +4,8 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
+  type CSSProperties,
   type KeyboardEvent,
   type PointerEvent,
 } from 'react';
@@ -19,9 +21,14 @@ import {
 import {
   coordinateLabel,
   getBoardGeometry,
+  getPrecisionBoardWidth,
   getStarPoints,
   pointToSvg,
 } from '../model/geometry';
+import {
+  getPreferences,
+  subscribePreferences,
+} from '../../platform/preferences';
 import type {
   BoardHighlight,
   BoardMarker,
@@ -130,7 +137,7 @@ export function GoBoard({
   ghostStone = null,
   ownership = null,
   showPlacementGhost = true,
-  showCoordinates = false,
+  showCoordinates,
   onIntersectionIntent,
   onFocusPointChange,
 }: GoBoardProps) {
@@ -143,6 +150,15 @@ export function GoBoard({
   const blackStoneFill = `url(#${blackStoneId})`;
   const whiteStoneFill = `url(#${whiteStoneId})`;
   const previousBoardRef = useRef<Board | null>(null);
+  const boardShellRef = useRef<HTMLDivElement | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const keyboardNavigationRef = useRef(false);
+  const preferences = useSyncExternalStore(
+    subscribePreferences,
+    getPreferences,
+    getPreferences,
+  );
+  const [precisionZoom, setPrecisionZoom] = useState(false);
   const [entered, setEntered] = useState<readonly StoneAtPoint[]>([]);
   const [exiting, setExiting] = useState<readonly StoneAtPoint[]>([]);
   const [hoveredPoint, setHoveredPoint] = useState<Point | null>(null);
@@ -152,6 +168,30 @@ export function GoBoard({
   });
 
   const starPoints = useMemo(() => getStarPoints(board.size), [board.size]);
+  const coordinatesVisible =
+    showCoordinates ?? preferences.showCoordinates;
+  const canPrecisionZoom =
+    interactive && board.size >= 13;
+  const precisionWidth = useMemo(
+    () => getPrecisionBoardWidth(board.size),
+    [board.size],
+  );
+  const blackCount = useMemo(
+    () =>
+      board.intersections.filter(
+        (value) => value === 'black',
+      ).length,
+    [board.intersections],
+  );
+  const whiteCount = useMemo(
+    () =>
+      board.intersections.filter(
+        (value) => value === 'white',
+      ).length,
+    [board.intersections],
+  );
+  const instructionsId =
+    `${idPrefix}-instructions`;
 
   useEffect(() => {
     const diff = diffBoards(previousBoardRef.current, board);
@@ -176,8 +216,55 @@ export function GoBoard({
   }, [exiting]);
 
   useEffect(() => {
+    setFocusPoint((current) => ({
+      x: clamp(current.x, 0, board.size - 1),
+      y: clamp(current.y, 0, board.size - 1),
+    }));
+  }, [board.size]);
+
+  useEffect(() => {
     onFocusPointChange?.(focusPoint);
   }, [focusPoint, onFocusPointChange]);
+
+  useEffect(() => {
+    if (
+      !precisionZoom ||
+      !keyboardNavigationRef.current
+    ) {
+      return;
+    }
+
+    const viewport = viewportRef.current;
+    const shell = boardShellRef.current;
+    if (!viewport || !shell) return;
+
+    const position = pointToSvg(
+      geometry,
+      focusPoint,
+    );
+    const scale =
+      shell.clientWidth / 1000;
+    const x = position.x * scale;
+    const y = position.y * scale;
+
+    viewport.scrollTo({
+      left:
+        x -
+        viewport.clientWidth / 2,
+      top:
+        y -
+        viewport.clientHeight / 2,
+      behavior:
+        preferences.reduceMotion
+          ? 'auto'
+          : 'smooth',
+    });
+  }, [
+    focusPoint,
+    geometry,
+    precisionZoom,
+    preferences.reduceMotion,
+  ]);
 
   const enteredKeys = useMemo(
     () => new Set(entered.map((stone) => pointKey(stone.point))),
@@ -198,6 +285,7 @@ export function GoBoard({
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!interactive) return;
+    keyboardNavigationRef.current = true;
 
     switch (event.key) {
       case 'ArrowLeft':
@@ -216,6 +304,17 @@ export function GoBoard({
         event.preventDefault();
         moveFocus(0, 1);
         break;
+      case 'Home':
+        event.preventDefault();
+        setFocusPoint({ x: 0, y: 0 });
+        break;
+      case 'End':
+        event.preventDefault();
+        setFocusPoint({
+          x: board.size - 1,
+          y: board.size - 1,
+        });
+        break;
       case 'Enter':
       case ' ':
         event.preventDefault();
@@ -227,9 +326,15 @@ export function GoBoard({
   };
 
   const focusedValue = getIntersection(board, focusPoint);
+  const focusedDescription =
+    focusedValue === null
+      ? 'empty'
+      : `${focusedValue} stone`;
   const statusText = interactive
-    ? `${coordinateLabel(focusPoint, board.size)}, ${focusedValue ?? 'empty'}. Arrow keys move, Enter or Space selects.`
+    ? `${coordinateLabel(focusPoint, board.size)}, ${focusedDescription}.`
     : label;
+  const boardSummary =
+    `${board.size} by ${board.size} Go board. ${blackCount} black stones and ${whiteCount} white stones. Arrow keys move the board cursor. Home moves to the top-left intersection, End to the bottom-right. Enter or Space selects the focused intersection.`;
 
   const renderGroupHalo = (point: Point, group: GroupHighlight) => {
     const { x, y } = pointToSvg(geometry, point);
@@ -293,17 +398,50 @@ export function GoBoard({
 
   return (
     <div
-      className="go-board-shell"
-      role="group"
-      aria-label={label}
-      tabIndex={interactive ? 0 : -1}
-      onKeyDown={onKeyDown}
+      className={[
+        'go-board-frame',
+        precisionZoom
+          ? 'is-precision-zoom'
+          : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      data-board-size={board.size}
+      style={
+        {
+          '--go-precision-width':
+            `${precisionWidth}px`,
+        } as CSSProperties
+      }
     >
+      <div
+        ref={viewportRef}
+        className="go-board-viewport"
+      >
+        <div
+          ref={boardShellRef}
+          className="go-board-shell"
+          role={interactive ? 'group' : undefined}
+          aria-label={interactive ? label : undefined}
+          aria-describedby={
+            interactive
+              ? instructionsId
+              : undefined
+          }
+          aria-keyshortcuts={
+            interactive
+              ? 'ArrowLeft ArrowRight ArrowUp ArrowDown Home End Enter Space'
+              : undefined
+          }
+          tabIndex={interactive ? 0 : -1}
+          onKeyDown={onKeyDown}
+        >
       <svg
         className="go-board"
         viewBox="0 0 1000 1000"
-        role="img"
-        aria-label={label}
+        role={interactive ? undefined : 'img'}
+        aria-label={interactive ? undefined : label}
+        aria-hidden={interactive ? true : undefined}
       >
         <defs>
           <filter id={shadowId} x="-10%" y="-10%" width="120%" height="125%">
@@ -421,7 +559,7 @@ export function GoBoard({
             </g>
           )}
 
-        {showCoordinates && (
+        {coordinatesVisible && (
           <g className="go-board__coordinates" aria-hidden="true">
             {Array.from({ length: board.size }, (_, index) => {
               const topPoint = { x: index, y: 0 };
@@ -590,7 +728,10 @@ export function GoBoard({
                     }
                   }}
                   onPointerLeave={() => setHoveredPoint(null)}
-                  onPointerDown={() => setFocusPoint(point)}
+                  onPointerDown={() => {
+                    keyboardNavigationRef.current = false;
+                    setFocusPoint(point);
+                  }}
                   onClick={() => activate(point)}
                 />
               );
@@ -615,9 +756,48 @@ export function GoBoard({
         )}
       </svg>
 
-      <span className="sr-only" aria-live="polite">
-        {statusText}
-      </span>
+          {interactive && (
+            <>
+              <span
+                id={instructionsId}
+                className="sr-only"
+              >
+                {boardSummary}
+              </span>
+              <span
+                className="sr-only"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {statusText}
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+
+      {canPrecisionZoom && (
+        <div className="go-board-precision">
+          <button
+            type="button"
+            className="go-board-precision__action"
+            aria-pressed={precisionZoom}
+            onClick={() => {
+              keyboardNavigationRef.current = false;
+              setPrecisionZoom((value) => !value);
+            }}
+          >
+            {precisionZoom
+              ? 'Fit whole board'
+              : 'Precision zoom'}
+          </button>
+          <span>
+            {precisionZoom
+              ? 'Pan the board; intersections keep comfortable touch spacing.'
+              : 'Enlarge 13×13 and 19×19 boards for more precise touch placement.'}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
