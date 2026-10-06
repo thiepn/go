@@ -1,24 +1,35 @@
+import {
+  isArrayOf,
+  isRecord,
+  readJson,
+  writeJson,
+} from '../platform/storage';
 import type { StudyDocument } from './types';
 
 export const STUDY_STORAGE_KEY =
   'thiepn-go:studies:v1';
 
+function isStudyDocument(
+  value: unknown,
+): value is StudyDocument {
+  return (
+    isRecord(value) &&
+    typeof value.id === 'string' &&
+    typeof value.title === 'string' &&
+    isRecord(value.metadata) &&
+    isRecord(value.root) &&
+    typeof value.createdAt === 'number' &&
+    typeof value.updatedAt === 'number'
+  );
+}
+
 export function loadStudyDocuments(): StudyDocument[] {
-  if (typeof window === 'undefined') return [];
-
-  try {
-    const raw = window.localStorage.getItem(
-      STUDY_STORAGE_KEY,
-    );
-    if (!raw) return [];
-
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed)
-      ? (parsed as StudyDocument[])
-      : [];
-  } catch {
-    return [];
-  }
+  return readJson(
+    STUDY_STORAGE_KEY,
+    () => [],
+    (value): value is StudyDocument[] =>
+      isArrayOf(value, isStudyDocument),
+  );
 }
 
 export function saveStudyDocument(
@@ -31,9 +42,9 @@ export function saveStudyDocument(
       (item) => item.id !== document.id,
     );
 
-    window.localStorage.setItem(
+    writeJson(
       STUDY_STORAGE_KEY,
-      JSON.stringify([document, ...existing].slice(0, 50)),
+      [document, ...existing].slice(0, 50),
     );
   } catch {
     // Study remains usable without persistence.
@@ -50,9 +61,9 @@ export function deleteStudyDocument(
       (item) => item.id !== documentId,
     );
 
-    window.localStorage.setItem(
+    writeJson(
       STUDY_STORAGE_KEY,
-      JSON.stringify(next),
+      next,
     );
   } catch {
     // Ignore storage failures.
