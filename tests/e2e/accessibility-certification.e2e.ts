@@ -492,7 +492,9 @@ test('forced-colors mode keeps board structure and focus explicit', async ({
       return {
         forcedColorAdjust:
           shellStyle
-            .forcedColorAdjust,
+            .getPropertyValue(
+              'forced-color-adjust',
+            ),
         outlineWidth:
           Number.parseFloat(
             shellStyle
@@ -503,10 +505,15 @@ test('forced-colors mode keeps board structure and focus explicit', async ({
         surfaceStrokeWidth:
           Number.parseFloat(
             surfaceStyle
-              .strokeWidth,
+              .getPropertyValue(
+                'stroke-width',
+              ),
           ),
         gridStroke:
-          gridStyle.stroke,
+          gridStyle
+            .getPropertyValue(
+              'stroke',
+            ),
       };
     });
 
