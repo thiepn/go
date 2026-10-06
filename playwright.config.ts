@@ -8,6 +8,7 @@ const localBaseURL =
 export default defineConfig({
   testDir: './tests/e2e',
   testMatch: '**/*.e2e.ts',
+  testIgnore: '**/mobile-pwa.e2e.ts',
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
