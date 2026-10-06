@@ -1,6 +1,6 @@
 # v1.0 Release Checklist
 
-Candidate: **1.0.0-rc.1**
+Candidate: **1.0.0-rc.2**
 
 This checklist is the release control surface. Individual phase documents hold
 the detailed evidence.
@@ -15,8 +15,8 @@ the detailed evidence.
 - [x] Release severity policy defined.
 - [x] Build/source identification defined.
 - [x] Dependency lockfile generated and aligned with the candidate.
-- [ ] Final C0 workflows green on one head.
-- [ ] C0 merged; merge SHA recorded as the rc.1 baseline externally/in release evidence.
+- [x] Final C0 workflows green on one head.
+- [x] C0 merged; rc.1 baseline recorded as `198febb30e0ee2f5447c64e9afbd68c05af1f10a`.
 
 ## C1 — Canonical deployment
 
