@@ -497,6 +497,11 @@ export function GoBoard({
           ref={boardShellRef}
           className="go-board-shell"
           role={interactive ? 'group' : undefined}
+          aria-roledescription={
+            interactive
+              ? 'interactive Go board'
+              : undefined
+          }
           aria-label={interactive ? label : undefined}
           aria-describedby={
             interactive
