@@ -1,6 +1,7 @@
 import {
   lazy,
   Suspense,
+  useEffect,
   useState,
 } from 'react';
 
@@ -103,6 +104,26 @@ export function App() {
     useState<string | null>(null);
   const [reviewReturnToCoach, setReviewReturnToCoach] =
     useState(false);
+
+  useEffect(() => {
+    const refreshUnlock = () => {
+      setPracticeUnlocked(
+        hasFirstGameComplete(),
+      );
+    };
+
+    window.addEventListener(
+      'thiepn-go:storage-write',
+      refreshUnlock,
+    );
+
+    return () => {
+      window.removeEventListener(
+        'thiepn-go:storage-write',
+        refreshUnlock,
+      );
+    };
+  }, []);
 
   if (studioOpen) {
     return (
