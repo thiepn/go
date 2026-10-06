@@ -370,6 +370,7 @@ for (const size of [
       {
         name:
           `${size}×${size}`,
+        exact: true,
       },
     ).click();
 
