@@ -5,6 +5,8 @@ const APP_SHELL = [
   '/offline.html',
   '/manifest.webmanifest',
   '/icon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
 ];
 
 async function cacheAppShell() {
