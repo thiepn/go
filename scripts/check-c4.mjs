@@ -110,7 +110,7 @@ for (const project of [
 
 for (const requirement of [
   'safe areas and rotation',
-  'offline cold app launch',
+  'offline controlled reload',
   'Launch mode',
   'for (const size of [',
   'board accepts touch',
