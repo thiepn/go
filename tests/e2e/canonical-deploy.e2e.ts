@@ -144,34 +144,44 @@ test('canonical deployment serves the exact release candidate from /go/', async 
     { timeout: 20_000 },
   );
 
-  const goRegistrations =
-    await page.evaluate(async () =>
-      (
-        await navigator.serviceWorker
-          .getRegistrations()
-      )
-        .map((registration) => ({
-          scope: new URL(
-            registration.scope,
-          ).pathname,
-          script: registration.active
-            ? new URL(
-                registration.active.scriptURL,
-              ).pathname
-            : null,
-        }))
-        .filter(
-          (registration) =>
-            registration.scope === '/go/',
-        ),
-    );
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const registrations =
+            await navigator.serviceWorker
+              .getRegistrations();
 
-  expect(goRegistrations).toEqual([
-    {
-      scope: '/go/',
-      script: '/go/sw.js',
-    },
-  ]);
+          return registrations
+            .filter(
+              (registration) =>
+                new URL(
+                  registration.scope,
+                ).pathname === '/go/',
+            )
+            .map((registration) => ({
+              scope: new URL(
+                registration.scope,
+              ).pathname,
+              script:
+                registration.active
+                  ? new URL(
+                      registration.active
+                        .scriptURL,
+                    ).pathname
+                  : null,
+            }));
+        }),
+      {
+        timeout: 20_000,
+      },
+    )
+    .toEqual([
+      {
+        scope: '/go/',
+        script: '/go/sw.js',
+      },
+    ]);
 });
 
 test('canonical app refreshes and opens a lazy lesson offline', async ({

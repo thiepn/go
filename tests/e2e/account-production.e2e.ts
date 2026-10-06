@@ -35,9 +35,11 @@ test('signed-out production boot does not depend on an account', async ({
   await openAccount(page);
 
   await expect(
-    page.getByRole('button', {
-      name: 'Sign in',
-    }),
+    page
+      .locator('.account-form')
+      .getByRole('button', {
+        name: 'Sign in',
+      }),
   ).toBeVisible();
 
   await expect(

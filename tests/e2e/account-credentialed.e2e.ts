@@ -76,9 +76,12 @@ async function signIn(
     .getByLabel('Password')
     .fill(password!);
 
-  await page.getByRole('button', {
-    name: 'Sign in',
-  }).click();
+  await page
+    .locator('.account-form')
+    .getByRole('button', {
+      name: 'Sign in',
+    })
+    .click();
 
   await expect(
     page.getByText('Signed in'),
@@ -298,10 +301,12 @@ test('dedicated account merges two devices, resyncs after offline work, signs ou
   ).click();
 
   await expect(
-    deviceA.page.getByRole(
-      'button',
-      { name: 'Sign in' },
-    ),
+    deviceA.page
+      .locator('.account-form')
+      .getByRole(
+        'button',
+        { name: 'Sign in' },
+      ),
   ).toBeVisible();
 
   await expect(
