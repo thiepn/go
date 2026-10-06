@@ -10,16 +10,7 @@ import {
   FIRST_GAME_COMPLETE_KEY,
   useAccount,
 } from '../account';
-import {
-  allProblems,
-  beginnerCourse,
-  beginnerProblems,
-  developingCourse,
-  developingProblems,
-  firstGuidedGame,
-} from '../content';
 import { markCoachPracticeComplete } from '../coach/store';
-import type { CourseDefinition } from '../learning';
 import { resolveConceptIds } from '../mastery/graph';
 import {
   loadMasteryEvidence,
@@ -132,6 +123,8 @@ function ModeBoundary({
   );
 }
 
+type ContentModule = typeof import('../content');
+
 type AppMode =
   | 'home'
   | 'course'
@@ -168,8 +161,10 @@ export function App() {
     if (typeof window === 'undefined') return false;
     return new URLSearchParams(window.location.search).get('studio') === '1';
   });
-  const [activeCourse, setActiveCourse] =
-    useState<CourseDefinition>(beginnerCourse);
+  const [content, setContent] =
+    useState<ContentModule | null>(null);
+  const [activeCourseId, setActiveCourseId] =
+    useState<'beginner' | 'developing'>('beginner');
   const [practiceUnlocked, setPracticeUnlocked] = useState(
     () => hasFirstGameComplete(),
   );
@@ -207,6 +202,42 @@ export function App() {
       );
     };
   }, []);
+
+
+  const preloadLearningContent = () => {
+    if (content) return;
+
+    void import('../content').then(
+      (module) => {
+        setContent(module);
+      },
+    );
+  };
+
+  const contentRequired =
+    mode !== 'home' &&
+    mode !== 'settings' &&
+    mode !== 'account';
+
+  useEffect(() => {
+    if (!contentRequired || content) {
+      return;
+    }
+
+    let active = true;
+
+    void import('../content').then(
+      (module) => {
+        if (active) {
+          setContent(module);
+        }
+      },
+    );
+
+    return () => {
+      active = false;
+    };
+  }, [content, contentRequired]);
 
   if (studioOpen) {
     return (
@@ -256,13 +287,19 @@ export function App() {
     );
   }
 
+  if (contentRequired && !content) {
+    return <ModeFallback />;
+  }
+
+  const resolvedContent = content;
+
   const evidencedConcepts = new Set(
     loadMasteryEvidence().map(
       (event) => event.conceptId,
     ),
   );
   const unlockedDevelopingProblems =
-    developingProblems.filter(
+    resolvedContent?.developingProblems.filter(
       (problem) =>
         resolveConceptIds(
           problem.concept,
@@ -273,24 +310,30 @@ export function App() {
             ),
         ),
     );
-  const practiceProblems = [
-    ...beginnerProblems,
-    ...unlockedDevelopingProblems,
-  ];
+  const practiceProblems = resolvedContent
+    ? [
+        ...resolvedContent.beginnerProblems,
+        ...(unlockedDevelopingProblems ?? []),
+      ]
+    : [];
 
   if (mode === 'course') {
     return (
       <ModeBoundary>
         <CoursePlayer
-        course={activeCourse}
+        course={
+          activeCourseId === 'beginner'
+            ? resolvedContent!.beginnerCourse
+            : resolvedContent!.developingCourse
+        }
         onExit={() => setMode('home')}
         onReadyForGame={
-          activeCourse.id === beginnerCourse.id
+          activeCourseId === 'beginner'
             ? () => setMode('guided-game')
             : undefined
         }
         onCompletionAction={
-          activeCourse.id === developingCourse.id
+          activeCourseId === 'developing'
             ? () => setMode('coach')
             : undefined
         }
@@ -303,7 +346,7 @@ export function App() {
     return (
       <ModeBoundary>
         <GuidedGamePlayer
-        scenario={firstGuidedGame}
+        scenario={resolvedContent!.firstGuidedGame}
         onExit={() => setMode('home')}
         onComplete={(result) => {
           const now = Date.now();
@@ -478,7 +521,7 @@ export function App() {
     return (
       <ModeBoundary>
         <MasteryDashboard
-        problems={allProblems}
+        problems={resolvedContent!.allProblems}
         onExit={() => setMode('home')}
         onPractice={(tags) => {
           setPracticeFocus(tags);
@@ -509,11 +552,13 @@ export function App() {
           <button
             className="primary-action"
             type="button"
+            onPointerEnter={preloadLearningContent}
+            onFocus={preloadLearningContent}
             onClick={() => {
-              setActiveCourse(
+              setActiveCourseId(
                 practiceUnlocked
-                  ? developingCourse
-                  : beginnerCourse,
+                  ? 'developing'
+                  : 'beginner',
               );
               setMode('course');
             }}
