@@ -30,6 +30,15 @@ let engineReady = false;
 let restartTimer = null;
 const pending = new Map();
 
+function bridgeError(
+  message,
+  statusCode,
+) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
+}
+
 function engineArgs() {
   const args = [
     'analysis',
@@ -180,7 +189,10 @@ function startEngine() {
 function sendQuery(query) {
   if (!engineReady || !engine?.stdin?.writable) {
     return Promise.reject(
-      new Error('KataGo is not ready.'),
+      bridgeError(
+        'KataGo is not ready.',
+        503,
+      ),
     );
   }
 
@@ -199,16 +211,18 @@ function sendQuery(query) {
 
   if (pending.has(query.id)) {
     return Promise.reject(
-      new Error(
+      bridgeError(
         `KataGo query id "${query.id}" is already pending.`,
+        409,
       ),
     );
   }
 
   if (pending.size >= MAX_PENDING) {
     return Promise.reject(
-      new Error(
+      bridgeError(
         'KataGo bridge is at its concurrency limit.',
+        429,
       ),
     );
   }
@@ -223,8 +237,9 @@ function sendQuery(query) {
     const timer = setTimeout(() => {
       pending.delete(query.id);
       reject(
-        new Error(
+        bridgeError(
           `KataGo analysis timed out after ${REQUEST_TIMEOUT_MS}ms.`,
+          504,
         ),
       );
     }, REQUEST_TIMEOUT_MS);
@@ -369,7 +384,14 @@ const server = http.createServer(
       );
       json(response, 200, result);
     } catch (error) {
-      json(response, 400, {
+      const status =
+        Number.isInteger(
+          error?.statusCode,
+        )
+          ? error.statusCode
+          : 400;
+
+      json(response, status, {
         error:
           error instanceof Error
             ? error.message
