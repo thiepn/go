@@ -1,3 +1,6 @@
+import {
+  kataGoEndpoint,
+} from './endpoints';
 import type {
   KataGoProvider,
   KataGoQuery,
@@ -26,7 +29,7 @@ export class HttpKataGoProvider
   ) {
     this.endpoint =
       options.endpoint ??
-      '/api/katago/analyze';
+      kataGoEndpoint('analyze');
     this.fetchImpl =
       options.fetchImpl ?? fetch;
   }
