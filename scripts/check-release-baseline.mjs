@@ -18,6 +18,12 @@ const requiredFiles = [
   'certification/test-profiles.json',
   'certification/states/fresh.json',
   'certification/states/post-beginner.json',
+  'certification/c4-device-checklist.json',
+  'certification/evidence/C4.md',
+  'playwright.c4.config.ts',
+  'tests/e2e/mobile-pwa.e2e.ts',
+  '.github/workflows/c4-mobile-pwa-qa.yml',
+  '.github/workflows/c4-production-mobile-qa.yml',
   'docs/RELEASE_BASELINE.md',
   'docs/RELEASE_CHECKLIST.md',
   'docs/KNOWN_LIMITATIONS.md',
@@ -216,6 +222,14 @@ const accountCredentialedWorkflow = readFileSync(
   '.github/workflows/account-c3-certification.yml',
   'utf8',
 );
+const c4Workflow = readFileSync(
+  '.github/workflows/c4-mobile-pwa-qa.yml',
+  'utf8',
+);
+const c4ProductionWorkflow = readFileSync(
+  '.github/workflows/c4-production-mobile-qa.yml',
+  'utf8',
+);
 const playwright = readFileSync(
   'playwright.config.ts',
   'utf8',
@@ -232,6 +246,8 @@ for (const [
   ['katago-live-qa', katagoWorkflow],
   ['account-production-qa', accountPublicWorkflow],
   ['account-c3-certification', accountCredentialedWorkflow],
+  ['c4-mobile-pwa-qa', c4Workflow],
+  ['c4-production-mobile-qa', c4ProductionWorkflow],
 ]) {
   if (
     !workflow.includes(
@@ -319,6 +335,25 @@ if (
 ) {
   throw new Error(
     'C3 public account workflow must smoke the canonical production app.',
+  );
+}
+
+if (
+  !c4Workflow.includes(
+    'npm run check:c4',
+  ) ||
+  !c4Workflow.includes(
+    'npm run qa:c4:emulation',
+  ) ||
+  !c4ProductionWorkflow.includes(
+    'https://thiepn.dev/go/',
+  ) ||
+  !c4ProductionWorkflow.includes(
+    'npm run qa:c4:emulation',
+  )
+) {
+  throw new Error(
+    'C4 local and canonical mobile PWA qualification workflows are incomplete.',
   );
 }
 
