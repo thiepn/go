@@ -608,7 +608,10 @@ Visual development runs in parallel rather than being postponed:
 - **V9** review / variation visuals — deterministic review and SGF variation foundation complete
 - **V10** engine-analysis visualization — candidate, ownership, beginner translation and coach turning-point surfacing complete
 - **V11** responsive / accessibility variants — complete implementation
-- **V12** visual performance and QA — next
+- **V12** visual performance and QA — automated implementation complete; physical-device/screen-reader certification pending
+
+V12 closes the automated visual track. Physical-device, assistive-technology,
+canonical-deployment, and learner-outcome certification remain empirical gates.
 
 ## Certification milestones
 
