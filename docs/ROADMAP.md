@@ -520,21 +520,44 @@ Boundary:
 
 ## P15 — Production Hardening
 
-Status: **next**
+Status: **implementation complete — real-device/browser certification pending**
 
-Audit:
-- mobile;
-- PWA/offline;
-- accessibility;
-- performance;
-- persistence;
-- browser compatibility;
-- corrupted-state recovery;
-- touch precision;
-- reduced motion;
-- sound/haptic settings.
+Implemented:
+- installable PWA manifest;
+- SVG and raster install icons;
+- production-only service-worker registration;
+- app-shell/runtime caching and offline navigation fallback;
+- explicit exclusion of KataGo API traffic from offline caching;
+- centralized resilient JSON persistence;
+- quarantine and bounded recovery snapshots for corrupt local data;
+- hardened course, practice, mastery, game, coach, study, analysis-cache, and
+  preference persistence;
+- learner controls for haptics, sound, and additional reduced motion;
+- OS reduced-motion support retained;
+- generated optional Web Audio feedback with capability guards;
+- generalized keyboard focus visibility;
+- coarse-pointer minimum control sizing and enlarged board targets;
+- dynamic viewport and mobile text-size hardening;
+- browser capability fallbacks for service workers, vibration, audio, and
+  local storage;
+- lazy-loaded internal Content Authoring Studio;
+- automated PWA/platform CI verification.
+
+Validation:
+- full repository test suite;
+- production TypeScript/Vite build;
+- KataGo server/proxy syntax checks;
+- manifest/install-asset/service-worker platform checks.
+
+Certification note:
+- physical Android/iOS and cross-browser install, offline, touch, safe-area,
+  and standalone-mode qualification remains a manual empirical requirement;
+- no live Vercel project was available through the connected account during
+  this phase, so deployed real-device certification is not claimed.
 
 ## P16 — Account/Ecosystem Integration
+
+Status: **next**
 
 Only after anonymous learning is excellent:
 - account sync;
