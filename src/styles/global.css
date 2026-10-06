@@ -15,6 +15,9 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  padding-inline:
+    env(safe-area-inset-left, 0px)
+    env(safe-area-inset-right, 0px);
   min-height: 100vh;
   min-height: 100dvh;
   overflow-wrap: anywhere;
@@ -35,6 +38,14 @@ select {
 
 button {
   -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
 }
 
 button:focus-visible,
@@ -440,5 +451,75 @@ html[data-reduce-motion='true'] *::after {
 
   .go-board-shell {
     forced-color-adjust: none;
+  }
+}
+
+
+html[data-large-text='true'] {
+  font-size: 112.5%;
+}
+
+@media (prefers-contrast: more) {
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  a:focus-visible,
+  [tabindex]:focus-visible {
+    outline-width: 4px;
+  }
+
+  .primary-action,
+  .home-secondary-action,
+  .control-chip,
+  .text-action {
+    border-color: currentColor;
+  }
+}
+
+html[data-high-contrast='true'] button:focus-visible,
+html[data-high-contrast='true'] input:focus-visible,
+html[data-high-contrast='true'] textarea:focus-visible,
+html[data-high-contrast='true'] select:focus-visible,
+html[data-high-contrast='true'] a:focus-visible,
+html[data-high-contrast='true'] [tabindex]:focus-visible {
+  outline-width: 4px;
+}
+
+html[data-high-contrast='true'] .primary-action,
+html[data-high-contrast='true'] .home-secondary-action,
+html[data-high-contrast='true'] .control-chip,
+html[data-high-contrast='true'] .text-action {
+  border-color: currentColor;
+}
+
+@media (max-width: 420px) {
+  .app-shell {
+    padding-inline: 0.85rem;
+  }
+
+  .home-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-actions > button {
+    width: 100%;
+  }
+
+  .home-utility-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-utility-action {
+    width: 100%;
+  }
+}
+
+@media (max-height: 640px) and (min-width: 761px) {
+  .board-lesson {
+    margin-top: 1rem;
+    align-items: start;
   }
 }
