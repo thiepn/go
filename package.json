@@ -1,7 +1,7 @@
 {
   "name": "@thiepn/go",
   "private": true,
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,8 @@
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "qa:browser": "playwright test",
     "check:release": "node scripts/check-release-baseline.mjs",
-    "qa:canonical": "playwright test tests/e2e/canonical-deploy.e2e.ts --project=chromium-mobile"
+    "qa:canonical": "playwright test tests/e2e/canonical-deploy.e2e.ts --project=chromium-mobile",
+    "qa:katago:live": "node scripts/check-katago-live.mjs"
   },
   "dependencies": {
     "react": "^19.1.0",
