@@ -474,6 +474,18 @@ describe('C6 game integrity', () => {
     }
 
     expect(
+      result.move.type,
+    ).toBe('play');
+
+    if (
+      result.move.type !== 'play'
+    ) {
+      throw new Error(
+        'playMove returned a non-play move record.',
+      );
+    }
+
+    expect(
       result.move.captured,
     ).toHaveLength(2);
     expect(
