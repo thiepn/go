@@ -342,19 +342,37 @@ for (const needle of [
   }
 }
 
+const currentPhase =
+  Number.parseInt(
+    candidate.phase.slice(1),
+    10,
+  );
+
 if (
-  candidate.phase !== 'C5' ||
+  !Number.isInteger(currentPhase) ||
+  currentPhase < 5 ||
   matrix.candidate !==
     candidate.candidate ||
   checklist.phase !== 'C5' ||
+  !/^1\.0\.0-rc\.\d+$/.test(
+    checklist.candidate,
+  )
+) {
+  throw new Error(
+    'C5 frozen evidence or current release matrix is not valid.',
+  );
+}
+
+if (
+  candidate.phase === 'C5' &&
   checklist.candidate !==
     candidate.candidate
 ) {
   throw new Error(
-    'C5 release candidate, platform matrix, and accessibility checklist are not aligned.',
+    'While C5 is current, its checklist must match the active candidate.',
   );
 }
 
 console.log(
-  `C5 accessibility contract and contrast floor verified for ${candidate.candidate}.`,
+  `C5 accessibility contract verified (evidence ${checklist.candidate}; current ${candidate.candidate}).`,
 );

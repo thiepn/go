@@ -108,6 +108,15 @@ Repository unit tests additionally cover:
 - play after game end;
 - neutral-area scoring.
 
+C6/M1 adds a separate certification campaign covering deterministic randomized
+legal games from 5×5 through 19×19, capture/stone/history/liberty invariants,
+simple-ko recapture after intervening play, positional-superko history,
+simultaneous disconnected-group capture, randomized area-score partitioning,
+and cross-layer saved-game/SGF replay equivalence.
+
+The certified rules claim is the documented THIEPN area-rules profile. It is
+not a claim of exact Japanese, Chinese, AGA, or other tournament rules.
+
 ## Next boundary
 
 P2 may consume the engine through `src/go/engine/index.ts`.

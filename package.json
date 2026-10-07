@@ -1,7 +1,7 @@
 {
   "name": "@thiepn/go",
   "private": true,
-  "version": "1.0.0-rc.6",
+  "version": "1.0.0-rc.7",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -24,7 +24,9 @@
     "qa:c4:emulation": "playwright test -c playwright.c4.config.ts",
     "preview": "vite preview",
     "check:c5": "node scripts/check-c5.mjs",
-    "qa:c5:accessibility": "playwright test -c playwright.c5.config.ts"
+    "qa:c5:accessibility": "playwright test -c playwright.c5.config.ts",
+    "check:c6": "node scripts/check-c6.mjs",
+    "qa:c6:rules": "vitest run src/go/engine/certification.test.ts src/go/engine/game.test.ts src/go/engine/scoring.test.ts src/play/scoring.test.ts src/play/scoring-certification.test.ts src/study/replay.test.ts src/sgf/integrity.test.ts src/sgf/parser.test.ts src/sgf/serializer.test.ts src/sgf/records.test.ts"
   },
   "dependencies": {
     "react": "^19.1.0",

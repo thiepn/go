@@ -202,7 +202,60 @@ function numeric(
   }
 
   const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : fallback;
+
+  if (!Number.isFinite(parsed)) {
+    throw new Error(
+      `Invalid SGF numeric value: "${value}".`,
+    );
+  }
+
+  return parsed;
+}
+
+function parseBoardSize(
+  value: string | undefined,
+): number {
+  if (
+    value === undefined ||
+    value.trim() === ''
+  ) {
+    return 19;
+  }
+
+  const parts = value.split(':');
+
+  if (parts.length > 2) {
+    throw new Error(
+      `Invalid SGF board size: "${value}".`,
+    );
+  }
+
+  const width = Number(parts[0]);
+  const height =
+    parts.length === 2
+      ? Number(parts[1])
+      : width;
+
+  if (
+    !Number.isInteger(width) ||
+    !Number.isInteger(height) ||
+    width < 2 ||
+    width > 25 ||
+    height < 2 ||
+    height > 25
+  ) {
+    throw new Error(
+      `Unsupported SGF board size: "${value}".`,
+    );
+  }
+
+  if (width !== height) {
+    throw new Error(
+      `Rectangular SGF boards are not supported: "${value}".`,
+    );
+  }
+
+  return width;
 }
 
 function expandPointValue(
@@ -382,11 +435,22 @@ function rawTreeToDocument(
   raw: RawNode,
   index: number,
 ): StudyDocument {
-  const sizeText = first(raw.properties, 'SZ') ?? '19';
-  const sizePart = sizeText.split(':')[0];
-  const boardSize = Math.max(
-    2,
-    Math.min(25, Math.round(numeric(sizePart, 19))),
+  const gameType = first(
+    raw.properties,
+    'GM',
+  );
+
+  if (
+    gameType !== undefined &&
+    gameType !== '1'
+  ) {
+    throw new Error(
+      `Unsupported SGF game type GM[${gameType}]. THIEPN Go only imports Go game trees.`,
+    );
+  }
+
+  const boardSize = parseBoardSize(
+    first(raw.properties, 'SZ'),
   );
   const komi = numeric(
     first(raw.properties, 'KM'),

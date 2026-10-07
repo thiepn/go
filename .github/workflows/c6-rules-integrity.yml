@@ -1,0 +1,32 @@
+name: c6-rules-integrity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  rules-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify C6 contract
+        run: npm run check:c6
+
+      - name: Run rules and replay certification
+        run: npm run qa:c6:rules

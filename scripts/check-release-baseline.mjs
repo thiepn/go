@@ -30,6 +30,11 @@ const requiredFiles = [
   'tests/e2e/accessibility-certification.e2e.ts',
   '.github/workflows/c5-accessibility-qa.yml',
   '.github/workflows/c5-production-accessibility-qa.yml',
+  'src/go/engine/certification.test.ts',
+  'src/sgf/integrity.test.ts',
+  'src/play/scoring-certification.test.ts',
+  'certification/evidence/C6.md',
+  '.github/workflows/c6-rules-integrity.yml',
   'docs/RELEASE_BASELINE.md',
   'docs/RELEASE_CHECKLIST.md',
   'docs/KNOWN_LIMITATIONS.md',
@@ -244,6 +249,10 @@ const c5ProductionWorkflow = readFileSync(
   '.github/workflows/c5-production-accessibility-qa.yml',
   'utf8',
 );
+const c6Workflow = readFileSync(
+  '.github/workflows/c6-rules-integrity.yml',
+  'utf8',
+);
 const playwright = readFileSync(
   'playwright.config.ts',
   'utf8',
@@ -264,6 +273,7 @@ for (const [
   ['c4-production-mobile-qa', c4ProductionWorkflow],
   ['c5-accessibility-qa', c5Workflow],
   ['c5-production-accessibility-qa', c5ProductionWorkflow],
+  ['c6-rules-integrity', c6Workflow],
 ]) {
   if (
     !workflow.includes(
@@ -399,6 +409,22 @@ if (
 ) {
   throw new Error(
     'Ordinary verification must enforce the C5 accessibility contract.',
+  );
+}
+
+if (
+  !verifyWorkflow.includes(
+    'npm run check:c6',
+  ) ||
+  !c6Workflow.includes(
+    'npm run check:c6',
+  ) ||
+  !c6Workflow.includes(
+    'npm run qa:c6:rules',
+  )
+) {
+  throw new Error(
+    'C6 rules-integrity certification must be enforced by verify and its dedicated workflow.',
   );
 }
 
