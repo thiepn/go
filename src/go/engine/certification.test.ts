@@ -17,6 +17,7 @@ import {
   setIntersection,
   type Board,
   type GameState,
+  type PlayMoveRecord,
   type Point,
   type Stone,
 } from '.';
@@ -118,9 +119,13 @@ function assertGameInvariants(
     serializeBoard(state.board),
   );
 
-  const played = state.moves.filter(
-    (move) => move.type === 'play',
-  );
+  const played =
+    state.moves.filter(
+      (
+        move,
+      ): move is PlayMoveRecord =>
+        move.type === 'play',
+    );
   const capturedByMoves = played.reduce(
     (total, move) =>
       total + move.captured.length,
