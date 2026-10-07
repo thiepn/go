@@ -306,29 +306,19 @@ function randomLegalGame(
     );
   }
 
-  if (state.status === 'playing') {
-    const first = pass(state);
+  while (
+    state.status === 'playing'
+  ) {
+    const result = pass(state);
 
-    expect(first.ok).toBe(true);
-    if (!first.ok) {
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
       throw new Error(
-        'Expected first ending pass.',
+        'Expected ending pass to remain legal until two consecutive passes finish the game.',
       );
     }
 
-    state = first.state;
-    assertGameInvariants(state);
-
-    const second = pass(state);
-
-    expect(second.ok).toBe(true);
-    if (!second.ok) {
-      throw new Error(
-        'Expected second ending pass.',
-      );
-    }
-
-    state = second.state;
+    state = result.state;
     assertGameInvariants(state);
   }
 
