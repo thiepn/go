@@ -127,6 +127,7 @@ Repository migration:
 Post-apply verification confirmed:
 - Go registry entry is active at `/go/`;
 - the consumer manifest registry declares shared identity / isolated app data;
+- Account exposes the required `identity.basic`, `app_data.read`, and `app_data.write` control-plane permissions for Go;
 - `go_user_state` has RLS enabled;
 - all four owner-only CRUD policies exist;
 - only the `authenticated` role has table CRUD grants;
@@ -167,3 +168,9 @@ Automation is split deliberately:
 - successful Google provider return and real recovery-email return remain
   explicit interactive evidence gates because CI must not use a personal
   account or mailbox.
+
+## Account permission-registry reconciliation
+
+Migration `20261007121010_go_account_permission_registry.sql` repairs the P16 registry omission that left Go with no `account_app_permissions` rows even though its manifest declared Account identity and cloud sync. It registers the three required basic permissions and backfills those grants only for existing Go connections whose Account status is currently `connected` or `limited`. Disconnected connections are not silently re-enabled.
+
+Go intentionally keeps `core_app_id` unset: its current cloud state lives directly in the canonical Account Supabase project and `go` is not a registered THIEPN Core namespace.
